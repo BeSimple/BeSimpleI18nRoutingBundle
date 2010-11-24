@@ -17,9 +17,9 @@ class Router extends BaseRouter
      */
     public function generate($name, array $parameters = array(), $absolute = false)
     {
-        if (isset($parameters['i18n'])) {
-            $locale = $parameters['i18n'];
-            unset($parameters['i18n']);
+        if (isset($parameters['locale'])) {
+            $locale = $parameters['locale'];
+            unset($parameters['locale']);
 
             return $this->getGenerator()->generateI18n($name, $parameters, $locale, $absolute);
         }
