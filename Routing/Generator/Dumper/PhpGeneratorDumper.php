@@ -47,7 +47,7 @@ EOF
     public function generateI18n(\$name, array \$parameters, \$locale, \$absolute = false)
     {
         try {
-            return \$this->generate(\$locale.'_'.\$name, \$parameters, \$absolute);
+            return \$this->generate(\$name.'_'.\$locale, \$parameters, \$absolute);
         } catch (\InvalidArgumentException \$e) {
             throw new \InvalidArgumentException(sprintf('I18nRoute "%s" (%s) does not exist.', \$name, \$locale));
         }

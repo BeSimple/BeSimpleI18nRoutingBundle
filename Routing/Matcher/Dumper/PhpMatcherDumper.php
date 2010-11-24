@@ -12,7 +12,7 @@ class PhpMatcherDumper extends BasePhpMatcherDumper
 
         foreach ($this->routes->getRoutes() as $name => $route) {
             if ($route->isI18n()) {
-                preg_match('/^[^_]+_(.+)$/', $name, $match);
+                preg_match('/^(.+)_[^_]+$/', $name, $match);
                 $name = $match[1];
             }
 
