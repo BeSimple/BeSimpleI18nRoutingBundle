@@ -45,7 +45,7 @@ class XmlFileLoader extends BaseXmlFileLoader
         } else {
             $route = new Routing\Route((string) $definition->getAttribute('pattern'), $defaults, $requirements, $options);
 
-            $collection->addRoute((string) $definition->getAttribute('id'), $route);
+            $collection->add((string) $definition->getAttribute('id'), $route);
         }
     }
 

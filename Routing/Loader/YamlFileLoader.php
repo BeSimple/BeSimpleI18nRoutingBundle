@@ -58,7 +58,7 @@ class YamlFileLoader extends BaseYamlFileLoader
         } elseif (isset($config['pattern'])) {
             $route = new Routing\Route($config['pattern'], $defaults, $requirements, $options);
 
-            $collection->addRoute($name, $route);
+            $collection->add($name, $route);
         } else {
             throw new \InvalidArgumentException(sprintf('You must define a "pattern" for the "%s" route.', $name));
         }
