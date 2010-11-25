@@ -119,7 +119,7 @@ When you create an i18n route and you go on it with your browser, the locale wil
     use Bundle\I18nRoutingBundle\Routing\I18nRoute;
     
     $collection = new RouteCollection();
-    $collection->addRoute('hello', new Route('/hello/:name', array(
+    $collection->add('hello', new Route('/hello/:name', array(
         '_controller' => 'HelloBundle:Hello:index',
     )));
     $route = new I18nRoute('homepage', array(
