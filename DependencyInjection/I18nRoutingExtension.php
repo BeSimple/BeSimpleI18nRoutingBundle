@@ -37,11 +37,8 @@ class I18nRoutingExtension extends Extension
             'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
             'Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface',
             'Symfony\\Component\\Routing\\Generator\\UrlGenerator',
-            'Symfony\\Component\\Routing\\Loader\\Loader',
-            'Symfony\\Component\\Routing\\Loader\\DelegatingLoader',
-            'Symfony\\Component\\Routing\\Loader\\LoaderResolver',
-            'Symfony\\Bundle\\FrameworkBundle\\Routing\\LoaderResolver',
-            'Symfony\\Bundle\\FrameworkBundle\\Routing\\DelegatingLoader',
+            'Symfony\\Component\\Routing\\Loader\\LoaderInterface',
+            'Symfony\\Bundle\\FrameworkBundle\\Routing\\LazyLoader',
         ));
     }
 
@@ -57,7 +54,7 @@ class I18nRoutingExtension extends Extension
      */
     public function getXsdValidationBasePath()
     {
-        return __DIR__.'/../Resources/config/schema';
+        return null;
     }
 
     /**
@@ -67,7 +64,7 @@ class I18nRoutingExtension extends Extension
      */
     public function getNamespace()
     {
-        return 'http://www.apercite.fr/schema/dic/I18nRoutingBundle';
+        return 'http://www.symfony-project.org/schema/dic/symfony';
     }
 
     /**
@@ -79,6 +76,6 @@ class I18nRoutingExtension extends Extension
      */
     public function getAlias()
     {
-        return 'i18nRouting';
+        return 'i18n_routing';
     }
 }

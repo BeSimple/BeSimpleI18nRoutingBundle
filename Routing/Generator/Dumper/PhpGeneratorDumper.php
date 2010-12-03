@@ -9,7 +9,7 @@ class PhpGeneratorDumper extends BasePhpGeneratorDumper
 {
     protected function addGenerator()
     {
-        $methods    = array();
+        $methods = array();
         $routes  = array();
 
         foreach ($this->routes->all() as $name => $route) {

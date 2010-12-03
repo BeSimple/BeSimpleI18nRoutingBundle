@@ -28,15 +28,15 @@ When you create an i18n route and you go on it with your browser, the locale wil
 
 ### Update your config
 
-#### Move router in app.config to i18nRouting.config
+#### Move router in app.config to i18n_routing.config
 
      // app/config/config.yml
-     i18nRouting.config:
+     i18n_routing.config:
          router: { resource: "%kernel.root_dir%/config/routing.yml" }
      
      // app/config/config_dev.yml
-     i18nRouting.config:
-         router:   { resource: "%kernel.root_dir%/config/routing_dev.yml" }
+     i18n_routing.config:
+          router: { resource: "%kernel.root_dir%/config/routing_dev.yml" }
 
 ## Create your routing
 
