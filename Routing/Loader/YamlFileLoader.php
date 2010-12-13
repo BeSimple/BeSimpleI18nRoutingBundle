@@ -28,6 +28,16 @@ class YamlFileLoader extends BaseYamlFileLoader
         $collection = new RouteCollection();
         $collection->addResource(new FileResource($path));
 
+        // empty file
+        if (null === $config) {
+            $config = array();
+        }
+
+        // not an array
+        if (!is_array($config)) {
+            throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $file));
+        }
+
         foreach ($config as $name => $config) {
             if (isset($config['resource'])) {
                 $type = isset($config['type']) ? $config['type'] : null;
