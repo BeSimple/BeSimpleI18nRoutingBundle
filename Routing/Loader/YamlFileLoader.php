@@ -12,13 +12,14 @@ class YamlFileLoader extends BaseYamlFileLoader
     /**
      * Loads a Yaml file.
      *
-     * @param  string $file A Yaml file path
+     * @param string $file A Yaml file path
+     * @param string $type The resource type
      *
      * @return RouteCollection A RouteCollection instance
      *
      * @throws \InvalidArgumentException When route can't be parsed
      */
-    public function load($file)
+    public function load($file, $type = null)
     {
         $path = $this->findFile($file);
 
@@ -29,9 +30,10 @@ class YamlFileLoader extends BaseYamlFileLoader
 
         foreach ($config as $name => $config) {
             if (isset($config['resource'])) {
+                $type = isset($config['type']) ? $config['type'] : null;
                 $prefix = isset($config['prefix']) ? $config['prefix'] : null;
                 $this->currentDir = dirname($path);
-                $collection->addCollection($this->import($config['resource']), $prefix);
+                $collection->addCollection($this->import($config['resource'], $type), $prefix);
             } elseif (isset($config['pattern']) || isset($config['locales'])) {
                 $this->parseRoute($collection, $name, $config, $path);
             } else {
