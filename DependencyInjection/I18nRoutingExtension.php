@@ -2,7 +2,7 @@
 
 namespace Bundle\I18nRoutingBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
@@ -30,7 +30,7 @@ class I18nRoutingExtension extends Extension
 
         $container->setParameter('routing.resource', $config['router']['resource']);
 
-        $this->addCompiledClasses($container, array(
+        $this->addClassesToCompile(array(
             'Symfony\\Component\\Routing\\RouterInterface',
             'Bundle\\I18nRoutingBundle\\Routing\\Router',
             'Symfony\\Component\\Routing\\Matcher\\UrlMatcherInterface',
@@ -40,11 +40,6 @@ class I18nRoutingExtension extends Extension
             'Symfony\\Component\\Routing\\Loader\\LoaderInterface',
             'Symfony\\Bundle\\FrameworkBundle\\Routing\\LazyLoader',
         ));
-    }
-
-    protected function addCompiledClasses($container, array $classes)
-    {
-        $container->setParameter('kernel.compiled_classes', array_merge($container->getParameter('kernel.compiled_classes'), $classes));
     }
 
     /**
