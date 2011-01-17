@@ -3,9 +3,20 @@
 namespace Bundle\I18nRoutingBundle\Routing;
 
 use Symfony\Component\Routing\Router as BaseRouter;
+use Symfony\Component\Routing\Loader\LoaderInterface;
+use Symfony\Component\HttpFoundation\Session;
 
 class Router extends BaseRouter
 {
+    protected $session;
+
+    public function __construct(LoaderInterface $loader, Session $session = null, $resource, array $options = array(), array $context = array(), array $defaults = array())
+    {
+        parent::__construct($loader, $resource, $options, $context, $defaults);
+
+        $this->session = $session;
+    }
+
     /**
      * Generates a URL from the given parameters.
      *
@@ -21,9 +32,22 @@ class Router extends BaseRouter
             $locale = $parameters['locale'];
             unset($parameters['locale']);
 
-            return $this->getGenerator()->generateI18n($name, $parameters, $locale, $absolute);
+            return $this->generateI18n($name, $locale, $parameters, $absolute);
         }
 
-        return parent::generate($name, $parameters, $absolute);
+        try {
+            return parent::generate($name, $parameters, $absolute);
+        } catch (\InvalidArgumentException $e) {
+            if (null !== $this->session) {
+                return $this->generateI18n($name, $this->session->getLocale(), $parameters, $absolute);
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    protected function generateI18n($name, $locale, $parameters, $absolute)
+    {
+        return $this->getGenerator()->generateI18n($name, $locale, $parameters, $absolute);
     }
 }

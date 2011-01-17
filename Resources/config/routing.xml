@@ -50,6 +50,7 @@
 
         <service id="router" class="%router.class%">
             <argument type="service" id="routing.loader" />
+            <argument type="service" id="session" on-invalid="ignore" />
             <argument>%routing.resource%</argument>
             <argument type="collection">
                 <argument key="cache_dir">%kernel.cache_dir%</argument>

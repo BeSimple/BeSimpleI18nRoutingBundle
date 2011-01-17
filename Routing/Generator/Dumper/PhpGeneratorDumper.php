@@ -48,7 +48,7 @@ EOF
         return \$this->doGenerate(\$variables, \$defaults, \$requirements, \$tokens, \$parameters, \$name, \$absolute);
     }
 
-    public function generateI18n(\$name, array \$parameters, \$locale, \$absolute = false)
+    public function generateI18n(\$name, \$locale, array \$parameters, \$absolute = false)
     {
         try {
             return \$this->generate(\$name.'_'.\$locale, \$parameters, \$absolute);
