@@ -2,9 +2,9 @@
 
 namespace Bundle\I18nRoutingBundle\Routing;
 
-use Symfony\Component\Routing\Router as BaseRouter;
-use Symfony\Component\Routing\Loader\LoaderInterface;
-use Symfony\Component\HttpFoundation\Session;
+use Symfony\Component\Routing\Router as BaseRouter,
+    Symfony\Component\Routing\Loader\LoaderInterface,
+    Symfony\Component\HttpFoundation\Session;
 
 class Router extends BaseRouter
 {

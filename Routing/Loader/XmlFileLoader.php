@@ -2,9 +2,9 @@
 
 namespace Bundle\I18nRoutingBundle\Routing\Loader;
 
-use Symfony\Component\Routing\Loader\XmlFileLoader as BaseXmlFileLoader;
-use Symfony\Component\Routing\RouteCollection;
-use Bundle\I18nRoutingBundle\Routing as Routing;
+use Symfony\Component\Routing\Loader\XmlFileLoader as BaseXmlFileLoader,
+    Symfony\Component\Routing\RouteCollection,
+    Bundle\I18nRoutingBundle\Routing as Routing;
 
 class XmlFileLoader extends BaseXmlFileLoader
 {

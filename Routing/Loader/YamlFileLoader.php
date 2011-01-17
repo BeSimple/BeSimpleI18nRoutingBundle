@@ -2,10 +2,10 @@
 
 namespace Bundle\I18nRoutingBundle\Routing\Loader;
 
-use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Resource\FileResource;
-use Bundle\I18nRoutingBundle\Routing as Routing;
+use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader,
+    Symfony\Component\Routing\RouteCollection,
+    Symfony\Component\Routing\Resource\FileResource,
+    Bundle\I18nRoutingBundle\Routing as Routing;
 
 class YamlFileLoader extends BaseYamlFileLoader
 {
