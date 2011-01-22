@@ -11,13 +11,15 @@ class I18nRoutingExtension extends Extension
     /**
      * Loads the I18nRouting configuration.
      *
-     * @param array            $config    An array of configuration settings
+     * @param array            $configs    An array of array of configuration settings
      * @param ContainerBuilder $container A ContainerBuilder instance
      */
-    public function configLoad($config, ContainerBuilder $container)
+    public function configLoad($configs, ContainerBuilder $container)
     {
-        if (isset($config['router'])) {
-            $this->registerRouterConfiguration($config, $container);
+        foreach ($configs as $config) {
+            if (isset($config['router'])) {
+                $this->registerRouterConfiguration($config, $container);
+            }
         }
     }
 
