@@ -2,9 +2,10 @@
 
 namespace Bundle\I18nRoutingBundle\DependencyInjection;
 
-use Symfony\Component\HttpKernel\DependencyInjection\Extension,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\FileLocator;
 
 class I18nRoutingExtension extends Extension
 {
@@ -26,7 +27,7 @@ class I18nRoutingExtension extends Extension
     protected function registerRouterConfiguration($config, ContainerBuilder $container)
     {
         if (!$container->hasDefinition('router')) {
-            $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
             $loader->load('routing.xml');
         }
 
