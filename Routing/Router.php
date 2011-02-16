@@ -3,7 +3,7 @@
 namespace Bundle\I18nRoutingBundle\Routing;
 
 use Symfony\Component\Routing\Router as BaseRouter,
-    Symfony\Component\Routing\Loader\LoaderInterface,
+    Symfony\Component\Config\Loader\LoaderInterface,
     Symfony\Component\HttpFoundation\Session;
 
 class Router extends BaseRouter

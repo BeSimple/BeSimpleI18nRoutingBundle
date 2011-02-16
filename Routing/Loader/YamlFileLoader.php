@@ -4,7 +4,7 @@ namespace Bundle\I18nRoutingBundle\Routing\Loader;
 
 use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader,
     Symfony\Component\Routing\RouteCollection,
-    Symfony\Component\Routing\Resource\FileResource,
+    Symfony\Component\Config\Resource\FileResource,
     Bundle\I18nRoutingBundle\Routing as Routing;
 
 class YamlFileLoader extends BaseYamlFileLoader
