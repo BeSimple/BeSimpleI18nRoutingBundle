@@ -46,7 +46,7 @@ class YamlFileLoader extends BaseYamlFileLoader
                 $file = $this->locator->locate($config['resource'], $this->currentDir);
                 $collection->addCollection($this->import($file, $type), $prefix);
             } elseif (isset($config['pattern']) || isset($config['locales'])) {
-                $this->parseRoute($collection, $name, $config);
+                $this->parseRoute($collection, $name, $config, $file);
             } else {
                 throw new \InvalidArgumentException(sprintf('Unable to parse the "%s" route.', $name));
             }
@@ -59,10 +59,11 @@ class YamlFileLoader extends BaseYamlFileLoader
      * @param RouteCollection $collection The collection routes
      * @param string          $name       The route name
      * @param array           $config     The config options
+     * @param string          $file       A Yaml file path
      *
      * @throws \InvalidArgumentException When config pattern is not defined for the given route
      */
-    protected function parseRoute(RouteCollection $collection, $name, $config)
+    protected function parseRoute(RouteCollection $collection, $name, $config, $file)
     {
         $defaults = isset($config['defaults']) ? $config['defaults'] : array();
         $requirements = isset($config['requirements']) ? $config['requirements'] : array();
