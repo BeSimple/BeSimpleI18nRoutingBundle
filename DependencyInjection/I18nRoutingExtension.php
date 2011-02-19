@@ -17,15 +17,8 @@ class I18nRoutingExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $this->registerRouterConfiguration($container);
-    }
-
-    protected function registerRouterConfiguration(ContainerBuilder $container)
-    {
-        if (!$container->hasDefinition('router')) {
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-            $loader->load('routing.xml');
-        }
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('routing.xml');
 
         $this->addClassesToCompile(array(
             'Bundle\\I18nRoutingBundle\\Routing\\Router',
