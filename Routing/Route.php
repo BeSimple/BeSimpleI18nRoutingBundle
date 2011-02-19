@@ -13,15 +13,13 @@ class Route extends BaseRoute
      *
      * Available options:
      *
-     *  * segment_separators: An array of allowed characters for segment separators (/ by default)
-     *  * text_regex:         A regex that match a valid text name (.+? by default)
-     *  * compiler_class:     A class name able to compile this route instance (RouteCompiler by default)
+     *   * See Route class
      *
-     * @param string  $pattern       The pattern to match
-     * @param array   $defaults      An array of default parameter values
-     * @param array   $requirements  An array of requirements for parameters (regexes)
-     * @param array   $options       An array of options
-     * @param boolean $isI18n        If the route is an i18nRoute
+     * @param string  $pattern      The pattern to match
+     * @param array   $defaults     An array of default parameter values
+     * @param array   $requirements An array of requirements for parameters (regexes)
+     * @param array   $options      An array of options
+     * @param boolean $isI18n       If the route is an i18nRoute
      */
     public function __construct($pattern, array $defaults = array(), array $requirements = array(), array $options = array(), $isI18n = false)
     {

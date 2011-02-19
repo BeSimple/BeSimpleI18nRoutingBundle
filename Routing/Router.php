@@ -10,6 +10,22 @@ class Router extends BaseRouter
 {
     protected $session;
 
+    /**
+     * Constructor.
+     *
+     * Available options:
+     *
+     *   * See Router class
+     *
+     * @param LoaderInterface $loader   A LoaderInterface instance
+     * @param Session         $session  A Session instance
+     * @param mixed           $resource The main resource to load
+     * @param array           $options  An array of options
+     * @param array           $context  The context
+     * @param array           $defaults The default values
+     *
+     * @throws \InvalidArgumentException When unsupported option is provided
+     */
     public function __construct(LoaderInterface $loader, Session $session = null, $resource, array $options = array(), array $context = array(), array $defaults = array())
     {
         parent::__construct($loader, $resource, $options, $context, $defaults);
@@ -25,6 +41,8 @@ class Router extends BaseRouter
      * @param  Boolean $absolute   Whether to generate an absolute URL
      *
      * @return string The generated URL
+     *
+     * @throws \InvalidArgumentException When the route doesn't exists
      */
     public function generate($name, array $parameters = array(), $absolute = false)
     {
@@ -46,6 +64,14 @@ class Router extends BaseRouter
         }
     }
 
+    /**
+     * Generates a I18N URL from the given parameter
+     *
+     * @param string   $name       The name of the I18N route
+     * @param string   $locale     The locale of the I18N route
+     * @param  array   $parameters An array of parameters
+     * @param  Boolean $absolute   Whether to generate an absolute URL
+     */
     protected function generateI18n($name, $locale, $parameters, $absolute)
     {
         return $this->getGenerator()->generateI18n($name, $locale, $parameters, $absolute);
