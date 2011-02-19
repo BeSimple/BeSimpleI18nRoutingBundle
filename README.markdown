@@ -132,16 +132,18 @@ When you create an i18n route and you go on it with your browser, the locale wil
 
 ## Generate route in your templates
 
-### Twig
+### Specify a locale
 
-    {% path homepage_en %}
-    {% path homepage with ['locale': en] %}
-    {% path homepage_fr %}
-    {% path homepage with ['locale': fr] %}
-    {% path homepage_de %}
-    {% path homepage with ['locale': de] %}
+#### Twig
 
-### PHP
+    {{ path homepage_en }}
+    {{ path homepage with ['locale': en] }}
+    {{ path homepage_fr }}
+    {{ path homepage with ['locale': fr] }}
+    {{ path homepage_de }}
+    {{ path homepage with ['locale': de] }}
+
+#### PHP
 
     <?php echo $view['router']->generate('homepage_en') ?>
     <?php echo $view['router']->generate('homepage', array('locale' => 'en')) ?>
@@ -149,4 +151,14 @@ When you create an i18n route and you go on it with your browser, the locale wil
     <?php echo $view['router']->generate('homepage', array('locale' => 'fr')) ?>
     <?php echo $view['router']->generate('homepage_de') ?>
     <?php echo $view['router']->generate('homepage', array('locale' => 'de')) ?>
+
+### Use current locale of user
+
+#### Twig
+
+    {{ path homepage }}
+
+#### PHP
+
+    <?php echo $view['router']->generate('homepage') ?>
 
