@@ -136,12 +136,12 @@ When you create an i18n route and you go on it with your browser, the locale wil
 
 #### Twig
 
-    {{ path homepage_en }}
-    {{ path homepage with ['locale': en] }}
-    {{ path homepage_fr }}
-    {{ path homepage with ['locale': fr] }}
-    {{ path homepage_de }}
-    {{ path homepage with ['locale': de] }}
+    {{ path('homepage_en') }}
+    {{ path('homepage', { 'locale': 'en' }) }}
+    {{ path('homepage_fr') }}
+    {{ path('homepage', { 'locale': 'fr' }) }}
+    {{ path('homepage_de') }}
+    {{ path('homepage', { 'locale': 'de' }) }}
 
 #### PHP
 
