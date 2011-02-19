@@ -17,30 +17,18 @@ class I18nRoutingExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        foreach ($configs as $config) {
-            if (isset($config['router'])) {
-                $this->registerRouterConfiguration($config, $container);
-            }
-        }
+        $this->registerRouterConfiguration($container);
     }
 
-    protected function registerRouterConfiguration($config, ContainerBuilder $container)
+    protected function registerRouterConfiguration(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('router')) {
             $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
             $loader->load('routing.xml');
         }
 
-        $container->setParameter('routing.resource', $config['router']['resource']);
-
         $this->addClassesToCompile(array(
-            'Symfony\\Component\\Routing\\RouterInterface',
             'Bundle\\I18nRoutingBundle\\Routing\\Router',
-            'Symfony\\Component\\Routing\\Matcher\\UrlMatcherInterface',
-            'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
-            'Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface',
-            'Symfony\\Component\\Routing\\Generator\\UrlGenerator',
-            'Symfony\\Bundle\\FrameworkBundle\\Routing\\LazyLoader',
         ));
     }
 
