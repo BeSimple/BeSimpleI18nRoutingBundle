@@ -26,11 +26,6 @@ When you create an i18n route and you go on it with your browser, the locale wil
         );
     }
 
-### Update your config
-
-     // app/config/config.yml
-     i18n_routing: ~
-
 ## Create your routing
 
 ### Yaml routing file
