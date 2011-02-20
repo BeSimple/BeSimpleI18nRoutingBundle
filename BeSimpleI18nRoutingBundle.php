@@ -6,7 +6,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use BeSimple\I18nRoutingBundle\DependencyInjection\Compiler\OverrideRoutingCompilerPass;
 
-class I18nRoutingBundle extends Bundle
+class BeSimpleI18nRoutingBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {

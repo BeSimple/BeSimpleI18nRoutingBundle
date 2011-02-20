@@ -21,7 +21,7 @@ When you create an i18n route and you go on it with your browser, the locale wil
     {
         return array(
             // ...
-            new BeSimple\I18nRoutingBundle\I18nRoutingBundle(),
+            new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),
             // ...
         );
     }

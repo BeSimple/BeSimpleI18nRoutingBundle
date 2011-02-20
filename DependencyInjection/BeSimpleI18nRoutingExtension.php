@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\Config\FileLocator;
 
-class I18nRoutingExtension extends Extension
+class BeSimpleI18nRoutingExtension extends Extension
 {
     /**
      * Loads the I18nRouting configuration.
@@ -34,6 +34,6 @@ class I18nRoutingExtension extends Extension
      */
     public function getAlias()
     {
-        return 'i18n_routing';
+        return 'be_simple_i18n_routing';
     }
 }
