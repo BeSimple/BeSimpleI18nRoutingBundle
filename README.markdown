@@ -152,7 +152,7 @@ When you create an i18n route and you go on it with your browser, the locale wil
 
 #### Twig
 
-    {{ path homepage }}
+    {{ path('homepage') }}
 
 #### PHP
 
