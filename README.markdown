@@ -12,7 +12,7 @@ When you create an i18n route and you go on it with your browser, the locale wil
 
 ### Add I18nRoutingBundle to your src/Bundle dir
 
-    git submodule add git://github.com/francisbesset/I18nRoutingBundle.git src/Bundle/I18nRoutingBundle
+    git submodule add git://github.com/francisbesset/I18nRoutingBundle.git src/BeSimple/I18nRoutingBundle
 
 ### Add I18nRoutingBundle to your application kernel
 
@@ -21,10 +21,18 @@ When you create an i18n route and you go on it with your browser, the locale wil
     {
         return array(
             // ...
-            new Bundle\I18nRoutingBundle\I18nRoutingBundle(),
+            new BeSimple\I18nRoutingBundle\I18nRoutingBundle(),
             // ...
         );
     }
+
+### Register the BeSimple
+
+    // app/autoload.php
+    $loader->registerNamespaces(array(
+        'BeSimple' => __DIR__.'/../src',
+        // your other namespaces
+    ));
 
 ## Create your routing
 
@@ -55,7 +63,7 @@ When you create an i18n route and you go on it with your browser, the locale wil
     <?php
     
     use Symfony\Component\Routing\RouteCollection;
-    use Bundle\I18nRoutingBundle\Routing\I18nRoute;
+    use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
     
     $collection = new RouteCollection();
     $route = new I18nRoute('homepage', array(
@@ -103,8 +111,8 @@ When you create an i18n route and you go on it with your browser, the locale wil
     <?php
     
     use Symfony\Component\Routing\RouteCollection;
-    use Bundle\I18nRoutingBundle\Routing\Route;
-    use Bundle\I18nRoutingBundle\Routing\I18nRoute;
+    use BeSimple\I18nRoutingBundle\Routing\Route;
+    use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
     
     $collection = new RouteCollection();
     $collection->add('hello', new Route('/hello/:name', array(
