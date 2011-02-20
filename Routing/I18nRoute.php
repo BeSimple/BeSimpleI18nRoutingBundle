@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\I18nRoutingBundle\Routing;
+namespace BeSimple\I18nRoutingBundle\Routing;
 
 use Symfony\Component\Routing\RouteCollection;
 

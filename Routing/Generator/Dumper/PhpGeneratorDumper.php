@@ -1,9 +1,9 @@
 <?php
 
-namespace Bundle\I18nRoutingBundle\Routing\Generator\Dumper;
+namespace BeSimple\I18nRoutingBundle\Routing\Generator\Dumper;
 
-use Symfony\Component\Routing\Generator\Dumper\PhpGeneratorDumper as BasePhpGeneratorDumper,
-    Bundle\I18nRoutingBundle\Routing\Route;
+use Symfony\Component\Routing\Generator\Dumper\PhpGeneratorDumper as BasePhpGeneratorDumper;
+use BeSimple\I18nRoutingBundle\Routing\Route;
 
 class PhpGeneratorDumper extends BasePhpGeneratorDumper
 {

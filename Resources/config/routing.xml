@@ -5,9 +5,9 @@
     xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="i18n_routing.router.class">Bundle\I18nRoutingBundle\Routing\Router</parameter>
-        <parameter key="i18n_routing.options.generator_dumper_class">Bundle\I18nRoutingBundle\Routing\Generator\Dumper\PhpGeneratorDumper</parameter>
-        <parameter key="i18n_routing.options.matcher_dumper_class">Bundle\I18nRoutingBundle\Routing\Matcher\Dumper\PhpMatcherDumper</parameter>
+        <parameter key="i18n_routing.router.class">BeSimple\I18nRoutingBundle\Routing\Router</parameter>
+        <parameter key="i18n_routing.options.generator_dumper_class">BeSimple\I18nRoutingBundle\Routing\Generator\Dumper\PhpGeneratorDumper</parameter>
+        <parameter key="i18n_routing.options.matcher_dumper_class">BeSimple\I18nRoutingBundle\Routing\Matcher\Dumper\PhpMatcherDumper</parameter>
     </parameters>
 
     <services>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\I18nRoutingBundle\Routing\Matcher\Dumper;
+namespace BeSimple\I18nRoutingBundle\Routing\Matcher\Dumper;
 
 use Symfony\Component\Routing\Matcher\Dumper\PhpMatcherDumper as BasePhpMatcherDumper;
 

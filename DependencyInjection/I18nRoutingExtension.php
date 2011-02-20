@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\I18nRoutingBundle\DependencyInjection;
+namespace BeSimple\I18nRoutingBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,7 +21,7 @@ class I18nRoutingExtension extends Extension
         $loader->load('routing.xml');
 
         $this->addClassesToCompile(array(
-            'Bundle\\I18nRoutingBundle\\Routing\\Router',
+            'BeSimple\\I18nRoutingBundle\\Routing\\Router',
         ));
     }
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Bundle\I18nRoutingBundle\Routing;
+namespace BeSimple\I18nRoutingBundle\Routing;
 
-use Symfony\Component\Routing\Router as BaseRouter,
-    Symfony\Component\Config\Loader\LoaderInterface,
-    Symfony\Component\HttpFoundation\Session;
+use Symfony\Component\Routing\Router as BaseRouter;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpFoundation\Session;
 
 class Router extends BaseRouter
 {
