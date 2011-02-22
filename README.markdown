@@ -83,7 +83,7 @@ When you create an i18n route and you go on it with your browser, the locale wil
         defaults: { _controller: HelloBundle:Hello:index }
     
     homepage:
-        locales: { en: /welcome, fr: /bienvenue, de: /willkommen }
+        locales:  { en: /welcome, fr: /bienvenue, de: /willkommen }
         defaults: { _controller: MyWebsiteBundle:Frontend:index }
 
 #### XML routing file
@@ -99,11 +99,11 @@ When you create an i18n route and you go on it with your browser, the locale wil
         </route>
     
         <route id="homepage">
-                <locale key="en">/welcome</locale>
-                <locale key="fr">/bienvenue</locale>
-                <locale key="de">/willkommen</locale>
-                <default key="_controller">MyWebsiteBundle:Frontend:index</default>
-            </route>
+            <locale key="en">/welcome</locale>
+            <locale key="fr">/bienvenue</locale>
+            <locale key="de">/willkommen</locale>
+            <default key="_controller">MyWebsiteBundle:Frontend:index</default>
+        </route>
     </routes>
 
 #### PHP routing file
