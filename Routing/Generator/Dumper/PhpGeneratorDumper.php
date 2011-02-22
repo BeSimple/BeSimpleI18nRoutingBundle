@@ -14,12 +14,12 @@ class PhpGeneratorDumper extends BasePhpGeneratorDumper
         foreach ($this->routes->all() as $name => $route) {
             $compiledRoute = $route->compile();
 
-            $variables = str_replace("\n", '', var_export($compiledRoute->getVariables(), true));
-            $defaults = str_replace("\n", '', var_export($route->getDefaults(), true));
+            $variables    = str_replace("\n", '', var_export($compiledRoute->getVariables(), true));
+            $defaults     = str_replace("\n", '', var_export($route->getDefaults(), true));
             $requirements = str_replace("\n", '', var_export($compiledRoute->getRequirements(), true));
-            $tokens = str_replace("\n", '', var_export($compiledRoute->getTokens(), true));
+            $tokens       = str_replace("\n", '', var_export($compiledRoute->getTokens(), true));
 
-            $escapedName = str_replace('.', '__', $name);
+            $escapedName  = str_replace('.', '__', $name);
 
             $methods[] = <<<EOF
     protected function get{$escapedName}RouteInfo()
