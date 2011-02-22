@@ -21,12 +21,18 @@
                 <argument key="generator_class">%router.options.generator_class%</argument>
                 <argument key="generator_base_class">%router.options.generator_base_class%</argument>
                 <argument key="generator_dumper_class">%i18n_routing.options.generator_dumper_class%</argument>
-                <argument key="generator_cache_class">%kernel.name%_%kernel.environment%UrlGenerator</argument>
+                <argument key="generator_cache_class">%router.options.generator.cache_class%</argument>
                 <argument key="matcher_class">%router.options.matcher_class%</argument>
                 <argument key="matcher_base_class">%router.options.matcher_base_class%</argument>
                 <argument key="matcher_dumper_class">%i18n_routing.options.matcher_dumper_class%</argument>
-                <argument key="matcher_cache_class">%kernel.name%UrlMatcher</argument>
+                <argument key="matcher_cache_class">%router.options.matcher.cache_class%</argument>
+                <argument key="resource_type">%router.options.resource_type%</argument>
             </argument>
+        </service>
+
+        <service id="router.cache_warmer" class="%router.cache_warmer.class%" public="false">
+            <tag name="kernel.cache_warmer" />
+            <argument type="service" id="router" />
         </service>
     </services>
 </container>
