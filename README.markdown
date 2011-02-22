@@ -26,7 +26,7 @@ When you create an i18n route and you go on it with your browser, the locale wil
         );
     }
 
-### Register the BeSimple
+### Register the BeSimple namespace
 
     // app/autoload.php
     $loader->registerNamespaces(array(
@@ -39,7 +39,7 @@ When you create an i18n route and you go on it with your browser, the locale wil
 ### Yaml routing file
 
     homepage:
-        locales: { en: /welcome, fr: /bienvenue, de: /willkommen }
+        locales:  { en: /welcome, fr: /bienvenue, de: /willkommen }
         defaults: { _controller: MyWebsiteBundle:Frontend:index }
 
 ### XML routing file
@@ -66,9 +66,9 @@ When you create an i18n route and you go on it with your browser, the locale wil
     use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
     
     $collection = new RouteCollection();
-    $route = new I18nRoute('homepage', array(
-            'en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen',
-        ), array('_controller' => 'MyWebsiteBundle:Frontend:index',)
+    $route      = new I18nRoute('homepage',
+        array('en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen'),
+        array('_controller' => 'MyWebsiteBundle:Frontend:index')
     );
     $collection->addCollection($route->getCollection());
     
