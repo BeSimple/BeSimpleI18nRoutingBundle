@@ -34,6 +34,11 @@ When you create an i18n route and you go on it with your browser, the locale wil
         // your other namespaces
     ));
 
+### Update your configuration
+
+    // app/config/config.yml
+    be_simple_i18n_routing: ~
+
 ## Create your routing
 
 ### Yaml routing file
@@ -51,11 +56,11 @@ When you create an i18n route and you go on it with your browser, the locale wil
         xsi:schemaLocation="http://www.symfony-project.org/schema/routing http://www.symfony-project.org/schema/routing/routing-1.0.xsd">
     
         <route id="homepage">
-                <locale key="en">/welcome</locale>
-                <locale key="fr">/bienvenue</locale>
-                <locale key="de">/willkommen</locale>
-                <default key="_controller">MyWebsiteBundle:Frontend:index</default>
-            </route>
+            <locale key="en">/welcome</locale>
+            <locale key="fr">/bienvenue</locale>
+            <locale key="de">/willkommen</locale>
+            <default key="_controller">MyWebsiteBundle:Frontend:index</default>
+        </route>
     </routes>
 
 ### PHP routing file
@@ -118,9 +123,9 @@ When you create an i18n route and you go on it with your browser, the locale wil
     $collection->add('hello', new Route('/hello/:name', array(
         '_controller' => 'HelloBundle:Hello:index',
     )));
-    $route = new I18nRoute('homepage', array(
-            'en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen',
-        ), array('_controller' => 'MyWebsiteBundle:Frontend:index',)
+    $route = new I18nRoute('homepage',
+        array('en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen'),
+        array('_controller' => 'MyWebsiteBundle:Frontend:index',)
     );
     $collection->addCollection($route->getCollection());
     
