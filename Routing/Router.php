@@ -71,6 +71,10 @@ class Router extends BaseRouter
      * @param string   $locale     The locale of the I18N route
      * @param  array   $parameters An array of parameters
      * @param  Boolean $absolute   Whether to generate an absolute URL
+     *
+     * @return string The generated URL
+     *
+     * @throws \InvalidArgumentException When the route doesn't exists
      */
     protected function generateI18n($name, $locale, $parameters, $absolute)
     {
