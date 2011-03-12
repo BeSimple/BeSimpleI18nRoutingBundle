@@ -95,9 +95,9 @@ When you create an i18n route and you go on it with your browser, the locale wil
 
     <?xml version="1.0" encoding="UTF-8" ?>
     
-    <routes xmlns="http://www.symfony-project.org/schema/routing"
+    <routes xmlns="http://symfony.com/schema/routing"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.symfony-project.org/schema/routing http://www.symfony-project.org/schema/routing/routing-1.0.xsd">
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
     
         <route id="hello" pattern="/hello/:name">
             <default key="_controller">HelloBundle:Hello:index</default>
@@ -137,20 +137,20 @@ When you create an i18n route and you go on it with your browser, the locale wil
 
 #### Twig
 
-    {{ path('homepage_en') }}
+    {{ path('homepage.en') }}
     {{ path('homepage', { 'locale': 'en' }) }}
-    {{ path('homepage_fr') }}
+    {{ path('homepage.fr') }}
     {{ path('homepage', { 'locale': 'fr' }) }}
-    {{ path('homepage_de') }}
+    {{ path('homepage.de') }}
     {{ path('homepage', { 'locale': 'de' }) }}
 
 #### PHP
 
-    <?php echo $view['router']->generate('homepage_en') ?>
+    <?php echo $view['router']->generate('homepage.en') ?>
     <?php echo $view['router']->generate('homepage', array('locale' => 'en')) ?>
-    <?php echo $view['router']->generate('homepage_fr') ?>
+    <?php echo $view['router']->generate('homepage.fr') ?>
     <?php echo $view['router']->generate('homepage', array('locale' => 'fr')) ?>
-    <?php echo $view['router']->generate('homepage_de') ?>
+    <?php echo $view['router']->generate('homepage.de') ?>
     <?php echo $view['router']->generate('homepage', array('locale' => 'de')) ?>
 
 ### Use current locale of user
@@ -162,4 +162,3 @@ When you create an i18n route and you go on it with your browser, the locale wil
 #### PHP
 
     <?php echo $view['router']->generate('homepage') ?>
-
