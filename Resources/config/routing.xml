@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="i18n_routing.router.class">BeSimple\I18nRoutingBundle\Routing\Router</parameter>
         <parameter key="i18n_routing.options.generator_dumper_class">BeSimple\I18nRoutingBundle\Routing\Generator\Dumper\PhpGeneratorDumper</parameter>
+        <parameter key="i18n_routing.generator_base.class">BeSimple\I18nRoutingBundle\Routing\Generator\UrlGenerator</parameter>
         <parameter key="i18n_routing.options.matcher_dumper_class">BeSimple\I18nRoutingBundle\Routing\Matcher\Dumper\PhpMatcherDumper</parameter>
     </parameters>
 
@@ -19,7 +20,7 @@
                 <argument key="cache_dir">%kernel.cache_dir%</argument>
                 <argument key="debug">%kernel.debug%</argument>
                 <argument key="generator_class">%router.options.generator_class%</argument>
-                <argument key="generator_base_class">%router.options.generator_base_class%</argument>
+                <argument key="generator_base_class">%i18n_routing.generator_base.class%</argument>
                 <argument key="generator_dumper_class">%i18n_routing.options.generator_dumper_class%</argument>
                 <argument key="generator_cache_class">%router.options.generator.cache_class%</argument>
                 <argument key="matcher_class">%router.options.matcher_class%</argument>
