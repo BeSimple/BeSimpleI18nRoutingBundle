@@ -25,16 +25,4 @@ class BeSimpleI18nRoutingExtension extends Extension
             'BeSimple\\I18nRoutingBundle\\Routing\\Router',
         ));
     }
-
-    /**
-     * Returns the recommended alias to use in XML.
-     *
-     * This alias is also the mandatory prefix to use when using YAML.
-     *
-     * @return string The alias
-     */
-    public function getAlias()
-    {
-        return 'be_simple_i18n_routing';
-    }
 }
