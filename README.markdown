@@ -6,7 +6,7 @@ for different languages.
 
 ## Information
 
-When you create an i18n route and you go on it with your browser, the locale will be updated.
+When you create an I18N route and you go on it with your browser, the locale will be updated.
 
 ## Installation
 
@@ -67,8 +67,8 @@ When you create an i18n route and you go on it with your browser, the locale wil
 
     <?php
     
-    use Symfony\Component\Routing\RouteCollection;
     use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
+    use Symfony\Component\Routing\RouteCollection;
     
     $collection = new RouteCollection();
     $route      = new I18nRoute('homepage',
@@ -84,11 +84,11 @@ When you create an i18n route and you go on it with your browser, the locale wil
 #### Yaml routing file
 
     hello:
-        pattern:  /hello/:name
+        pattern:  /hello/{name}
         defaults: { _controller: HelloBundle:Hello:index }
     
     homepage:
-        locales:  { en: /welcome, fr: /bienvenue, de: /willkommen }
+        locales:  { en: /welcome/{name}, fr: /bienvenue/{name}, de: /willkommen/{name} }
         defaults: { _controller: MyWebsiteBundle:Frontend:index }
 
 #### XML routing file
@@ -99,14 +99,14 @@ When you create an i18n route and you go on it with your browser, the locale wil
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
     
-        <route id="hello" pattern="/hello/:name">
+        <route id="hello" pattern="/hello/{name}">
             <default key="_controller">HelloBundle:Hello:index</default>
         </route>
     
         <route id="homepage">
-            <locale key="en">/welcome</locale>
-            <locale key="fr">/bienvenue</locale>
-            <locale key="de">/willkommen</locale>
+            <locale key="en">/welcome/{name}</locale>
+            <locale key="fr">/bienvenue/{name}</locale>
+            <locale key="de">/willkommen/{name}</locale>
             <default key="_controller">MyWebsiteBundle:Frontend:index</default>
         </route>
     </routes>
@@ -115,16 +115,16 @@ When you create an i18n route and you go on it with your browser, the locale wil
 
     <?php
     
-    use Symfony\Component\Routing\RouteCollection;
-    use BeSimple\I18nRoutingBundle\Routing\Route;
     use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
+    use Symfony\Component\Routing\Route;
+    use Symfony\Component\Routing\RouteCollection;
     
     $collection = new RouteCollection();
-    $collection->add('hello', new Route('/hello/:name', array(
+    $collection->add('hello', new Route('/hello/{name}', array(
         '_controller' => 'HelloBundle:Hello:index',
     )));
     $route = new I18nRoute('homepage',
-        array('en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen'),
+        array('en' => '/welcome/{name}', 'fr' => '/bienvenue/{name}', 'de' => '/willkommen/{name}'),
         array('_controller' => 'MyWebsiteBundle:Frontend:index',)
     );
     $collection->addCollection($route->getCollection());
