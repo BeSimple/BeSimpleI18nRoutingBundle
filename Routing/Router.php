@@ -65,6 +65,20 @@ class Router extends BaseRouter
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function match($url)
+    {
+        $match = parent::match($url);
+
+        if (!empty($match['_locale']) && preg_match('#^(.+)\.'.preg_quote($match['_locale'], '#').'+$#', $match['_route'], $route)) {
+            $match['_route'] = $route[1];
+        }
+
+        return $match;
+    }
+
+    /**
      * Generates a I18N URL from the given parameter
      *
      * @param string   $name       The name of the I18N route
