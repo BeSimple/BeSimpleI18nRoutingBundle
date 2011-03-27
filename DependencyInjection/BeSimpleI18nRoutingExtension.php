@@ -21,6 +21,7 @@ class BeSimpleI18nRoutingExtension extends Extension
         $loader->load('routing.xml');
 
         $this->addClassesToCompile(array(
+            'BeSimple\\I18nRoutingBundle\\Routing\\Generator\\UrlGenerator',
             'BeSimple\\I18nRoutingBundle\\Routing\\Router',
         ));
     }
