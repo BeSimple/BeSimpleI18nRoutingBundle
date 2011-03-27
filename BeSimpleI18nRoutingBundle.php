@@ -2,9 +2,9 @@
 
 namespace BeSimple\I18nRoutingBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use BeSimple\I18nRoutingBundle\DependencyInjection\Compiler\OverrideRoutingCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class BeSimpleI18nRoutingBundle extends Bundle
 {

@@ -2,6 +2,7 @@
 
 namespace BeSimple\I18nRoutingBundle\Routing;
 
+use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 class I18nRoute

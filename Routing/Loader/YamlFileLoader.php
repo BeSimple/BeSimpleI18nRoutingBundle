@@ -3,9 +3,9 @@
 namespace BeSimple\I18nRoutingBundle\Routing\Loader;
 
 use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
-use BeSimple\I18nRoutingBundle\Routing\Route;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader;
+use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;
 

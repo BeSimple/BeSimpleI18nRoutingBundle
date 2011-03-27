@@ -2,9 +2,10 @@
 
 namespace BeSimple\I18nRoutingBundle\Routing\Loader;
 
+use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
 use Symfony\Component\Routing\Loader\XmlFileLoader as BaseXmlFileLoader;
+use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use BeSimple\I18nRoutingBundle\Routing;
 
 class XmlFileLoader extends BaseXmlFileLoader
 {
@@ -48,11 +49,11 @@ class XmlFileLoader extends BaseXmlFileLoader
         }
 
         if ($locales) {
-            $route = new Routing\I18nRoute((string) $definition->getAttribute('id'), $locales, $defaults, $requirements, $options);
+            $route = new I18nRoute((string) $definition->getAttribute('id'), $locales, $defaults, $requirements, $options);
 
             $collection->addCollection($route->getCollection());
         } else {
-            $route = new Routing\Route((string) $definition->getAttribute('pattern'), $defaults, $requirements, $options);
+            $route = new Route((string) $definition->getAttribute('pattern'), $defaults, $requirements, $options);
 
             $collection->add((string) $definition->getAttribute('id'), $route);
         }
