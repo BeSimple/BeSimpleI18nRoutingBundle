@@ -6,6 +6,8 @@ use Symfony\Component\Routing\Route as BaseRoute;
 
 class Route extends BaseRoute
 {
+    static protected $compilers = array();
+
     protected $isI18n;
 
     /**
