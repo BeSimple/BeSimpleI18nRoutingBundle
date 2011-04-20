@@ -26,7 +26,7 @@ class Router extends BaseRouter
      *
      * @throws \InvalidArgumentException When unsupported option is provided
      */
-    public function __construct(LoaderInterface $loader, Session $session = null, $resource, array $options = array(), array $context = array(), array $defaults = array())
+    public function __construct(LoaderInterface $loader, Session $session = null, $resource, array $options = array(), RequestContext $context = null, array $defaults = array())
     {
         parent::__construct($loader, $resource, $options, $context, $defaults);
 
