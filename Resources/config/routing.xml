@@ -11,9 +11,9 @@
 
     <services>
         <service id="i18n_routing.router" class="%i18n_routing.router.class%">
-            <argument type="service" id="routing.loader" />
             <argument type="service" id="session" on-invalid="ignore" />
-            <argument>%routing.resource%</argument>
+            <argument type="service" id="routing.loader" />
+            <argument /> <!-- routing resource -->
             <argument type="collection">
                 <argument key="cache_dir">%kernel.cache_dir%</argument>
                 <argument key="debug">%kernel.debug%</argument>
@@ -25,7 +25,6 @@
                 <argument key="matcher_base_class">%router.options.matcher_base_class%</argument>
                 <argument key="matcher_dumper_class">%router.options.matcher_dumper_class%</argument>
                 <argument key="matcher_cache_class">%router.options.matcher.cache_class%</argument>
-                <argument key="resource_type">%router.options.resource_type%</argument>
             </argument>
         </service>
 

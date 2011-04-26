@@ -13,5 +13,11 @@ class OverrideRoutingCompilerPass implements CompilerPassInterface
         $container->setParameter('routing.loader.yml.class', 'BeSimple\\I18nRoutingBundle\\Routing\\Loader\\YamlFileLoader');
 
         $container->setAlias('router', 'i18n_routing.router');
+
+        $routerReal = $container->findDefinition('router.real');
+        $arguments  = $routerReal->getArguments();
+
+        $i18nRoutingRouter = $container->findDefinition('i18n_routing.router');
+        $i18nRoutingRouter->replaceArgument(2, $arguments[1]);
     }
 }

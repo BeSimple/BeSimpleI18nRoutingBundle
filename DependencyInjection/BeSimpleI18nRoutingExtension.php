@@ -3,6 +3,7 @@
 namespace BeSimple\I18nRoutingBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -12,7 +13,7 @@ class BeSimpleI18nRoutingExtension extends Extension
     /**
      * Loads the I18nRouting configuration.
      *
-     * @param array            $configs    An array of array of configuration settings
+     * @param array            $configs   An array of array of configuration settings
      * @param ContainerBuilder $container A ContainerBuilder instance
      */
     public function load(array $configs, ContainerBuilder $container)
