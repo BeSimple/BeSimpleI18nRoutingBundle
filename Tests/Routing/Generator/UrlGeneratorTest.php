@@ -25,18 +25,40 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testGenerate()
+    /**
+     * @dataProvider provideI18nRouteData
+     */
+    public function testGenerate($name, $locales)
     {
-        $route = $this->getRoute('test', array(
-            'en' => '/welcome',
-            'fr' => '/bienvenue',
-            'de' => '/willkommen',
-        ));
-
+        $route = $this->getRoute($name, $locales);
         $generator = $this->getGenerator($route->getCollection());
-        $this->assertEquals('/welcome', $generator->generateI18n('test', 'en'));
-        $this->assertEquals('/bienvenue', $generator->generateI18n('test', 'fr'));
-        $this->assertEquals('/willkommen', $generator->generateI18n('test', 'de'));
+
+        foreach ($locales as $locale => $pattern) {
+            $this->assertEquals($pattern, $generator->generateI18n($name, $locale));
+        }
+    }
+
+    public function provideI18nRouteData()
+    {
+        return array(
+            array(
+                'test',
+                array(
+                    'en' => '/welcome',
+                    'fr' => '/bienvenue',
+                    'de' => '/willkommen',
+                ),
+            ),
+
+            array(
+                'test_bis',
+                array(
+                    'en_GB' => '/welcome',
+                    'fr_FR' => '/bienvenue',
+                    'de_DE' => '/willkommen',
+                ),
+            ),
+        );
     }
 
     private function getGenerator(RouteCollection $collection = null)
