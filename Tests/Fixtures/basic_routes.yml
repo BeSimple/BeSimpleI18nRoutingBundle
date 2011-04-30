@@ -1,0 +1,7 @@
+homepage:
+    pattern:  /
+    defaults: { _controller: TestBundle:Frontend:homepage }
+
+welcome:
+    locales: { en: /welcome, fr: /bienvenue, de: /willkommen }
+    defaults: { _controller: TestBundle:Frontend:welcome }

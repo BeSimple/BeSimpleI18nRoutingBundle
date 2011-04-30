@@ -1,0 +1,5 @@
+_basic_i18n_route:
+    resource: basic_i18n_route.yml
+
+_basic_routes:
+    resource: basic_routes.yml
