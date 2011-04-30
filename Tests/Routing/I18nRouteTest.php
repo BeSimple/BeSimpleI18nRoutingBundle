@@ -78,6 +78,15 @@ class I18nRouteTest extends \PHPUnit_Framework_TestCase
                 array('page' => 1),
                 array('page', 'extension'),
             ),
+
+            array(
+                'other_locales_route',
+                array('en_GB' => '/en/{page}.{extension}', 'fr_FR' => '/fr/{page}.{extension}', 'de_DE' => '/de/{page}.{extension}'),
+                array('page' => 'index.html'),
+                array('page' => '\d+', 'extension' => 'html|xml|json'),
+                array('page' => 1),
+                array('page', 'extension'),
+            ),
         );
     }
 }
