@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Router as BaseRouter;
 
 class Router extends BaseRouter
 {
-    protected $session;
+    private $session;
 
     /**
      * Constructor.
