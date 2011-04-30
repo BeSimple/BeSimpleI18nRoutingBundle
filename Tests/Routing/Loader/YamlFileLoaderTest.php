@@ -24,6 +24,13 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(4, count($routes));
     }
 
+    public function testFullLocale()
+    {
+        $routes = $this->load('full_locale.yml')->all();
+
+        $this->assertEquals(3, count($routes));
+    }
+
     public function testImport()
     {
         $routes = $this->load('import.yml')->all();

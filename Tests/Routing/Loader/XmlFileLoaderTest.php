@@ -24,6 +24,13 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(4, count($routes));
     }
 
+    public function testFullLocale()
+    {
+        $routes = $this->load('full_locale.xml')->all();
+
+        $this->assertEquals(3, count($routes));
+    }
+
     public function testImport()
     {
         $routes = $this->load('import.xml')->all();
