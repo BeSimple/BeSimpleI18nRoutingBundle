@@ -1,6 +1,6 @@
 <?php
 
-namespace BeSimple\I18nRoutingBundle\Routing\Generator;
+namespace BeSimple\I18nRoutingBundle\Tests\Routing\Generator;
 
 use BeSimple\I18nRoutingBundle\Routing\Generator\UrlGenerator;
 use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
