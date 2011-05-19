@@ -2,7 +2,9 @@ I18nRoutingBundle, generate your I18N Routes for Symfony2
 =========================================================
 
 If you have a website multilingual, this bundle avoids of copy paste your routes
-for different languages.
+for different languages. Additionally it allows to translate given routing parameters
+between languages in Router#match and UrlGenerator#generate using either a Symfony Translator
+or a Doctrine DBAL (+Cache) based backend.
 
 ## Information
 
@@ -162,3 +164,32 @@ When you create an I18N route and you go on it with your browser, the locale wil
 #### PHP
 
     <?php echo $view['router']->generate('homepage') ?>
+
+## Translating Route Parameters
+
+If the static parts of your routes are translated you get to the point really fast when dynamic parts
+such as product slugs, category names or other dynamic routing parameters should be translated.
+
+You can configure translation in your config.yml:
+
+    // app/config/config.yml
+    be_simple_i18n_routing:
+        connection: default # Doctrine DBAL connection name
+        cache: apc
+        #use_translations: true # If you want to use Symfony translator
+
+After this you can now define a to be translated attribute in your route defaults:
+
+    product_view:
+        locales: { en: "/product/{slug}", de: "/produkt/{slug}" }
+        defaults: { _controller: "ShopBundle:Product:view", _translate: "slug" }
+    product_view2:
+        locales: { en: "/product/{category}/{slug}", de: "/produkt/{category}/{slug}" }
+        defaults:
+            _controller: "ShopBundle:Product:view"
+            _translate: "slug"
+
+The same goes with generating routes, now backwards:
+
+    {{ path("product_view", {"slug": product.slug, "translate": "slug"}) }}
+    {{ path("product_view2", {"slug": product.slug, "translate": ["slug", "category]}) }}

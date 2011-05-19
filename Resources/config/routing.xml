@@ -7,11 +7,14 @@
     <parameters>
         <parameter key="i18n_routing.router.class">BeSimple\I18nRoutingBundle\Routing\Router</parameter>
         <parameter key="i18n_routing.generator_base.class">BeSimple\I18nRoutingBundle\Routing\Generator\UrlGenerator</parameter>
+        <parameter key="i18n_routing.translator.doctrine.class">BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBALTranslator</parameter>
+        <parameter key="i18n_routing.translator.translation.class">BeSimple\I18nRoutingBundle\Routing\Translator\TranslationTranslator</parameter>
     </parameters>
 
     <services>
         <service id="i18n_routing.router" class="%i18n_routing.router.class%">
             <argument type="service" id="session" on-invalid="ignore" />
+            <argument type="service" id="i18n_routing.translator" on-invalid="ignore" />
             <argument type="service" id="routing.loader" />
             <argument /> <!-- routing resource -->
             <argument type="collection">
