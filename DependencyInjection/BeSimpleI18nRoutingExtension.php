@@ -38,17 +38,25 @@ class BeSimpleI18nRoutingExtension extends Extension
                 
                 $def = new Definition(
                     '%i18n_routing.translator.doctrine.class%', array(
-                        new Reference('docctrine.dbal.' . $config['connection'] . '_connection'),
+                        new Reference('doctrine.dbal.' . $config['connection'] . '_connection'),
                         new Reference('i18n_routing.doctrine.cache'),
                     )
-                );
+                );                
+                $def->setPublic(true); // public, we need it to add translations!
                 $container->setDefinition('i18n_routing.translator', $def);
+                
+                $def = $container->getDefinition('i18n_routing.translator.doctrine.schemalistener');
+                $def->addTag('doctrine.event_listener', array(
+                    'connection' => $config['connection'],
+                    'event'      => 'postGenerateSchema',
+                ));
             } else if (isset($config['use_translator']) && $config['use_translator'] == true) {
                 $def = new Definition(
                     '%i18n_routing.translator.translation.class%', array(
                         new Reference('translator')
                     )
                 );
+                $def->setPublic(false);
                 $container->setDefinition('i18n_routing.translator', $def);
             }
         }

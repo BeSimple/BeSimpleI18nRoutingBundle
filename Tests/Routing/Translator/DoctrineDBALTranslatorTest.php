@@ -3,6 +3,7 @@
 namespace BeSimple\I18nRoutingBundle\Tests\Routing\Translator;
 
 use BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBALTranslator;
+use BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBAL\SchemaListener;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\DriverManager;
@@ -36,7 +37,9 @@ class DoctrineDBALTranslatorTest extends \PHPUnit_Framework_TestCase
         $this->translator = new DoctrineDBALTranslator($conn, $cache, false);
         $schema = new Schema();
         
-        $this->translator->postGenerateSchema($schema);
+        $schemaListener = new SchemaListener();
+        $schemaListener->addRoutingTranslationsTable($schema);
+        
         foreach ($schema->toSql($conn->getDatabasePlatform()) AS $sql) {
             $conn->exec($sql);
         }

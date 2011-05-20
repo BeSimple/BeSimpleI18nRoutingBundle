@@ -106,20 +106,6 @@ class DoctrineDBALTranslator implements AttributeTranslatorInterface
         return $value;
     }
     
-    public function postGenerateSchema(Schema $schema)
-    {
-        $table = $schema->createTable('routing_translations');
-        $table->addColumn('id', 'integer');
-        $table->addColumn('route', 'string');
-        $table->addColumn('locale', 'string');
-        $table->addColumn('attribute', 'string');
-        $table->addColumn('localized_value', 'string');
-        $table->addColumn('original_value', 'string');
-        $table->setPrimaryKey(array('id'));
-        $table->addUniqueIndex(array('route', 'locale', 'attribute'));
-        $table->addIndex(array('localized_value')); // this is much more selective than the unique index
-    }
-    
     public function addTranslation($route, $locale, $attribute, $localizedValue, $originalValue)
     {
         $query = "SELECT id FROM routing_translations WHERE route = ? AND locale = ? AND attribute = ?";
