@@ -53,7 +53,7 @@ class DoctrineDBALTranslator implements AttributeTranslatorInterface
     {
         // values can potentially be large, so we hash them and prevent collisions
         $hashKey = $route . "__" . $locale . "__" . $attribute . "__" . $value;
-        $cacheKey = "sf2i18nroute__" . sha1($hashKey);
+        $cacheKey = "besimplei18nroute__" . sha1($hashKey);
         $translatedValues = $this->cache->fetch($cacheKey);
         if ($translatedValues && isset($translatedValues[$hashKey])) {
             return $translatedValues[$hashKey];
@@ -88,7 +88,7 @@ class DoctrineDBALTranslator implements AttributeTranslatorInterface
     {
         // values can potentially be large, so we hash them and prevent collisions
         $hashKey = $route . "__" . $locale . "__" . $attribute . "__" . $value;
-        $cacheKey = "sf2i18nroute__reverse__" . sha1($hashKey);
+        $cacheKey = "besimplei18nroute__reverse__" . sha1($hashKey);
         $reverseTranslatedValues = $this->cache->fetch($cacheKey);
         if ($reverseTranslatedValues && isset($reverseTranslatedValues[$hashKey])) {
             return $reverseTranslatedValues[$hashKey];
@@ -129,7 +129,7 @@ class DoctrineDBALTranslator implements AttributeTranslatorInterface
         // prime the cache!
         if ($this->primeCache) {
             $hashKey = $route . "__" . $locale . "__" . $attribute . "__" . $localizedValue;
-            $cacheKey = "sf2i18nroute__" . sha1($hashKey);
+            $cacheKey = "besimplei18nroute__" . sha1($hashKey);
             $translatedValues = $this->cache->fetch($cacheKey);
             if (!$translatedValues) {
                 $translatedValues = array();

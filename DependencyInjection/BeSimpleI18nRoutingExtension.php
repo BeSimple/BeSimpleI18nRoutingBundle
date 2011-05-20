@@ -27,10 +27,10 @@ class BeSimpleI18nRoutingExtension extends Extension
             'BeSimple\\I18nRoutingBundle\\Routing\\Router',
         ));
         
-        foreach ($configs AS $config) {
+        foreach ($configs as $config) {
             if (isset($config['connection'])) {
                 if (!isset($config['cache'])) {
-                    $cacheDef = new \Symfony\Component\DependencyInjection\Definition('Doctrine\Common\Cache\ArrayCache');
+                    $cacheDef = new Definition('Doctrine\Common\Cache\ArrayCache');
                 } else {
                     $cacheDef = $this->getCacheDefinition($config['cache'], $container);
                 }

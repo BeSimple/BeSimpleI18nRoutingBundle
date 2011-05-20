@@ -63,7 +63,7 @@ class Router extends BaseRouter
             unset($parameters['locale']);
             
             if (isset($parameters['translate'])) {
-                foreach (array($parameters['translate']) AS $translateAttribute) {
+                foreach (array($parameters['translate']) as $translateAttribute) {
                     $parameters[$translateAttribute] = $this->translator->reverseTranslate(
                         $name, $locale, $translateAttribute, $parameters[$translateAttribute]
                     );

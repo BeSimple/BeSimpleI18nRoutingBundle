@@ -10,6 +10,7 @@ class SchemaListener
     public function postGenerateSchema(GenerateSchemaEventArgs $eventArgs)
     {
         $schema = $eventArgs->getSchema();
+        $this->addRoutingTranslationsTable($schema);
     }
     
     public function addRoutingTranslationsTable(Schema $schema)
