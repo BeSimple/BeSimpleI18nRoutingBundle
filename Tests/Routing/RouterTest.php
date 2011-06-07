@@ -18,9 +18,9 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->session = new Session(new ArraySessionStorage());
         $this->translator = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface');
         
-        $loader = $this->getMock('Symfony\Component\Config\Loader\LoaderInterface');
+        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->router = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Router', array('getMatcher', 'getGenerator'), array(
-            $this->session, $this->translator, $loader, null
+            $this->session, $this->translator, $container, null
         ));
     }
     
