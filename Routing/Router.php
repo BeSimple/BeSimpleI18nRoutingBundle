@@ -2,10 +2,10 @@
 
 namespace BeSimple\I18nRoutingBundle\Routing;
 
-use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\Router as BaseRouter;
+use Symfony\Bundle\FrameworkBundle\Routing\Router as BaseRouter;
 
 class Router extends BaseRouter
 {
@@ -19,7 +19,7 @@ class Router extends BaseRouter
      *   * See Router class
      *
      * @param Session         $session  A Session instance
-     * @param LoaderInterface $loader   A LoaderInterface instance
+     * @param LoaderInterface $container   A LoaderInterface instance
      * @param mixed           $resource The main resource to load
      * @param array           $options  An array of options
      * @param array           $context  The context
@@ -27,9 +27,9 @@ class Router extends BaseRouter
      *
      * @throws \InvalidArgumentException When unsupported option is provided
      */
-    public function __construct(Session $session = null, LoaderInterface $loader, $resource, array $options = array(), RequestContext $context = null, array $defaults = array())
+    public function __construct(Session $session = null, ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null, array $defaults = array())
     {
-        parent::__construct($loader, $resource, $options, $context, $defaults);
+        parent::__construct($container, $resource, $options, $context, $defaults);
 
         $this->session = $session;
     }
