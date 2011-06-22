@@ -7,11 +7,15 @@
     <parameters>
         <parameter key="i18n_routing.router.class">BeSimple\I18nRoutingBundle\Routing\Router</parameter>
         <parameter key="i18n_routing.generator_base.class">BeSimple\I18nRoutingBundle\Routing\Generator\UrlGenerator</parameter>
+        <parameter key="i18n_routing.translator.doctrine.class">BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBALTranslator</parameter>
+        <parameter key="i18n_routing.translator.doctrine.schemalistener.class">BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBAL\SchemaListener</parameter>
+        <parameter key="i18n_routing.translator.translation.class">BeSimple\I18nRoutingBundle\Routing\Translator\TranslationTranslator</parameter>
     </parameters>
 
     <services>
         <service id="i18n_routing.router" class="%i18n_routing.router.class%">
             <argument type="service" id="session" on-invalid="ignore" />
+            <argument type="service" id="i18n_routing.translator" on-invalid="ignore" />
             <argument type="service" id="service_container" />
             <argument /> <!-- routing resource -->
             <argument type="collection">
@@ -32,5 +36,7 @@
             <tag name="kernel.cache_warmer" />
             <argument type="service" id="router" />
         </service>
+        
+        <service id="i18n_routing.translator.doctrine.schemalistener" class="%i18n_routing.translator.doctrine.schemalistener.class%" public="false" />
     </services>
 </container>
