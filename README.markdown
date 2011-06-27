@@ -10,9 +10,9 @@ When you create an I18N route and you go on it with your browser, the locale wil
 
 ## Installation
 
-### Add I18nRoutingBundle to your src/Bundle dir
+### Add I18nRoutingBundle to your vendor/bundles dir
 
-    git submodule add git://github.com/francisbesset/I18nRoutingBundle.git src/BeSimple/I18nRoutingBundle
+    git submodule add git://github.com/francisbesset/I18nRoutingBundle.git vendor/bundles/BeSimple/I18nRoutingBundle
 
 ### Add I18nRoutingBundle to your application kernel
 
@@ -30,7 +30,7 @@ When you create an I18N route and you go on it with your browser, the locale wil
 
     // app/autoload.php
     $loader->registerNamespaces(array(
-        'BeSimple' => __DIR__.'/../src',
+        'BeSimple' => __DIR__.'/../vendor/bundles',
         // your other namespaces
     ));
 
