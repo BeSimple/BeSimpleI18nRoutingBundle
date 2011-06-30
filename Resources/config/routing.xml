@@ -36,7 +36,7 @@
             <tag name="kernel.cache_warmer" />
             <argument type="service" id="router" />
         </service>
-        
+
         <service id="i18n_routing.translator.doctrine.schemalistener" class="%i18n_routing.translator.doctrine.schemalistener.class%" public="false" />
     </services>
 </container>

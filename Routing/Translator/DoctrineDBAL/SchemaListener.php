@@ -2,8 +2,8 @@
 
 namespace BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBAL;
 
-use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 
 class SchemaListener
 {
@@ -14,7 +14,7 @@ class SchemaListener
     }
     
     public function addRoutingTranslationsTable(Schema $schema)
-    {   
+    {
         $table = $schema->createTable('routing_translations');
         $table->addColumn('id', 'integer');
         $table->addColumn('route', 'string');
