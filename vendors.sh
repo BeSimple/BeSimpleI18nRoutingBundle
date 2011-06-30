@@ -2,14 +2,19 @@
 
 cd $(dirname $0)
 
+METHOD=git
+if [ "$1" = "--http" ]; then
+    METHOD=http
+fi
+
 # initialization
-if [ "$1" = "--reinstall" ]; then
+if [ "$2" = "--reinstall" ]; then
     rm -rf vendor
 fi
 
 mkdir -p vendor && cd vendor
 
-##
+#
 # @param destination directory (e.g. "doctrine")
 # @param URL of the git remote (e.g. git://github.com/doctrine/doctrine2.git)
 # @param revision to point the head (e.g. origin/HEAD)
@@ -35,4 +40,8 @@ install_git()
 }
 
 # Symfony
-install_git symfony git://github.com/symfony/symfony.git
+install_git symfony $METHOD://github.com/symfony/symfony.git
+
+# Doctrine
+install_git doctrine-dbal $METHOD://github.com/doctrine/dbal.git 2.1.0RC2
+install_git doctrine-common $METHOD://github.com/doctrine/common.git 2.1.0RC2

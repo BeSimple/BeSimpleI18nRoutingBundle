@@ -6,6 +6,8 @@ use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespace('Symfony', $_SERVER['SYMFONY']);
+$loader->registerNamespace('Doctrine\\DBAL', $_SERVER['DOCTRINE_DBAL']);
+$loader->registerNamespace('Doctrine\\Common', $_SERVER['DOCTRINE_COMMON']);
 $loader->register();
 
 spl_autoload_register(function($class) {

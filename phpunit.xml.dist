@@ -13,6 +13,8 @@
 >
     <php>
         <server name="SYMFONY" value="./vendor/symfony/src" />
+        <server name="DOCTRINE_DBAL" value="./vendor/doctrine-dbal/lib" />
+        <server name="DOCTRINE_COMMON" value="./vendor/doctrine-common/lib" />
     </php>
 
     <testsuites>
