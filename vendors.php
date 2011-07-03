@@ -13,7 +13,6 @@
 /*
 
 CAUTION: This file installs the dependencies needed to run the I18nRoutingBundle test suite.
-If you want to create a new project, download the Symfony Standard Edition instead:
 
 https://github.com/BeSimple/I18nRoutingBundle
 
