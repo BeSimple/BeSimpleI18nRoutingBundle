@@ -1,8 +1,0 @@
-[symfony]
-    git=http://github.com/symfony/symfony.git
-
-[doctrine-common]
-    git=http://github.com/doctrine/common.git
-
-[doctrine-dbal]
-    git=http://github.com/doctrine/dbal.git
