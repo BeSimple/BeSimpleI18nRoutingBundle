@@ -19,6 +19,6 @@ class OverrideRoutingCompilerPass implements CompilerPassInterface
 
 
         $i18nRoutingRouter = $container->findDefinition('i18n_routing.router');
-        $i18nRoutingRouter->replaceArgument(2, $arguments[1]);
+        $i18nRoutingRouter->replaceArgument(3, $arguments[1]);
     }
 }
