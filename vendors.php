@@ -24,6 +24,8 @@ if (!is_dir($vendorDir = dirname(__FILE__).'/vendor')) {
 
 $deps = array(
     array('symfony', 'http://github.com/symfony/symfony.git', 'origin/HEAD'),
+    array('doctrine-common', 'http://github.com/doctrine/common.git', 'origin/HEAD'),
+    array('doctrine-dbal', 'http://github.com/doctrine/dbal.git', 'origin/HEAD'),
 );
 
 foreach ($deps as $dep) {
