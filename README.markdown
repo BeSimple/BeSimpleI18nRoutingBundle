@@ -14,7 +14,7 @@ When you create an I18N route and you go on it with your browser, the locale wil
 
 ### Add I18nRoutingBundle to your vendor/bundles dir
 
-    git submodule add git://github.com/francisbesset/I18nRoutingBundle.git vendor/bundles/BeSimple/I18nRoutingBundle
+    git submodule add git://github.com/BeSimple/BeSimpleI18nRoutingBundle.git vendor/bundles/BeSimple/I18nRoutingBundle
 
 ### Add I18nRoutingBundle to your application kernel
 
