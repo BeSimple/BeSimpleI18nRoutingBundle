@@ -11,7 +11,7 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class UrlGenerator extends BaseUrlGenerator
 {
-    public function generateI18n($name, $locale, array $parameters = array(), $absolute = false)
+    public function generateI18n($name, $locale, $parameters = array(), $absolute = false)
     {
         try {
             return $this->generate($name.'.'.$locale, $parameters, $absolute);
