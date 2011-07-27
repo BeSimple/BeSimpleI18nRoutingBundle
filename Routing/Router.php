@@ -55,7 +55,7 @@ class Router extends BaseRouter
      *
      * @throws \InvalidArgumentException When the route doesn't exists
      */
-    public function generate($name, array $parameters = array(), $absolute = false)
+    public function generate($name, $parameters = array(), $absolute = false)
     {
         if (isset($parameters['locale']) || isset($parameters['translate'])) {
             $locale = isset($parameters['locale']) ? $parameters['locale'] : $this->session->getLocale();
