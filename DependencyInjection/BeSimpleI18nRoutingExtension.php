@@ -33,30 +33,30 @@ class BeSimpleI18nRoutingExtension extends Extension
                 } else {
                     $cacheDef = $this->getCacheDefinition($config['cache'], $container);
                 }
-                $container->setDefinition('i18n_routing.doctrine.cache', $cacheDef);
+                $container->setDefinition('be_simple_i18n_routing.doctrine.cache', $cacheDef);
 
                 $def = new Definition(
-                    '%i18n_routing.translator.doctrine.class%', array(
+                    '%be_simple_i18n_routing.translator.doctrine.class%', array(
                         new Reference('doctrine.dbal.'. $config['connection'].'_connection'),
-                        new Reference('i18n_routing.doctrine.cache'),
+                        new Reference('be_simple_i18n_routing.doctrine.cache'),
                     )
                 );
                 $def->setPublic(true); // public, we need it to add translations!
-                $container->setDefinition('i18n_routing.translator', $def);
+                $container->setDefinition('be_simple_i18n_routing.translator', $def);
 
-                $def = $container->getDefinition('i18n_routing.translator.doctrine.schemalistener');
+                $def = $container->getDefinition('be_simple_i18n_routing.translator.doctrine.schema_listener');
                 $def->addTag('doctrine.event_listener', array(
                     'connection' => $config['connection'],
                     'event'      => 'postGenerateSchema',
                 ));
             } elseif (isset($config['use_translator']) && true === $config['use_translator']) {
                 $def = new Definition(
-                    '%i18n_routing.translator.translation.class%', array(
+                    '%be_simple_i18n_routing.translator.translation.class%', array(
                         new Reference('translator'),
                     )
                 );
                 $def->setPublic(false);
-                $container->setDefinition('i18n_routing.translator', $def);
+                $container->setDefinition('be_simple_i18n_routing.translator', $def);
             }
         }
     }
@@ -83,8 +83,8 @@ class BeSimpleI18nRoutingExtension extends Extension
                     $memcacheHost,
                     $memcachePort,
                 ));
-                $container->setDefinition('i18n_routing.doctrine.cache_memcache');
-                $cacheDef->addMethodCall('setMemcache', array(new Reference('i18n_routing.doctrine.cache_memcache')));
+                $container->setDefinition('be_simple_i18n_routing.doctrine.cache_memcache', $memcacheInstance);
+                $cacheDef->addMethodCall('setMemcache', array(new Reference('be_simple_i18n_routing.doctrine.cache_memcache')));
                 break;
             case 'apc':
             case 'array':
@@ -97,7 +97,7 @@ class BeSimpleI18nRoutingExtension extends Extension
 
         $cacheDef->setPublic(false);
         // generate a unique namespace for the given application
-        $namespace = 'i18n_'.md5($container->getParameter('kernel.root_dir'));
+        $namespace = 'be_simple_i18n_'.md5($container->getParameter('kernel.root_dir'));
         $cacheDef->addMethodCall('setNamespace', array($namespace));
 
         return $cacheDef;
