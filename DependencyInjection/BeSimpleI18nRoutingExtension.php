@@ -23,7 +23,6 @@ class BeSimpleI18nRoutingExtension extends Extension
         $loader->load('routing.xml');
 
         $this->addClassesToCompile(array(
-            'BeSimple\\I18nRoutingBundle\\Routing\\Generator\\UrlGenerator',
             'BeSimple\\I18nRoutingBundle\\Routing\\Router',
         ));
 
@@ -67,7 +66,6 @@ class BeSimpleI18nRoutingExtension extends Extension
      *
      * @param type $cacheDriver
      * @param ContainerBuilder $container
-     *
      * @return Definition
      */
     protected function getCacheDefinition($cacheDriver, ContainerBuilder $container)

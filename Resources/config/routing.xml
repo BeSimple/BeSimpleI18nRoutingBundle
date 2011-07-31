@@ -5,30 +5,16 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="i18n_routing.router.class">BeSimple\I18nRoutingBundle\Routing\Router</parameter>
-        <parameter key="i18n_routing.generator_base.class">BeSimple\I18nRoutingBundle\Routing\Generator\UrlGenerator</parameter>
         <parameter key="i18n_routing.translator.doctrine.class">BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBALTranslator</parameter>
         <parameter key="i18n_routing.translator.doctrine.schemalistener.class">BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBAL\SchemaListener</parameter>
         <parameter key="i18n_routing.translator.translation.class">BeSimple\I18nRoutingBundle\Routing\Translator\TranslationTranslator</parameter>
+        <parameter key="be_simple_i18n_routing.router.class">BeSimple\I18nRoutingBundle\Routing\Router</parameter>
     </parameters>
 
     <services>
-        <service id="i18n_routing.router" class="%i18n_routing.router.class%">
-            <argument type="service" id="i18n_routing.translator" on-invalid="ignore" />
-            <argument type="service" id="service_container" />
-            <argument>%router.resource%</argument>
-            <argument type="collection">
-                <argument key="cache_dir">%kernel.cache_dir%</argument>
-                <argument key="debug">%kernel.debug%</argument>
-                <argument key="generator_class">%router.options.generator_class%</argument>
-                <argument key="generator_base_class">%i18n_routing.generator_base.class%</argument>
-                <argument key="generator_dumper_class">%router.options.generator_dumper_class%</argument>
-                <argument key="generator_cache_class">%router.options.generator.cache_class%</argument>
-                <argument key="matcher_class">%router.options.matcher_class%</argument>
-                <argument key="matcher_base_class">%router.options.matcher_base_class%</argument>
-                <argument key="matcher_dumper_class">%router.options.matcher_dumper_class%</argument>
-                <argument key="matcher_cache_class">%router.options.matcher.cache_class%</argument>
-            </argument>
+        <service id="be_simple_i18n_routing.router" class="%be_simple_i18n_routing.router.class%">
+            <argument type="service" id="be_simple_i18n_routing.router.parent" />
+            <argument type="service" id="i18n_routing.translator" on-invalid="null" />
         </service>
 
         <service id="router.cache_warmer" class="%router.cache_warmer.class%" public="false">
