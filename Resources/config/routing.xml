@@ -9,6 +9,8 @@
         <parameter key="i18n_routing.translator.doctrine.schemalistener.class">BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBAL\SchemaListener</parameter>
         <parameter key="i18n_routing.translator.translation.class">BeSimple\I18nRoutingBundle\Routing\Translator\TranslationTranslator</parameter>
         <parameter key="be_simple_i18n_routing.router.class">BeSimple\I18nRoutingBundle\Routing\Router</parameter>
+        <parameter key="be_simple_i18n_routing.loader.xml.class">BeSimple\I18nRoutingBundle\Routing\Loader\XmlFileLoader</parameter>
+        <parameter key="be_simple_i18n_routing.loader.yaml.class">BeSimple\I18nRoutingBundle\Routing\Loader\YamlFileLoader</parameter>
     </parameters>
 
     <services>
@@ -17,11 +19,15 @@
             <argument type="service" id="i18n_routing.translator" on-invalid="null" />
         </service>
 
-        <service id="router.cache_warmer" class="%router.cache_warmer.class%" public="false">
-            <tag name="kernel.cache_warmer" />
-            <argument type="service" id="router" />
+        <service id="be_simple_i18n_routing.loader.xml" class="%be_simple_i18n_routing.loader.xml.class%" public="false">
+            <tag name="routing.loader" />
+            <argument type="service" id="file_locator" />
         </service>
 
         <service id="i18n_routing.translator.doctrine.schemalistener" class="%i18n_routing.translator.doctrine.schemalistener.class%" public="false" />
+        <service id="be_simple_i18n_routing.loader.yaml" class="%be_simple_i18n_routing.loader.yaml.class%" public="false">
+            <tag name="routing.loader" />
+            <argument type="service" id="file_locator" />
+        </service>
     </services>
 </container>

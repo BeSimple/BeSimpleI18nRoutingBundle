@@ -10,9 +10,6 @@ class OverrideRoutingCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $container->setParameter('routing.loader.xml.class', 'BeSimple\\I18nRoutingBundle\\Routing\\Loader\\XmlFileLoader');
-        $container->setParameter('routing.loader.yml.class', 'BeSimple\\I18nRoutingBundle\\Routing\\Loader\\YamlFileLoader');
-
         if (!$container->hasDefinition('be_simple_i18n_routing.router')) {
             return;
         }

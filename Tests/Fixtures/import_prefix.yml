@@ -1,6 +1,8 @@
 _basic_i18n_route:
     resource: basic_i18n_route.yml
+    type: be_simple_i18n
 
 _basic_routes:
     resource: basic_routes.yml
     prefix:   /path
+    type: be_simple_i18n

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<routes xmlns="http://symfony.com/schema/routing"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+<routes xmlns="http://example.com/schema/be_simple_i18n_routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <import resource="basic_i18n_route.xml" />
-    <import resource="basic_routes.xml" prefix="/path" />
+    <import resource="basic_i18n_route.xml" type="be_simple_i18n" />
+    <import resource="basic_routes.xml" prefix="/path" type="be_simple_i18n" />
 </routes>
