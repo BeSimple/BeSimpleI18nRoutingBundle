@@ -62,10 +62,12 @@ class Router extends BaseRouter
             }
 
             if (isset($parameters['translate'])) {
-                foreach (array($parameters['translate']) as $translateAttribute) {
-                    $parameters[$translateAttribute] = $this->translator->reverseTranslate(
-                        $name, $locale, $translateAttribute, $parameters[$translateAttribute]
-                    );
+                if (null !== $this->translator) {
+                    foreach ((array) $parameters['translate'] as $translateAttribute) {
+                        $parameters[$translateAttribute] = $this->translator->reverseTranslate(
+                            $name, $locale, $translateAttribute, $parameters[$translateAttribute]
+                        );
+                    }
                 }
                 unset($parameters['translate']);
             }
@@ -97,8 +99,8 @@ class Router extends BaseRouter
             $match['_route'] = $route[1];
 
             // now also check if we want to translate parameters:
-            if (isset($match['_translate'])) {
-                foreach ((array)$match['_translate'] as $attribute) {
+            if (null !== $this->translator && isset($match['_translate'])) {
+                foreach ((array) $match['_translate'] as $attribute) {
                     $match[$attribute] = $this->translator->translate(
                         $match['_route'], $match['_locale'], $attribute, $match[$attribute]
                     );
