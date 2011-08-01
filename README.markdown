@@ -148,7 +148,7 @@ loader: ``http://besim.pl/schema/i18n_routing``.
 
     return $collection;
 
-## Generate route in your templates
+## Generate a route in your templates
 
 ### Specify a locale
 
@@ -180,20 +180,14 @@ loader: ``http://besim.pl/schema/i18n_routing``.
 
     <?php echo $view['router']->generate('homepage') ?>
 
-## Translating Route Parameters
+## Translating the route attributes
 
-If the static parts of your routes are translated you get to the point really fast when dynamic parts
-such as product slugs, category names or other dynamic routing parameters should be translated.
+If the static parts of your routes are translated you get to the point really
+fast when dynamic parts such as product slugs, category names or other dynamic
+routing parameters should be translated. The bundle provides 2 implementations.
 
-You can configure translation in your config.yml:
-
-    // app/config/config.yml
-    be_simple_i18n_routing:
-        connection: default # Doctrine DBAL connection name
-        cache: apc
-        #use_translations: true # If you want to use Symfony translator
-
-After this you can now define a to be translated attribute in your route defaults:
+After configuring the backend you want to use (see below for each one), you
+can define a to be translated attribute in your route defaults:
 
     product_view:
         locales: { en: "/product/{slug}", de: "/produkt/{slug}" }
@@ -209,11 +203,21 @@ The same goes with generating routes, now backwards:
     {{ path("product_view", {"slug": product.slug, "translate": "slug"}) }}
     {{ path("product_view2", {"slug": product.slug, "translate": ["slug", "category]}) }}
 
-The reverse translation is only necessary if you have the "original" values in your templates.
-If you have access to the localized value of the current locale then you can just pass this
-and do not hint to translate it with the "translate" key.
+The reverse translation is only necessary if you have the "original" values
+in your templates. If you have access to the localized value of the current
+locale then you can just pass this and do not hint to translate it with the
+"translate" key.
 
 ### Doctrine DBAL Backend
+
+Configure the use of the DBAL backend
+
+    // app/config/config.yml
+    be_simple_i18n_routing:
+        attribute_translator:
+            type: doctrine_dbal
+            connection: default # Doctrine DBAL connection name. Using null (default value) will use the default connection
+            cache: apc
 
 The Doctrine Backend has the following table structure:
 
@@ -229,15 +233,36 @@ The Doctrine Backend has the following table structure:
         PRIMARY KEY(id)
     ) ENGINE = InnoDB;
 
-Lookups are made through the combination of route name, locale and attribute of the route
-to be translated.
+Lookups are made through the combination of route name, locale and attribute
+of the route to be translated.
 
-Every lookup is cached in a Doctrine\Common\Cache\Cache instance that you should configure
-to be APC, Memcache or Xcache for performance reasons.
+Every lookup is cached in a Doctrine\Common\Cache\Cache instance that you
+should configure to be APC, Memcache or Xcache for performance reasons.
 
-If you are using Doctrine it automatically registers a listener for SchemaTool to create
-the routing_translations table for your database backend, you only have to call:
+If you are using Doctrine it automatically registers a listener for SchemaTool
+to create the routing_translations table for your database backend, you only
+have to call:
 
     ./app/console doctrine:schema:update --dump-sql
     ./app/console doctrine:schema:update --force
 
+### Translator backend
+
+This implementation uses the Symfony2 translator to translate the attributes.
+The translation domain will be created using the pattern `<route name>_<attribute name>`
+
+    // app/config/config.yml
+    be_simple_i18n_routing:
+        attribute_translator:
+            type: translator
+
+### Custom backend
+
+If you want to use a different implementation, simply create a service implementing
+`BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface`.
+
+    // app/config/config.yml
+    be_simple_i18n_routing:
+        attribute_translator:
+            type: service
+            id: my_attribute_translator

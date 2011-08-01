@@ -26,80 +26,70 @@ class BeSimpleI18nRoutingExtension extends Extension
             'BeSimple\\I18nRoutingBundle\\Routing\\Router',
         ));
 
-        foreach ($configs as $config) {
-            if (isset($config['connection'])) {
-                if (!isset($config['cache'])) {
-                    $cacheDef = new Definition('Doctrine\Common\Cache\ArrayCache');
-                } else {
-                    $cacheDef = $this->getCacheDefinition($config['cache'], $container);
-                }
-                $container->setDefinition('be_simple_i18n_routing.doctrine.cache', $cacheDef);
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
 
-                $def = new Definition(
-                    '%be_simple_i18n_routing.translator.doctrine.class%', array(
-                        new Reference('doctrine.dbal.'. $config['connection'].'_connection'),
-                        new Reference('be_simple_i18n_routing.doctrine.cache'),
-                    )
-                );
-                $def->setPublic(true); // public, we need it to add translations!
-                $container->setDefinition('be_simple_i18n_routing.translator', $def);
+        if (isset($config['attribute_translator'])) {
+            switch ($config['attribute_translator']['type']) {
+                case 'service':
+                    $container->setAlias('be_simple_i18n_routing.translator', $config['attribute_translator']['id']);
+                    break;
 
-                $def = $container->getDefinition('be_simple_i18n_routing.translator.doctrine.schema_listener');
-                $def->addTag('doctrine.event_listener', array(
-                    'connection' => $config['connection'],
-                    'event'      => 'postGenerateSchema',
-                ));
-            } elseif (isset($config['use_translator']) && true === $config['use_translator']) {
-                $def = new Definition(
-                    '%be_simple_i18n_routing.translator.translation.class%', array(
-                        new Reference('translator'),
-                    )
-                );
-                $def->setPublic(false);
-                $container->setDefinition('be_simple_i18n_routing.translator', $def);
+                case 'doctrine_dbal':
+                    $loader->load('dbal.xml');
+                    $this->configureCacheDefinition($config['cache'], $container);
+                    $container->setAlias('be_simple_i18n_routing.translator', 'be_simple_i18n_routing.translator.doctrine_dbal');
+
+                    $attributes = array('event' => 'postGenerateSchema');
+                    if (null !== $config['connection']) {
+                        $attributes['connection'] = $config['connection'];
+                    }
+                    $def = $container->getDefinition('be_simple_i18n_routing.translator.doctrine_dbal.schema_listener');
+                    $def->addTag('doctrine.event_listener', $attributes);
+                    break;
+
+                case 'translator':
+                    $container->setAlias('be_simple_i18n_routing.translator', 'be_simple_i18n_routing.translator.translation');
+                    break;
+
+                default:
+                    throw new \InvalidArgumentException(sprintf('Unsupported attribute translator type "%s"', $config['attribute_translator']['type']));
             }
         }
     }
 
     /**
-     * This is almost copied completly from DoctrineExtension::getEntityManagerCacheDefinition().
+     * Configures the Doctrine cache definition
      *
-     * @param type $cacheDriver
+     * @param array $cacheDriver
      * @param ContainerBuilder $container
-     * @return Definition
      */
-    protected function getCacheDefinition($cacheDriver, ContainerBuilder $container)
+    private function configureCacheDefinition(array $cacheDriver, ContainerBuilder $container)
     {
         switch ($cacheDriver['type']) {
             case 'memcache':
-                $memcacheClass         = !empty($cacheDriver['class']) ? $cacheDriver['class'] : '%doctrine.orm.cache.memcache.class%';
-                $memcacheInstanceClass = !empty($cacheDriver['instance_class']) ? $cacheDriver['instance_class'] : '%doctrine.orm.cache.memcache_instance.class%';
-                $memcacheHost          = !empty($cacheDriver['host']) ? $cacheDriver['host'] : '%doctrine.orm.cache.memcache_host%';
-                $memcachePort          = !empty($cacheDriver['port']) ? $cacheDriver['port'] : '%doctrine.orm.cache.memcache_port%';
-
-                $cacheDef         = new Definition($memcacheClass);
-                $memcacheInstance = new Definition($memcacheInstanceClass);
-                $memcacheInstance->addMethodCall('connect', array(
-                    $memcacheHost,
-                    $memcachePort,
-                ));
-                $container->setDefinition('be_simple_i18n_routing.doctrine.cache_memcache', $memcacheInstance);
-                $cacheDef->addMethodCall('setMemcache', array(new Reference('be_simple_i18n_routing.doctrine.cache_memcache')));
-                break;
+                if (!empty($cacheDriver['class'])) {
+                    $container->setParameter('be_simple_i18n_routing.doctrine_dbal.cache.memcache.class', $cacheDriver['class']);
+                }
+                if (!empty($cacheDriver['instance_class'])) {
+                    $container->setParameter('be_simple_i18n_routing.doctrine_dbal.cache.memcache_instance.class', $cacheDriver['instance_class']);
+                }
+                if (!empty($cacheDriver['host'])) {
+                    $container->setParameter('be_simple_i18n_routing.doctrine_dbal.cache.memcache_host', $cacheDriver['host']);
+                }
+                if (!empty($cacheDriver['port'])) {
+                    $container->setParameter('be_simple_i18n_routing.doctrine_dbal.cache.memcache_port', $cacheDriver['port']);
+                }
             case 'apc':
             case 'array':
             case 'xcache':
-                $cacheDef = new Definition('%'.sprintf('doctrine.orm.cache.%s.class', $cacheDriver['type']).'%');
+                $container->setAlias('be_simple_i18n_routing.doctrine_dbal.cache', sprintf('be_simple_i18n_routing.doctrine_dbal.cache.%s', $cacheDriver['type']));
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('"%s" is an unrecognized Doctrine cache driver.', $cacheDriver['type']));
         }
 
-        $cacheDef->setPublic(false);
         // generate a unique namespace for the given application
-        $namespace = 'be_simple_i18n_'.md5($container->getParameter('kernel.root_dir'));
-        $cacheDef->addMethodCall('setNamespace', array($namespace));
-
-        return $cacheDef;
+        $container->setParameter('be_simple_i18n_routing.doctrine_dbal.cache.namespace', 'be_simple_i18n_'.md5($container->getParameter('kernel.root_dir')));
     }
 }
