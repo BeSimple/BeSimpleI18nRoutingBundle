@@ -45,6 +45,16 @@ When you create an I18N route and you go on it with your browser, the locale wil
 
 ## Create your routing
 
+To define internationalized routes in XML or YAML, you need to import the
+routing file by using the ``be_simple_i18n`` type:
+
+    my_yaml_i18n_routes:
+        resource: "@MyWebsiteBundle/Resources/config/routing/i18n.yml"
+        type: be_simple_i18n
+    my_xml_i18n_routes:
+        resource: "@MyWebsiteBundle/Resources/config/routing/i18n.xml"
+        type: be_simple_i18n
+
 ### Yaml routing file
 
     homepage:
@@ -55,9 +65,8 @@ When you create an I18N route and you go on it with your browser, the locale wil
 
     <?xml version="1.0" encoding="UTF-8" ?>
 
-    <routes xmlns="http://www.symfony-project.org/schema/routing"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.symfony-project.org/schema/routing http://www.symfony-project.org/schema/routing/routing-1.0.xsd">
+    <routes xmlns="http://example.com/schema/be_simple_i18n_routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
         <route id="homepage">
             <locale key="en">/welcome</locale>
@@ -66,6 +75,9 @@ When you create an I18N route and you go on it with your browser, the locale wil
             <default key="_controller">MyWebsiteBundle:Frontend:index</default>
         </route>
     </routes>
+
+Note that the XML file uses a different namespace than when using the core
+loader: ``http://example.com/schema/be_simple_i18n_routing``.
 
 ### PHP routing file
 
@@ -99,9 +111,8 @@ When you create an I18N route and you go on it with your browser, the locale wil
 
     <?xml version="1.0" encoding="UTF-8" ?>
 
-    <routes xmlns="http://symfony.com/schema/routing"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+    <routes xmlns="http://example.com/schema/be_simple_i18n_routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
         <route id="hello" pattern="/hello/{name}">
             <default key="_controller">HelloBundle:Hello:index</default>
