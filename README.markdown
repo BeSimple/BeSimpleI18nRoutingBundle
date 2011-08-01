@@ -65,8 +65,9 @@ routing file by using the ``be_simple_i18n`` type:
 
     <?xml version="1.0" encoding="UTF-8" ?>
 
-    <routes xmlns="http://example.com/schema/be_simple_i18n_routing"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <routes xmlns="http://besim.pl/schema/i18n_routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xml">
 
         <route id="homepage">
             <locale key="en">/welcome</locale>
@@ -77,7 +78,7 @@ routing file by using the ``be_simple_i18n`` type:
     </routes>
 
 Note that the XML file uses a different namespace than when using the core
-loader: ``http://example.com/schema/be_simple_i18n_routing``.
+loader: ``http://besim.pl/schema/i18n_routing``.
 
 ### PHP routing file
 
@@ -111,8 +112,9 @@ loader: ``http://example.com/schema/be_simple_i18n_routing``.
 
     <?xml version="1.0" encoding="UTF-8" ?>
 
-    <routes xmlns="http://example.com/schema/be_simple_i18n_routing"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <routes xmlns="http://besim.pl/schema/i18n_routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xml">
 
         <route id="hello" pattern="/hello/{name}">
             <default key="_controller">HelloBundle:Hello:index</default>
