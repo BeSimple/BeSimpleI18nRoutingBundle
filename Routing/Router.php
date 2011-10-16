@@ -4,17 +4,12 @@ namespace BeSimple\I18nRoutingBundle\Routing;
 
 use BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Session;
+use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Bundle\FrameworkBundle\Routing\Router as BaseRouter;
 
 class Router extends BaseRouter
 {
-    /**
-     * @var Session
-     */
-    private $session;
-
     /**
      * @var AttributeTranslatorInterface
      */
@@ -27,7 +22,7 @@ class Router extends BaseRouter
      *
      *   * See Router class
      *
-     * @param Session            $session   A Session instance
+     * @param AttributeTranslatorInterface $translator
      * @param ContainerInterface $container A ContainerInterface instance
      * @param mixed              $resource  The main resource to load
      * @param array              $options   An array of options
@@ -36,11 +31,10 @@ class Router extends BaseRouter
      *
      * @throws \InvalidArgumentException When unsupported option is provided
      */
-    public function __construct(Session $session = null, AttributeTranslatorInterface $translator = null, ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null, array $defaults = array())
+    public function __construct(AttributeTranslatorInterface $translator = null, ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null, array $defaults = array())
     {
         parent::__construct($container, $resource, $options, $context, $defaults);
 
-        $this->session    = $session;
         $this->translator = $translator;
     }
 
@@ -58,8 +52,14 @@ class Router extends BaseRouter
     public function generate($name, $parameters = array(), $absolute = false)
     {
         if (isset($parameters['locale']) || isset($parameters['translate'])) {
-            $locale = isset($parameters['locale']) ? $parameters['locale'] : $this->session->getLocale();
-            unset($parameters['locale']);
+            if (isset($parameters['locale'])) {
+                $locale = $parameters['locale'];
+                unset($parameters['locale']);
+            } elseif ($this->getContext()->hasParameter('_locale')) {
+                $locale = $this->getContext()->getParameter('_locale');
+            } else {
+                throw new MissingMandatoryParametersException('The locale must be available when using the "translate" option.');
+            }
 
             if (isset($parameters['translate'])) {
                 foreach (array($parameters['translate']) as $translateAttribute) {
@@ -76,9 +76,9 @@ class Router extends BaseRouter
         try {
             return parent::generate($name, $parameters, $absolute);
         } catch (\InvalidArgumentException $e) {
-            if (null !== $this->session) {
+            if ($this->getContext()->hasParameter('_locale')) {
                 // at this point here we would never have $parameters['translate'] due to condition before
-                return $this->generateI18n($name, $this->session->getLocale(), $parameters, $absolute);
+                return $this->generateI18n($name, $this->getContext()->getParameter('_locale'), $parameters, $absolute);
             } else {
                 throw $e;
             }
