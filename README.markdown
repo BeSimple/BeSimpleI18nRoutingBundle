@@ -46,7 +46,7 @@ When you create an I18N route and you go on it with your browser, the locale wil
 ### Yaml routing file
 
     homepage:
-        locales:  { en: /welcome, fr: /bienvenue, de: /willkommen }
+        locales:  { en: "/welcome", fr: "/bienvenue", de: "/willkommen" }
         defaults: { _controller: MyWebsiteBundle:Frontend:index }
 
 ### XML routing file
@@ -86,11 +86,11 @@ When you create an I18N route and you go on it with your browser, the locale wil
 #### Yaml routing file
 
     hello:
-        pattern:  /hello/{name}
+        pattern:  "/hello/{name}"
         defaults: { _controller: HelloBundle:Hello:index }
     
     homepage:
-        locales:  { en: /welcome/{name}, fr: /bienvenue/{name}, de: /willkommen/{name} }
+        locales:  { en: "/welcome/{name}", fr: "/bienvenue/{name}", de: "/willkommen/{name}" }
         defaults: { _controller: MyWebsiteBundle:Frontend:index }
 
 #### XML routing file
