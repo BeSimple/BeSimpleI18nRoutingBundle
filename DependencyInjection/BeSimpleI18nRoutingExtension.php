@@ -26,7 +26,7 @@ class BeSimpleI18nRoutingExtension extends Extension
             'BeSimple\\I18nRoutingBundle\\Routing\\Generator\\UrlGenerator',
             'BeSimple\\I18nRoutingBundle\\Routing\\Router',
         ));
-        
+
         foreach ($configs as $config) {
             if (isset($config['connection'])) {
                 if (!isset($config['cache'])) {
@@ -64,10 +64,11 @@ class BeSimpleI18nRoutingExtension extends Extension
 
     /**
      * This is almost copied completly from DoctrineExtension::getEntityManagerCacheDefinition().
-     * 
+     *
      * @param type $cacheDriver
      * @param ContainerBuilder $container
-     * @return Definition 
+     *
+     * @return Definition
      */
     protected function getCacheDefinition($cacheDriver, ContainerBuilder $container)
     {
