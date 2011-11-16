@@ -10,17 +10,14 @@ use Symfony\Component\HttpFoundation\SessionStorage\ArraySessionStorage;
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
     private $router;
-    private $session;
     private $translator;
 
     public function setUp()
     {
-        $this->session    = new Session(new ArraySessionStorage());
         $this->translator = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface');
 
         $container    = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->router = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Router', array('getMatcher', 'getGenerator'), array(
-            $this->session,
             $this->translator,
             $container,
             null,
@@ -68,7 +65,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testGenerateI18n()
     {
         $absolute  = false;
-        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface', array('generateI18n', 'generate', 'setContext'));
+        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface', array('generateI18n', 'generate', 'setContext', 'getContext'));
         $generator->expects($this->once())
             ->method('generateI18n')
             ->with($this->equalTo('test_route'), $this->equalTo('en'), $this->equalTo(array('foo' => 'bar')), $this->equalTo($absolute))
@@ -86,7 +83,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testGenerateDefault()
     {
         $absolute  = false;
-        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface', array('generateI18n', 'generate', 'setContext'));
+        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface', array('generateI18n', 'generate', 'setContext', 'getContext'));
         $generator->expects($this->once())
             ->method('generate')
             ->with($this->equalTo('test_route'), $this->equalTo(array('foo' => 'bar')), $this->equalTo($absolute))
@@ -107,7 +104,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $localizedValue = 'baz';
 
         $absolute  = false;
-        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface', array('generateI18n', 'generate', 'setContext'));
+        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface', array('generateI18n', 'generate', 'setContext', 'getContext'));
         $generator->expects($this->once())
             ->method('generateI18n')
             ->with($this->equalTo('test_route'), $this->equalTo('en'), $this->equalTo(array('foo' => $localizedValue)), $this->equalTo($absolute))
@@ -129,13 +126,13 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->router->generate('test_route', array('foo' => $originalValue, 'translate' => 'foo', 'locale' => 'en'), $absolute);
     }
 
-    public function testGenerateI18nTranslatedDefaultSessionLocale()
+    public function testGenerateI18nTranslatedContextLocale()
     {
         $originalValue  = 'bar';
         $localizedValue = 'baz';
 
         $absolute  = false;
-        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface', array('generateI18n', 'generate', 'setContext'));
+        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface', array('generateI18n', 'generate', 'setContext', 'getContext'));
         $generator->expects($this->once())
             ->method('generateI18n')
             ->with($this->equalTo('test_route'), $this->equalTo('en'), $this->equalTo(array('foo' => $localizedValue)), $this->equalTo($absolute))
@@ -148,13 +145,48 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($localizedValue))
         ;
 
+        $context = $this->getMockBuilder('Symfony\Component\Routing\RequestContext')
+            ->disableOriginalConstructor()
+            ->setMethods(array('getParameter', 'hasParameter'))
+            ->getMock()
+        ;
+        $context->expects($this->once())
+            ->method('hasParameter')
+            ->with($this->equalTo('_locale'))
+            ->will($this->returnValue(true))
+        ;
+        $context->expects($this->once())
+            ->method('getParameter')
+            ->with($this->equalTo('_locale'))
+            ->will($this->returnValue('en'))
+        ;
+        $this->router = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Router', array('getMatcher', 'getGenerator', 'getContext'), array(
+            $this->translator,
+            $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface'),
+            null,
+        ));
         $this->router
             ->expects($this->once())
             ->method('getGenerator')
             ->will($this->returnValue($generator))
         ;
+        $this->router
+            ->expects($this->any())
+            ->method('getContext')
+            ->will($this->returnValue($context))
+        ;
 
-        $this->assertEquals('en', $this->session->getLocale(), 'Precondition');
+        $this->router->generate('test_route', array('foo' => $originalValue, 'translate' => 'foo'), $absolute);
+    }
+
+    /**
+     * @expectedException Symfony\Component\Routing\Exception\MissingMandatoryParametersException
+     */
+    public function testGenerateI18nTranslatedWithoutLocale()
+    {
+        $originalValue  = 'bar';
+        $absolute  = false;
+
         $this->router->generate('test_route', array('foo' => $originalValue, 'translate' => 'foo'), $absolute);
     }
 
