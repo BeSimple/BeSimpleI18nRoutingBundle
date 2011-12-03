@@ -1,0 +1,38 @@
+{
+    "name": "besimple/i18n-routing-bundle",
+    "type": "symfony-bundle",
+    "description": "Full routing internationalized on your Symfony2 project ",
+    "keywords": ["routing", "internationalisation", "Symfony2", "BeSimpleI18nRoutingBundle"],
+    "homepage": "https://github.com/BeSimple/BeSimpleI18nRoutingBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Francis Besset",
+            "email": "francis.besset@gmail.com"
+        },
+        {
+            "name": "Christophe Coevoet",
+            "email": "stof@notk.org"
+        },
+        {
+            "name": "Benjamin Eberlei",
+            "email": "kontakt@beberlei.de"
+        },
+        {
+            "name": "BeSimple Community",
+            "homepage": "https://github.com/BeSimple/BeSimpleI18nRoutingBundle/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "2.*"
+    },
+    "suggest": {
+        "symfony/translator": ">=2.0",
+        "doctrine/dbal": ">=2.0"
+    },
+    "autoload": {
+        "psr-0": { "BeSimple\\I18nRoutingBundle": "" }
+    },
+    "target-dir": "BeSimple/I18nRoutingBundle"
+}
