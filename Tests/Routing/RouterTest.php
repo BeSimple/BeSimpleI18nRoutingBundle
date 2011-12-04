@@ -101,7 +101,15 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateI18nTranslatedContextLocale()
     {
-        $parentRouter = $this->getMock('Symfony\Component\Routing\RouterInterface');
+        if (method_exists('Symfony\Component\Routing\RouterInterface', 'getContext')) {
+            $parentRouter = $this->getMock('Symfony\Component\Routing\RouterInterface');
+        } else {
+            // use the Router for Symfony 2.0 as it implements the needed methods but they were not in the interface
+            $parentRouter = $this->getMockBuilder('Symfony\Component\Routing\Router')
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+
         $parentRouter->expects($this->once())
             ->method('generate')
             ->with($this->equalTo('test_route.fr'), $this->equalTo(array('foo' => 'baz')), $this->equalTo(false))
@@ -145,7 +153,14 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateI18nTranslatedWithoutLocale()
     {
-        $parentRouter = $this->getMock('Symfony\Component\Routing\RouterInterface');
+        if (method_exists('Symfony\Component\Routing\RouterInterface', 'getContext')) {
+            $parentRouter = $this->getMock('Symfony\Component\Routing\RouterInterface');
+        } else {
+            // use the Router for Symfony 2.0 as it implements the needed methods but they were not in the interface
+            $parentRouter = $this->getMockBuilder('Symfony\Component\Routing\Router')
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
 
         $context = $this->getMockBuilder('Symfony\Component\Routing\RequestContext')
             ->disableOriginalConstructor()
