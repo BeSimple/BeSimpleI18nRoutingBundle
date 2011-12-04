@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="be_simple_i18n_routing.translator.doctrine_dbal.class">BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBALTranslator</parameter>
+        <parameter key="be_simple_i18n_routing.translator.doctrine_dbal.schema_listener.class">BeSimple\I18nRoutingBundle\Routing\Translator\DoctrineDBAL\SchemaListener</parameter>
+        <parameter key="be_simple_i18n_routing.doctrine_dbal.cache.array.class">Doctrine\Common\Cache\ArrayCache</parameter>
+        <parameter key="be_simple_i18n_routing.doctrine_dbal.cache.xcache.class">Doctrine\Common\Cache\XcacheCache</parameter>
+        <parameter key="be_simple_i18n_routing.doctrine_dbal.cache.apc.class">Doctrine\Common\Cache\ApcCache</parameter>
+        <parameter key="be_simple_i18n_routing.doctrine_dbal.cache.memcache.class">Doctrine\Common\Cache\MemcacheCache</parameter>
+        <parameter key="be_simple_i18n_routing.doctrine_dbal.cache.memcache_instance.class">Memcache</parameter>
+        <parameter key="be_simple_i18n_routing.doctrine_dbal.cache.memcache_host">localhost</parameter>
+        <parameter key="be_simple_i18n_routing.doctrine_dbal.cache.memcache_port">11211</parameter>
+    </parameters>
+
+    <services>
+        <service id="be_simple_i18n_routing.translator.doctrine_dbal" class="%be_simple_i18n_routing.translator.doctrine_dbal.class%">
+            <argument type="service" id="be_simple_i18n_routing.doctrine_dbal.connection" />
+            <argument type="service" id="be_simple_i18n_routing.doctrine_dbal.cache" />
+        </service>
+
+        <service id="be_simple_i18n_routing.doctrine_dbal.connection" factory-service="doctrine" factory-method="getConnection" class="Doctrine\DBAL\Connection" public="false">
+            <argument>%be_simple_i18n_routing.doctrine_dbal.connection_name%</argument>
+        </service>
+
+        <service id="be_simple_i18n_routing.doctrine_dbal.cache.array" class="%be_simple_i18n_routing.doctrine_dbal.cache.array.class%" public="false">
+            <call method="setNamespace">
+                <argument>%be_simple_i18n_routing.doctrine_dbal.cache.namespace%</argument>
+            </call>
+        </service>
+
+        <service id="be_simple_i18n_routing.doctrine_dbal.cache.xcache" class="%be_simple_i18n_routing.doctrine_dbal.cache.xcache.class%" public="false">
+            <call method="setNamespace">
+                <argument>%be_simple_i18n_routing.doctrine_dbal.cache.namespace%</argument>
+            </call>
+        </service>
+
+        <service id="be_simple_i18n_routing.doctrine_dbal.cache.apc" class="%be_simple_i18n_routing.doctrine_dbal.cache.apc.class%" public="false">
+            <call method="setNamespace">
+                <argument>%be_simple_i18n_routing.doctrine_dbal.cache.namespace%</argument>
+            </call>
+        </service>
+
+        <service id="be_simple_i18n_routing.doctrine_dbal.cache.memcache" class="%be_simple_i18n_routing.doctrine_dbal.cache.memcache.class%" public="false">
+            <call method="setMemcache">
+                <argument type="service" id="be_simple_i18n_routing.doctrine_dbal.cache.memcache_instance" />
+            </call>
+            <call method="setNamespace">
+                <argument>%be_simple_i18n_routing.doctrine_dbal.cache.namespace%</argument>
+            </call>
+        </service>
+
+        <service id="be_simple_i18n_routing.doctrine_dbal.cache.memcache_instance" class="%be_simple_i18n_routing.doctrine_dbal.cache.memcache_instance.class%" public="false">
+            <call method="connect">
+                <argument>%be_simple_i18n_routing.doctrine_dbal.cache.memcache_host%</argument>
+                <argument>%be_simple_i18n_routing.doctrine_dbal.cache.memcache_port%</argument>
+            </call>
+        </service>
+
+        <service id="be_simple_i18n_routing.translator.doctrine_dbal.schema_listener" class="%be_simple_i18n_routing.translator.doctrine_dbal.schema_listener.class%" public="false" />
+    </services>
+</container>

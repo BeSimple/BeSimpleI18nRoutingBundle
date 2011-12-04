@@ -10,6 +10,21 @@ use Symfony\Component\Routing\RouteCollection;
 class XmlFileLoader extends BaseXmlFileLoader
 {
     /**
+     * Returns true if this class supports the given resource.
+     *
+     * @param mixed  $resource A resource
+     * @param string $type     The resource type
+     *
+     * @return Boolean True if this class supports the given resource, false otherwise
+     *
+     * @api
+     */
+    public function supports($resource, $type = null)
+    {
+        return is_string($resource) && 'be_simple_i18n' === $type && 'xml' === pathinfo($resource, PATHINFO_EXTENSION);
+    }
+
+    /**
      * Parses a route and adds it to the RouteCollection.
      *
      * @param RouteCollection $collection A RouteCollection instance
@@ -78,7 +93,7 @@ class XmlFileLoader extends BaseXmlFileLoader
         }
         libxml_use_internal_errors($current);
     }
-    
+
     /**
      * Retrieves libxml errors and clears them.
      *

@@ -16,7 +16,31 @@ class YamlFileLoader extends BaseYamlFileLoader
     );
 
     /**
-     * {@inheritDoc}
+     * Returns true if this class supports the given resource.
+     *
+     * @param mixed  $resource A resource
+     * @param string $type     The resource type
+     *
+     * @return Boolean True if this class supports the given resource, false otherwise
+     *
+     * @api
+     */
+    public function supports($resource, $type = null)
+    {
+        return is_string($resource) && 'be_simple_i18n' === $type && 'yml' === pathinfo($resource, PATHINFO_EXTENSION);
+    }
+
+    /**
+     * Loads a Yaml file.
+     *
+     * @param string $file A Yaml file path
+     * @param string $type The resource type
+     *
+     * @return RouteCollection A RouteCollection instance
+     *
+     * @throws \InvalidArgumentException When route can't be parsed
+     *
+     * @api
      */
     public function load($file, $type = null)
     {
@@ -44,11 +68,9 @@ class YamlFileLoader extends BaseYamlFileLoader
                 $type = isset($config['type']) ? $config['type'] : null;
                 $prefix = isset($config['prefix']) ? $config['prefix'] : null;
                 $this->setCurrentDir(dirname($path));
-                $collection->addCollection($this->import($config['resource'], $type), $prefix);
-            } elseif (isset($config['pattern']) || isset($config['locales'])) {
-                $this->parseRoute($collection, $name, $config, $path);
+                $collection->addCollection($this->import($config['resource'], $type, false, $file), $prefix);
             } else {
-                throw new \InvalidArgumentException(sprintf('Unable to parse the "%s" route.', $name));
+                $this->parseRoute($collection, $name, $config, $path);
             }
         }
 
