@@ -6,6 +6,8 @@ for different languages. Additionally it allows to translate given routing param
 between languages in Router#match and UrlGenerator#generate using either a Symfony Translator
 or a Doctrine DBAL (+Cache) based backend.
 
+[![Build Status](https://secure.travis-ci.org/BeSimple/BeSimpleI18nRoutingBundle.png)](http://travis-ci.org/BeSimple/BeSimpleI18nRoutingBundle)
+
 ## Information
 
 When you create an I18N route and you go on it with your browser, the locale will be updated.
@@ -52,11 +54,11 @@ When you create an I18N route and you go on it with your browser, the locale wil
 ### XML routing file
 
     <?xml version="1.0" encoding="UTF-8" ?>
-    
+
     <routes xmlns="http://www.symfony-project.org/schema/routing"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.symfony-project.org/schema/routing http://www.symfony-project.org/schema/routing/routing-1.0.xsd">
-    
+
         <route id="homepage">
             <locale key="en">/welcome</locale>
             <locale key="fr">/bienvenue</locale>
@@ -68,17 +70,17 @@ When you create an I18N route and you go on it with your browser, the locale wil
 ### PHP routing file
 
     <?php
-    
+
     use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
     use Symfony\Component\Routing\RouteCollection;
-    
+
     $collection = new RouteCollection();
     $route      = new I18nRoute('homepage',
         array('en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen'),
         array('_controller' => 'MyWebsiteBundle:Frontend:index')
     );
     $collection->addCollection($route->getCollection());
-    
+
     return $collection;
 
 ### You can insert classic route in your routing
@@ -88,7 +90,7 @@ When you create an I18N route and you go on it with your browser, the locale wil
     hello:
         pattern:  "/hello/{name}"
         defaults: { _controller: HelloBundle:Hello:index }
-    
+
     homepage:
         locales:  { en: "/welcome/{name}", fr: "/bienvenue/{name}", de: "/willkommen/{name}" }
         defaults: { _controller: MyWebsiteBundle:Frontend:index }
@@ -96,15 +98,15 @@ When you create an I18N route and you go on it with your browser, the locale wil
 #### XML routing file
 
     <?xml version="1.0" encoding="UTF-8" ?>
-    
+
     <routes xmlns="http://symfony.com/schema/routing"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
-    
+
         <route id="hello" pattern="/hello/{name}">
             <default key="_controller">HelloBundle:Hello:index</default>
         </route>
-    
+
         <route id="homepage">
             <locale key="en">/welcome/{name}</locale>
             <locale key="fr">/bienvenue/{name}</locale>
@@ -116,11 +118,11 @@ When you create an I18N route and you go on it with your browser, the locale wil
 #### PHP routing file
 
     <?php
-    
+
     use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
     use Symfony\Component\Routing\Route;
     use Symfony\Component\Routing\RouteCollection;
-    
+
     $collection = new RouteCollection();
     $collection->add('hello', new Route('/hello/{name}', array(
         '_controller' => 'HelloBundle:Hello:index',
@@ -130,7 +132,7 @@ When you create an I18N route and you go on it with your browser, the locale wil
         array('_controller' => 'MyWebsiteBundle:Frontend:index',)
     );
     $collection->addCollection($route->getCollection());
-    
+
     return $collection;
 
 ## Generate route in your templates
@@ -205,10 +207,10 @@ The Doctrine Backend has the following table structure:
     CREATE TABLE routing_translations (
         id INT NOT NULL,
         route VARCHAR(255) NOT NULL,
-        locale VARCHAR(255) NOT NULL, 
+        locale VARCHAR(255) NOT NULL,
         attribute VARCHAR(255) NOT NULL,
-        localized_value VARCHAR(255) NOT NULL, 
-        original_value VARCHAR(255) NOT NULL, 
+        localized_value VARCHAR(255) NOT NULL,
+        original_value VARCHAR(255) NOT NULL,
         UNIQUE INDEX UNIQ_291BA3522C420794180C698FA7AEFFB (route, locale, attribute),
         INDEX IDX_291BA352D951F3E4 (localized_value),
         PRIMARY KEY(id)
