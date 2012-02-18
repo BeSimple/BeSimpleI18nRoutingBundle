@@ -12,11 +12,11 @@ class SchemaListener
         $schema = $eventArgs->getSchema();
         $this->addRoutingTranslationsTable($schema);
     }
-    
+
     public function addRoutingTranslationsTable(Schema $schema)
     {
         $table = $schema->createTable('routing_translations');
-        $table->addColumn('id', 'integer');
+        $table->addColumn('id', 'integer', array('autoincrement' => true));
         $table->addColumn('route', 'string');
         $table->addColumn('locale', 'string');
         $table->addColumn('attribute', 'string');
