@@ -5,6 +5,7 @@ namespace BeSimple\I18nRoutingBundle\Routing;
 use BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Bundle\FrameworkBundle\Routing\Router as BaseRouter;
 
@@ -77,7 +78,7 @@ class Router extends BaseRouter
 
         try {
             return parent::generate($name, $parameters, $absolute);
-        } catch (\InvalidArgumentException $e) {
+        } catch (RouteNotFoundException $e) {
             if ($this->getContext()->hasParameter('_locale')) {
                 // at this point here we would never have $parameters['translate'] due to condition before
                 return $this->generateI18n($name, $this->getContext()->getParameter('_locale'), $parameters, $absolute);
