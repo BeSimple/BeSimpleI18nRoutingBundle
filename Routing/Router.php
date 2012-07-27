@@ -4,6 +4,7 @@ namespace BeSimple\I18nRoutingBundle\Routing;
 
 use BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RequestContext;
@@ -11,6 +12,11 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router as BaseRouter;
 
 class Router extends BaseRouter
 {
+    /**
+     * @var Session
+     */
+    private $session;
+
     /**
      * @var AttributeTranslatorInterface
      */
@@ -23,19 +29,21 @@ class Router extends BaseRouter
      *
      *   * See Router class
      *
-     * @param AttributeTranslatorInterface $translator
-     * @param ContainerInterface $container A ContainerInterface instance
-     * @param mixed              $resource  The main resource to load
-     * @param array              $options   An array of options
-     * @param array              $context   The context
-     * @param array              $defaults  The default values
+     * @param Session                      $session    The session
+     * @param AttributeTranslatorInterface $translator The attribute translator
+     * @param ContainerInterface           $container  A ContainerInterface instance
+     * @param mixed                        $resource   The main resource to load
+     * @param array                        $options    An array of options
+     * @param array                        $context    The context
+     * @param array                        $defaults   The default values
      *
      * @throws \InvalidArgumentException When unsupported option is provided
      */
-    public function __construct(AttributeTranslatorInterface $translator = null, ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null, array $defaults = array())
+    public function __construct(Session $session = null, AttributeTranslatorInterface $translator = null, ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null, array $defaults = array())
     {
         parent::__construct($container, $resource, $options, $context, $defaults);
 
+        $this->session    = $session;
         $this->translator = $translator;
     }
 
@@ -79,9 +87,16 @@ class Router extends BaseRouter
         try {
             return parent::generate($name, $parameters, $absolute);
         } catch (RouteNotFoundException $e) {
+            $locale = null;
             if ($this->getContext()->hasParameter('_locale')) {
+                $locale = $this->getContext()->getParameter('_locale');
+            } elseif ($this->session) {
+                $locale = $this->session->getLocale();
+            }
+
+            if (null !== $locale) {
                 // at this point here we would never have $parameters['translate'] due to condition before
-                return $this->generateI18n($name, $this->getContext()->getParameter('_locale'), $parameters, $absolute);
+                return $this->generateI18n($name, $locale, $parameters, $absolute);
             } else {
                 throw $e;
             }

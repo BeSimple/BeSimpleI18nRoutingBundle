@@ -14,6 +14,7 @@
 
     <services>
         <service id="i18n_routing.router" class="%i18n_routing.router.class%">
+            <argument type="service" id="session" on-invalid="ignore" />
             <argument type="service" id="i18n_routing.translator" on-invalid="ignore" />
             <argument type="service" id="service_container" />
             <argument>%router.resource%</argument>
