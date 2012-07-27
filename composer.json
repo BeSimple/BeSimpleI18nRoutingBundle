@@ -28,7 +28,6 @@
         "symfony/framework-bundle": "2.*"
     },
     "suggest": {
-        "symfony/translator": ">=2.0",
         "doctrine/dbal": ">=2.0"
     },
     "autoload": {
