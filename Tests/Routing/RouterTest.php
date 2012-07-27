@@ -10,14 +10,21 @@ use Symfony\Component\HttpFoundation\SessionStorage\ArraySessionStorage;
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
     private $router;
+    private $session;
     private $translator;
 
     public function setUp()
     {
+        $this->session    = $this
+            ->getMockBuilder('Symfony\Component\HttpFoundation\Session')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
         $this->translator = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface');
 
         $container    = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->router = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Router', array('getMatcher', 'getGenerator'), array(
+            $this->session,
             $this->translator,
             $container,
             null,
@@ -161,6 +168,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('en'))
         ;
         $this->router = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Router', array('getMatcher', 'getGenerator', 'getContext'), array(
+            $this->session,
             $this->translator,
             $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface'),
             null,
