@@ -259,11 +259,11 @@ CREATE TABLE routing_translations (
 Lookups are made through the combination of route name, locale and attribute of the route
 to be translated.
 
-Every lookup is cached in a Doctrine\Common\Cache\Cache instance that you should configure
+Every lookup is cached in a `Doctrine\Common\Cache\Cache` instance that you should configure
 to be APC, Memcache or Xcache for performance reasons.
 
 If you are using Doctrine it automatically registers a listener for SchemaTool to create
-the routing_translations table for your database backend, you only have to call:
+the `routing_translations` table for your database backend, you only have to call:
 
 ``` bash
 $ php app/console doctrine:schema:update --dump-sql
