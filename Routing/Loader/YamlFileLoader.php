@@ -93,4 +93,11 @@ class YamlFileLoader extends BaseYamlFileLoader
 
         return $config;
     }
+
+    /**
+     * {@InheritDoc}
+     */
+    public function supports($resource, $type=null) {
+        return ('be_simple_i18n' == $type) ?  true : parent::supports($resource, $type);
+    }
 }
