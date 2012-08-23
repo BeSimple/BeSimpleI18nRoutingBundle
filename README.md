@@ -14,10 +14,19 @@ When you create an I18N route and you go on it with your browser, the locale wil
 
 ## Installation
 
-### Add I18nRoutingBundle to your vendor/bundles dir
+### Add I18nRoutingBundle to your vendor/bundles dir as git submodule
 
 ``` bash
 $ git submodule add git://github.com/BeSimple/BeSimpleI18nRoutingBundle.git vendor/bundles/BeSimple/I18nRoutingBundle
+```
+
+### Add I18nRoutingBundle to your vendor/bundles dir with deps file (symfony 2.0)
+
+``` ini
+[BeSimpleI18nRoutingBundle]
+    git=git://github.com/BeSimple/BeSimpleI18nRoutingBundle.git
+    target=/bundles/BeSimple/I18nRoutingBundle
+    version=origin/2.0
 ```
 
 ### Add I18nRoutingBundle to your application kernel
