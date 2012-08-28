@@ -89,7 +89,7 @@ class XmlFileLoader extends BaseXmlFileLoader
 
         $current = libxml_use_internal_errors(true);
         if (!$dom->schemaValidate($location)) {
-            throw new \InvalidArgumentException(implode("\n", $this->getXmlErrors()));
+            throw new \InvalidArgumentException(implode("\n", $this->getXmlErrors($current)));
         }
         libxml_use_internal_errors($current);
     }
@@ -99,7 +99,7 @@ class XmlFileLoader extends BaseXmlFileLoader
      *
      * @return array An array of libxml error strings
      */
-    private function getXmlErrors()
+    private function getXmlErrors($internalErrors)
     {
         $errors = array();
         foreach (libxml_get_errors() as $error) {
@@ -114,6 +114,7 @@ class XmlFileLoader extends BaseXmlFileLoader
         }
 
         libxml_clear_errors();
+        libxml_use_internal_errors($internalErrors);
 
         return $errors;
     }
