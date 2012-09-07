@@ -16,7 +16,11 @@ class UrlGenerator extends BaseUrlGenerator
         try {
             return $this->generate($name.'.'.$locale, $parameters, $absolute);
         } catch (\InvalidArgumentException $e) {
-            throw new \InvalidArgumentException(sprintf('I18nRoute "%s" (%s) does not exist.', $name, $locale));
+            try {
+            	return $this->generate($name.'.'.strtok($locale, '_'), $parameters, $absolute);
+            } catch (\InvalidArgumentException $e) {
+            	throw new \InvalidArgumentException(sprintf('I18nRoute "%s" (%s) does not exist.', $name, $locale));
+            }
         }
     }
 }
