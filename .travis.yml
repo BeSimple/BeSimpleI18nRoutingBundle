@@ -11,6 +11,5 @@ env:
   - SYMFONY_VERSION=v2.1.3
   - SYMFONY_VERSION=v2.1.4
   - SYMFONY_VERSION=origin/2.1
-  - SYMFONY_VERSION=origin/master
 
 before_script: php vendor/vendors.php
