@@ -266,3 +266,9 @@ If you want to use a different implementation, simply create a service implement
         attribute_translator:
             type: service
             id: my_attribute_translator
+
+## License
+
+This bundle is under the MIT license. See the complete license in the bundle:
+
+    Resources/meta/LICENSE
