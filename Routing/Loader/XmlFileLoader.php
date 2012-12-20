@@ -73,18 +73,20 @@ class XmlFileLoader extends BaseXmlFileLoader
         $location = 'file:///'.$drive.implode('/', $parts);
 
         $current = libxml_use_internal_errors(true);
+        libxml_clear_errors();
+
         if (!$dom->schemaValidate($location)) {
-            throw new \InvalidArgumentException(implode("\n", $this->getXmlErrors()));
+            throw new \InvalidArgumentException(implode("\n", $this->getXmlErrors($current)));
         }
         libxml_use_internal_errors($current);
     }
-    
+
     /**
      * Retrieves libxml errors and clears them.
      *
      * @return array An array of libxml error strings
      */
-    private function getXmlErrors()
+    private function getXmlErrors($internalErrors)
     {
         $errors = array();
         foreach (libxml_get_errors() as $error) {
@@ -99,6 +101,7 @@ class XmlFileLoader extends BaseXmlFileLoader
         }
 
         libxml_clear_errors();
+        libxml_use_internal_errors($internalErrors);
 
         return $errors;
     }
