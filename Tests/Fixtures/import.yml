@@ -3,5 +3,5 @@ _basic_i18n_route:
     type: be_simple_i18n
 
 _basic_routes:
-    resource: basic_routes.yml
+    resource: full_locale.yml
     type: be_simple_i18n

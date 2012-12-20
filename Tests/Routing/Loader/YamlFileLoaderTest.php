@@ -10,18 +10,37 @@ use Symfony\Component\Config\FileLocator;
  */
 class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
+    public function testSupports()
+    {
+        $loader = $this->getYamlFileLoader();
+
+        $this->assertTrue($loader->supports('foo.yml', 'be_simple_i18n'));
+        $this->assertTrue($loader->supports('foo.bar.yml', 'be_simple_i18n'));
+
+        $this->assertFalse($loader->supports('foo.yml'));
+        $this->assertFalse($loader->supports('foo.yml', 'yaml'));
+        $this->assertFalse($loader->supports('foo.xml', 'be_simple_i18n'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @dataProvider getPathsToInvalidFiles()
+     */
+    public function testLoadThrowsExceptionWithInvalidFile($filePath)
+    {
+        $this->load($filePath);
+    }
+
+    public function getPathsToInvalidFiles()
+    {
+        return array(array('nonvalid_array.yml'), array('nonvalid_extrakeys.yml'), array('nonvalid_resource_with_locales.yml'), array('nonvalid_type_without_resource.yml'), array('nonvalid_without_resource_and_locales.yml'), array('nonvalid_basic_routes.yml'));
+    }
+
     public function testBasicI18nRoute()
     {
         $routes = $this->load('basic_i18n_route.yml')->all();
 
         $this->assertEquals(3, count($routes));
-    }
-
-    public function testBasicRoutes()
-    {
-        $routes = $this->load('basic_routes.yml')->all();
-
-        $this->assertEquals(4, count($routes));
     }
 
     public function testFullLocale()
@@ -35,20 +54,26 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $routes = $this->load('import.yml')->all();
 
-        $this->assertEquals(7, count($routes));
+        $this->assertEquals(6, count($routes));
     }
 
     public function testImportPrefix()
     {
         $routes = $this->load('import_prefix.yml')->all();
 
-        $this->assertEquals(7, count($routes));
+        $this->assertEquals(6, count($routes));
     }
 
     private function load($file)
     {
-        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));
+        return $this
+            ->getYamlFileLoader()
+            ->load($file)
+        ;
+    }
 
-        return $loader->load($file);
+    private function getYamlFileLoader()
+    {
+        return new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));
     }
 }
