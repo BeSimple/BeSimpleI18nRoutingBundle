@@ -6,7 +6,7 @@ for different languages. Additionally it allows to translate given routing param
 between languages in Router#match and UrlGenerator#generate using either a Symfony Translator
 or a Doctrine DBAL (+Cache) based backend.
 
-[![Build Status](https://secure.travis-ci.org/BeSimple/BeSimpleI18nRoutingBundle.png?branch=2.1)](http://travis-ci.org/BeSimple/BeSimpleI18nRoutingBundle)
+[![Build Status](https://secure.travis-ci.org/BeSimple/BeSimpleI18nRoutingBundle.png?branch=master)](http://travis-ci.org/BeSimple/BeSimpleI18nRoutingBundle)
 
 ## Information
 
