@@ -10,6 +10,13 @@ use Symfony\Component\Config\FileLocator;
  */
 class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
+    public static function setUpBeforeClass()
+    {
+        self::markTestSkipped(
+          'The XmlFileLoader is temporary disabled.'
+        );
+    }
+
     public function testBasicI18nRoute()
     {
         $routes = $this->load('basic_i18n_route.xml')->all();
