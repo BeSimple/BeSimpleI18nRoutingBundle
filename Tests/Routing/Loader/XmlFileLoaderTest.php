@@ -10,7 +10,7 @@ use Symfony\Component\Config\FileLocator;
  */
 class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testEBasicI18nRoute()
+    public function testBasicI18nRoute()
     {
         $routes = $this->load('basic_i18n_route.xml')->all();
 
