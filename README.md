@@ -100,13 +100,13 @@ loader: ``http://besim.pl/schema/i18n_routing``.
 
 #### Yaml routing file
 
-    hello:
-        pattern:  "/hello/{name}"
-        defaults: { _controller: HelloBundle:Hello:index }
-
     homepage:
+        locales:  { en: "/en/", fr: "/fr/", de: "/de/" }
+        defaults: { _controller: HelloBundle:Frontend:homepage }
+
+    welcome:
         locales:  { en: "/welcome/{name}", fr: "/bienvenue/{name}", de: "/willkommen/{name}" }
-        defaults: { _controller: MyWebsiteBundle:Frontend:index }
+        defaults: { _controller: MyWebsiteBundle:Frontend:welcome }
 
 #### XML routing file
 
