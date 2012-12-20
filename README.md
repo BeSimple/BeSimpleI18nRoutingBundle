@@ -269,3 +269,9 @@ the `routing_translations` table for your database backend, you only have to cal
 $ php app/console doctrine:schema:update --dump-sql
 $ php app/console doctrine:schema:update --force
 ```
+
+## License
+
+This bundle is under the MIT license. See the complete license in the bundle:
+
+    Resources/meta/LICENSE
