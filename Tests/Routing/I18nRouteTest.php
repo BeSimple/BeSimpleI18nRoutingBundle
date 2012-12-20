@@ -18,15 +18,16 @@ class I18nRouteTest extends \PHPUnit_Framework_TestCase
         $collection = $i18nRoute->getCollection();
 
         foreach ($locales as $locale => $pattern) {
-            $compiled = $collection->get($name.'.'.$locale)->compile();
-            
+            $route = $collection->get($name.'.'.$locale);
+            $compiled = $route->compile();
+
             $defaults['_locale']       = $locale;
             $options['compiler_class'] = 'Symfony\\Component\\Routing\\RouteCompiler';
 
-            $this->assertEquals($pattern, $compiled->getPattern(), '(pattern)');
-            $this->assertEquals($defaults, $compiled->getDefaults(), '(defaults)');
-            $this->assertEquals($requirements, $compiled->getRequirements(), '(requirements)');
-            $this->assertEquals($options, $compiled->getOptions(), '(options)');
+            $this->assertEquals($pattern, $route->getPattern(), '(pattern)');
+            $this->assertEquals($defaults, $route->getDefaults(), '(defaults)');
+            $this->assertEquals($requirements, $route->getRequirements(), '(requirements)');
+            $this->assertEquals($options, $route->getOptions(), '(options)');
             $this->assertEquals($variables, $compiled->getVariables(), '(variables)');
         }
     }
