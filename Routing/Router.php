@@ -14,12 +14,12 @@ class Router implements RouterInterface
     /**
      * @var AttributeTranslatorInterface
      */
-    private $translator;
+    protected $translator;
 
     /**
      * @var RouterInterface
      */
-    private $router;
+    protected $router;
 
     /**
      * Constructor
