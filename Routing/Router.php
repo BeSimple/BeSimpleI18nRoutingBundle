@@ -138,7 +138,9 @@ class Router implements RouterInterface
         try {
             return $this->router->generate($name.'.'.$locale, $parameters, $absolute);
         } catch (RouteNotFoundException $e) {
-            throw new RouteNotFoundException(sprintf('I18nRoute "%s" (%s) does not exist.', $name, $locale));
+            // try to fallback to a not localized route
+            return $this->router->generate($name, $parameters, $absolute);
+            //throw new RouteNotFoundException(sprintf('I18nRoute "%s" (%s) does not exist.', $name, $locale));
         }
     }
 }

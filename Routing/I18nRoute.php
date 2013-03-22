@@ -16,13 +16,14 @@ class I18nRoute
      *
      *  * See Routing class
      *
-     * @param string  $name         The route name
-     * @param array   $locales      An array with keys locales and values patterns
-     * @param array   $defaults     An array of default parameter values
-     * @param array   $requirements An array of requirements for parameters (regexes)
-     * @param array   $options      An array of options
+     * @param string $name         The route name
+     * @param array $locales      An array with keys locales and values patterns
+     * @param array $defaults     An array of default parameter values
+     * @param array $requirements An array of requirements for parameters (regexes)
+     * @param array $options      An array of options
+     * @param $default_locale     The kernel.default_locale parameter
      */
-    public function __construct($name, array $locales, array $defaults = array(), array $requirements = array(), array $options = array())
+    public function __construct($name, array $locales, array $defaults = array(), array $requirements = array(), array $options = array(), $default_locale)
     {
         $this->collection = new RouteCollection();
 
@@ -30,6 +31,10 @@ class I18nRoute
             $defaults['_locale'] = $locale;
 
             $this->collection->add($name.'.'.$locale, new Route($pattern, $defaults, $requirements, $options));
+
+            if($locale == $default_locale){
+                $this->collection->add($name, new Route($pattern, $defaults, $requirements, $options));
+            }
         }
     }
 
