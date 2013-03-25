@@ -145,6 +145,7 @@ class Router implements RouterInterface
                 if(isset($variables['locale'])){
                     $parameters['locale'] = $locale;
                 }
+                $parameters['_locale'] = $locale;
                 return $this->router->generate($name, $parameters, $absolute);
             }
             throw new RouteNotFoundException(sprintf('I18nRoute "%s" (%s) does not exist.', $name, $locale));
