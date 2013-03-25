@@ -142,7 +142,7 @@ class Router implements RouterInterface
             if(($route = $this->getRouteCollection()->get($name)) !== null){
                 $compiled_route = $route->compile();
                 $variables = $compiled_route->getVariables();
-                if(isset($variables['locale'])){
+                if(in_array('locale', $variables)){
                     $parameters['locale'] = $locale;
                 }
                 return $this->router->generate($name, $parameters, $absolute);
