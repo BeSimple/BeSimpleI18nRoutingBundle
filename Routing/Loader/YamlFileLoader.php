@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
 class YamlFileLoader extends BaseYamlFileLoader
 {
     private static $availableKeys = array(
-        'locales', 'resource', 'type', 'prefix', 'pattern', 'defaults', 'requirements', 'options',
+        'locales', 'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options',
     );
 
     /**
