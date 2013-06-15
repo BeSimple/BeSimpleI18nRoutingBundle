@@ -22,12 +22,12 @@ class I18nRoute
      * @param array   $requirements An array of requirements for parameters (regexes)
      * @param array   $options      An array of options
      */
-    public function __construct($name, array $locales, array $defaults = array(), array $requirements = array(), array $options = array())
+    public function __construct($name, array $locales, array $defaults = array(), array $requirements = array(), array $options = array(), $host = '', $schemes = array(), $methods = array())
     {
         $this->collection = new RouteCollection();
 
         foreach ($locales as $locale => $pattern) {
-            $this->collection->add($name.'.'.$locale, new Route($pattern, $defaults, $requirements, $options, true));
+            $this->collection->add($name.'.'.$locale, new Route($pattern, $defaults, $requirements, $options, $host, $schemes, $methods));
         }
     }
 
