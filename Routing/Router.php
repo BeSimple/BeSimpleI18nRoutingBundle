@@ -48,7 +48,7 @@ class Router implements RouterInterface
     public function generate($name, $parameters = array(), $absolute = false)
     {
 
-        /*if (isset($parameters['locale']) || isset($parameters['translate'])) {
+        if (isset($parameters['locale']) || isset($parameters['translate'])) {
             if (isset($parameters['locale'])) {
                 $locale = $parameters['locale'];
                 unset($parameters['locale']);
@@ -69,8 +69,13 @@ class Router implements RouterInterface
                 unset($parameters['translate']);
             }
 
-            return $this->generateI18n($name, $locale, $parameters, $absolute);
-        }*/
+            try {
+                return $this->generateI18n($name, $locale, $parameters, $absolute);
+            } catch (RouteNotFoundException $e) {
+                return $this->router->generate($name, $parameters, $absolute);
+            }
+
+        }
 
         try {
             return $this->router->generate($name, $parameters, $absolute);
