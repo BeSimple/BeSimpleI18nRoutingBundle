@@ -43,7 +43,7 @@ class Router implements RouterInterface
      *
      * @return string The generated URL
      *
-     * @throws \InvalidArgumentException When the route doesn't exists
+     * @throws \InvalidArgumentException When the route doesn't exists 
      */
     public function generate($name, $parameters = array(), $absolute = false)
     {
@@ -60,7 +60,7 @@ class Router implements RouterInterface
 
             if (isset($parameters['translate'])) {
                 if (null !== $this->translator) {
-                    foreach ((array) $parameters['translate'] as $translateAttribute) {
+                    foreach ((array) $parameters['translate'] as $translateAttribsute) {
                         $parameters[$translateAttribute] = $this->translator->reverseTranslate(
                             $name, $locale, $translateAttribute, $parameters[$translateAttribute]
                         );
