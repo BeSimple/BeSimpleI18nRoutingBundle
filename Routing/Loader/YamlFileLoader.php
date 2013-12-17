@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
 class YamlFileLoader extends BaseYamlFileLoader
 {
     private static $availableKeys = array(
-        'locales', 'resource', 'type', 'prefix', 'pattern', 'defaults', 'requirements', 'options',
+        'locales', 'resource', 'type', 'prefix', 'pattern', 'defaults', 'requirements', 'options', 'path',
     );
 
     /**
@@ -39,8 +39,13 @@ class YamlFileLoader extends BaseYamlFileLoader
         $requirements = isset($config['requirements']) ? $config['requirements'] : array();
         $options = isset($config['options']) ? $config['options'] : array();
 
-        $route = new I18nRoute($name, $config['locales'], $defaults, $requirements, $options);
+        if (isset($config['locales'])) {
+            $route = new I18nRoute($name, $config['locales'], $defaults, $requirements, $options);
+        } else {
+            $route = new I18nRoute($name, array('' => $config['path']), $defaults, $requirements, $options);
+        }
         $collection->addCollection($route->getCollection());
+
     }
 
     /**
@@ -73,11 +78,11 @@ class YamlFileLoader extends BaseYamlFileLoader
             ));
         }
 
-        if (!isset($config['resource']) && !isset($config['locales'])) {
+        /*if (!isset($config['resource']) && !isset($config['locales'])) {
             throw new \InvalidArgumentException(sprintf(
                 'You must define a "locales" for the route "%s" in file "%s".',
                 $name, $path
             ));
-        }
+        }*/
     }
 }

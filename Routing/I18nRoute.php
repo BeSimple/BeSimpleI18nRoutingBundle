@@ -28,8 +28,10 @@ class I18nRoute
 
         foreach ($locales as $locale => $pattern) {
             $defaults['_locale'] = $locale;
-
-            $this->collection->add($name.'.'.$locale, new Route($pattern, $defaults, $requirements, $options, true));
+            if (strlen($locale) > 0) {
+                $locale = '.'.$locale;
+            }
+            $this->collection->add($name.$locale, new Route($pattern, $defaults, $requirements, $options));
         }
     }
 

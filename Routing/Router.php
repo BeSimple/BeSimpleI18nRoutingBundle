@@ -4,6 +4,7 @@ namespace BeSimple\I18nRoutingBundle\Routing;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
@@ -42,10 +43,11 @@ class Router implements RouterInterface
      *
      * @return string The generated URL
      *
-     * @throws \InvalidArgumentException When the route doesn't exists
+     * @throws \InvalidArgumentException When the route doesn't exists 
      */
     public function generate($name, $parameters = array(), $absolute = false)
     {
+
         if (isset($parameters['locale']) || isset($parameters['translate'])) {
             if (isset($parameters['locale'])) {
                 $locale = $parameters['locale'];
@@ -58,7 +60,7 @@ class Router implements RouterInterface
 
             if (isset($parameters['translate'])) {
                 if (null !== $this->translator) {
-                    foreach ((array) $parameters['translate'] as $translateAttribute) {
+                    foreach ((array) $parameters['translate'] as $translateAttribsute) {
                         $parameters[$translateAttribute] = $this->translator->reverseTranslate(
                             $name, $locale, $translateAttribute, $parameters[$translateAttribute]
                         );
@@ -67,17 +69,20 @@ class Router implements RouterInterface
                 unset($parameters['translate']);
             }
 
-            return $this->generateI18n($name, $locale, $parameters, $absolute);
+            try {
+                return $this->generateI18n($name, $locale, $parameters, $absolute);
+            } catch (RouteNotFoundException $e) {
+                return $this->router->generate($name, $parameters, $absolute);
+            }
+
         }
 
         try {
             return $this->router->generate($name, $parameters, $absolute);
         } catch (RouteNotFoundException $e) {
             if ($this->getContext()->hasParameter('_locale')) {
-                // at this point here we would never have $parameters['translate'] due to condition before
                 return $this->generateI18n($name, $this->getContext()->getParameter('_locale'), $parameters, $absolute);
             }
-
             throw $e;
         }
     }
@@ -101,6 +106,11 @@ class Router implements RouterInterface
                     );
                 }
             }
+
+            if ($this->getContext()->getParameter('_locale') != $match['_locale']) {
+                throw new ResourceNotFoundException();
+            }
+
         }
 
         return $match;
