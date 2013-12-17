@@ -4,6 +4,7 @@ namespace BeSimple\I18nRoutingBundle\Routing;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
@@ -46,7 +47,8 @@ class Router implements RouterInterface
      */
     public function generate($name, $parameters = array(), $absolute = false)
     {
-        if (isset($parameters['locale']) || isset($parameters['translate'])) {
+
+        /*if (isset($parameters['locale']) || isset($parameters['translate'])) {
             if (isset($parameters['locale'])) {
                 $locale = $parameters['locale'];
                 unset($parameters['locale']);
@@ -68,16 +70,14 @@ class Router implements RouterInterface
             }
 
             return $this->generateI18n($name, $locale, $parameters, $absolute);
-        }
+        }*/
 
         try {
             return $this->router->generate($name, $parameters, $absolute);
         } catch (RouteNotFoundException $e) {
             if ($this->getContext()->hasParameter('_locale')) {
-                // at this point here we would never have $parameters['translate'] due to condition before
                 return $this->generateI18n($name, $this->getContext()->getParameter('_locale'), $parameters, $absolute);
             }
-
             throw $e;
         }
     }
@@ -101,6 +101,11 @@ class Router implements RouterInterface
                     );
                 }
             }
+
+            if ($this->getContext()->getParameter('_locale') != $match['_locale']) {
+                throw new ResourceNotFoundException();
+            }
+
         }
 
         return $match;
