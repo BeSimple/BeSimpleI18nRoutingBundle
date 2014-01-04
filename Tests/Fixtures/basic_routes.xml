@@ -2,7 +2,7 @@
 
 <routes xmlns="http://besim.pl/schema/i18n_routing"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xml">
+    xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xsd">
 
     <route id="homepage" pattern="/">
         <default key="_controller">TestBundle:Frontend:homepage</default>

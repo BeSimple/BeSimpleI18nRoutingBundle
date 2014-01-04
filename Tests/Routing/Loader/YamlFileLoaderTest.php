@@ -26,14 +26,28 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @dataProvider getPathsToInvalidFiles()
      */
-    public function testLoadThrowsExceptionWithInvalidFile($filePath)
+    public function testLoadThrowsInvalidArgumentExceptionWithInvalidFile($filePath)
     {
         $this->load($filePath);
     }
 
     public function getPathsToInvalidFiles()
     {
-        return array(array('nonvalid_array.yml'), array('nonvalid_extrakeys.yml'), array('nonvalid_resource_with_locales.yml'), array('nonvalid_type_without_resource.yml'), array('nonvalid_without_resource_and_locales.yml'), array('nonvalid_basic_routes.yml'));
+        return array(array('nonvalid_array.yml'), array('nonvalid_extrakeys.yml'), array('nonvalid_type_without_resource.yml'), array('nonvalid_without_resource_and_locales.yml'), array('nonvalid_basic_routes.yml'));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Exception\FileLoaderLoadException
+     * @dataProvider getPathsToInvalidImportFiles()
+     */
+    public function testLoadThrowsFileLoaderLoadExceptionWithInvalidFile($filePath)
+    {
+        $this->load($filePath);
+    }
+
+    public function getPathsToInvalidImportFiles()
+    {
+        return array(array('nonvalid_resource_with_locales.yml'),);
     }
 
     public function testBasicI18nRoute()
@@ -68,7 +82,7 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
     {
         return $this
             ->getYamlFileLoader()
-            ->load($file)
+            ->load($file, 'be_simple_i18n')
         ;
     }
 
