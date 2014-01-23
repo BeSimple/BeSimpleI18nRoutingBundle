@@ -9,6 +9,20 @@ use Symfony\Component\Routing\RouteCollection;
 
 class XmlFileLoader extends BaseXmlFileLoader
 {
+    private $default_locale;
+
+    /**
+     * Constructor.
+     *
+     * @param FileLocatorInterface $locator A FileLocatorInterface instance
+     * @param $default_locale The kernel.default_locale parameter
+     */
+    public function __construct(FileLocatorInterface $locator, $default_locale)
+    {
+        $this->locator = $locator;
+        $this->default_locale = $default_locale;
+    }
+
     /**
      * Returns true if this class supports the given resource.
      *
@@ -64,7 +78,7 @@ class XmlFileLoader extends BaseXmlFileLoader
         }
 
         if ($locales) {
-            $route = new I18nRoute((string) $definition->getAttribute('id'), $locales, $defaults, $requirements, $options);
+            $route = new I18nRoute((string) $definition->getAttribute('id'), $locales, $defaults, $requirements, $options, $this->default_locale);
 
             $collection->addCollection($route->getCollection());
         } else {

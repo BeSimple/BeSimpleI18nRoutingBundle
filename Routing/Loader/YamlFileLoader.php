@@ -8,12 +8,27 @@ use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Config\FileLocatorInterface;
 
 class YamlFileLoader extends BaseYamlFileLoader
 {
     private static $availableKeys = array(
         'locales', 'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options',
     );
+
+    private $default_locale;
+
+    /**
+     * Constructor.
+     *
+     * @param FileLocatorInterface $locator A FileLocatorInterface instance
+     * @param $default_locale The kernel.default_locale parameter
+     */
+    public function __construct(FileLocatorInterface $locator, $default_locale)
+    {
+        $this->locator = $locator;
+        $this->default_locale = $default_locale;
+    }
 
     /**
      * Returns true if this class supports the given resource.

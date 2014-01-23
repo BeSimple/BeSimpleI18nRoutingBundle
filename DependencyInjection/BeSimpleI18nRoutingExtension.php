@@ -24,7 +24,12 @@ class BeSimpleI18nRoutingExtension extends Extension
 
         $this->addClassesToCompile(array(
             'BeSimple\\I18nRoutingBundle\\Routing\\Router',
+            'BeSimple\\I18nRoutingBundle\\EventListener\\LocaleListener',
         ));
+
+        $container->getDefinition('be_simple_i18n_routing.event_listener.locale')
+            ->setPublic(true)
+            ->addTag('kernel.event_subscriber');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

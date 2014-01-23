@@ -9,6 +9,7 @@
         <parameter key="be_simple_i18n_routing.loader.xml.class">BeSimple\I18nRoutingBundle\Routing\Loader\XmlFileLoader</parameter>
         <parameter key="be_simple_i18n_routing.loader.yaml.class">BeSimple\I18nRoutingBundle\Routing\Loader\YamlFileLoader</parameter>
         <parameter key="be_simple_i18n_routing.translator.translation.class">BeSimple\I18nRoutingBundle\Routing\Translator\TranslationTranslator</parameter>
+        <parameter key="be_simple_i18n_routing.event_listener.locale.class">BeSimple\I18nRoutingBundle\EventListener\LocaleListener</parameter>
     </parameters>
 
     <services>
@@ -21,16 +22,21 @@
         <service id="be_simple_i18n_routing.loader.xml" class="%be_simple_i18n_routing.loader.xml.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
+            <argument>%kernel.default_locale%</argument>
         </service>
         -->
 
         <service id="be_simple_i18n_routing.loader.yaml" class="%be_simple_i18n_routing.loader.yaml.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
+            <argument>%kernel.default_locale%</argument>
         </service>
 
         <service id="be_simple_i18n_routing.translator.translation" class="%be_simple_i18n_routing.translator.translation.class%" public="false">
             <argument type="service" id="translator" />
+        </service>
+
+        <service id="be_simple_i18n_routing.event_listener.locale" class="%be_simple_i18n_routing.event_listener.locale.class%" public="false">
         </service>
     </services>
 </container>
