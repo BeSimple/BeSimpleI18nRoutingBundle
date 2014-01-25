@@ -16,20 +16,6 @@ class YamlFileLoader extends BaseYamlFileLoader
         'locales', 'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options',
     );
 
-    private $default_locale;
-
-    /**
-     * Constructor.
-     *
-     * @param FileLocatorInterface $locator A FileLocatorInterface instance
-     * @param $default_locale The kernel.default_locale parameter
-     */
-    public function __construct(FileLocatorInterface $locator, $default_locale)
-    {
-        $this->locator = $locator;
-        $this->default_locale = $default_locale;
-    }
-
     /**
      * Returns true if this class supports the given resource.
      *
