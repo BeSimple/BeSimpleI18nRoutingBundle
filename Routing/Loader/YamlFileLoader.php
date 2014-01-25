@@ -8,11 +8,12 @@ use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Config\FileLocatorInterface;
 
 class YamlFileLoader extends BaseYamlFileLoader
 {
     private static $availableKeys = array(
-        'locales', 'resource', 'type', 'prefix', 'pattern', 'defaults', 'requirements', 'options',
+        'locales', 'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options',
     );
 
     /**
@@ -35,11 +36,14 @@ class YamlFileLoader extends BaseYamlFileLoader
      */
     protected function parseRoute(RouteCollection $collection, $name, array $config, $path)
     {
-        $defaults = isset($config['defaults']) ? $config['defaults'] : array();
+        $defaults     = isset($config['defaults']) ? $config['defaults'] : array();
         $requirements = isset($config['requirements']) ? $config['requirements'] : array();
-        $options = isset($config['options']) ? $config['options'] : array();
+        $options      = isset($config['options']) ? $config['options'] : array();
+        $host         = isset($config['host']) ? $config['host'] : '';
+        $schemes      = isset($config['schemes']) ? $config['schemes'] : array();
+        $methods      = isset($config['methods']) ? $config['methods'] : array();
 
-        $route = new I18nRoute($name, $config['locales'], $defaults, $requirements, $options);
+        $route = new I18nRoute($name, $config['locales'], $defaults, $requirements, $options, $host, $schemes, $methods);
         $collection->addCollection($route->getCollection());
     }
 
@@ -52,7 +56,9 @@ class YamlFileLoader extends BaseYamlFileLoader
             throw new \InvalidArgumentException(sprintf('The definition of "%s" in "%s" must be a YAML array. hihi', $name, $path));
         }
 
-        if ($extraKeys = array_diff(array_keys($config), self::$availableKeys)) {
+        $extraKeys = array_diff(array_keys($config), self::$availableKeys);
+
+        if (!empty($extraKeys)) {
             throw new \InvalidArgumentException(sprintf(
                 'The routing file "%s" contains unsupported keys for "%s": "%s". Expected one of: "%s".',
                 $path, $name, implode('", "', $extraKeys), implode('", "', self::$availableKeys)

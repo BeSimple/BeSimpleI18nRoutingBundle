@@ -64,7 +64,7 @@ class XmlFileLoader extends BaseXmlFileLoader
         }
 
         if ($locales) {
-            $route = new I18nRoute((string) $definition->getAttribute('id'), $locales, $defaults, $requirements, $options);
+            $route = new I18nRoute((string) $definition->getAttribute('id'), $locales, $defaults, $requirements, $options, $this->default_locale);
 
             $collection->addCollection($route->getCollection());
         } else {

@@ -25,7 +25,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": "dev-master"
+        "symfony/framework-bundle": ">=2.2,<2.4"
     },
     "suggest": {
         "doctrine/dbal": ">=2.0"
