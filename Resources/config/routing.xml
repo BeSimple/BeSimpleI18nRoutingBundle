@@ -22,9 +22,8 @@
         <service id="be_simple_i18n_routing.loader.xml" class="%be_simple_i18n_routing.loader.xml.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
-            <argument>%kernel.default_locale%</argument>
         </service>
-        -->
+         -->
 
         <service id="be_simple_i18n_routing.loader.yaml" class="%be_simple_i18n_routing.loader.yaml.class%" public="false">
             <tag name="routing.loader" />
