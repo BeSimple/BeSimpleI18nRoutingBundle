@@ -14,134 +14,147 @@ When you create an I18N route and you go on it with your browser, the locale wil
 
 ## Installation
 
-    ```js
-        //composer.json
-        "require": {
-            //...
-            "besimple/i18n-routing-bundle": "dev-master"
-        }
-    ```
+```js
+//composer.json
+"require": {
+    //...
+    "besimple/i18n-routing-bundle": "dev-master"
+}
+```
 
-    ```php
-        //app/AppKernel.php
-        public function registerBundles()
-        {
-            $bundles = array(
-                //...
-                new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),
-            );
-        }
-    ```
+```php
+//app/AppKernel.php
+public function registerBundles()
+{
+    $bundles = array(
+        //...
+        new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),
+    );
+}
+```
 
 ### Update your configuration
 
-    // app/config/config.yml
-    be_simple_i18n_routing: ~
+```yaml
+# app/config/config.yml
+be_simple_i18n_routing: ~
+```
 
 ## Create your routing
 
 To define internationalized routes in XML or YAML, you need to import the
 routing file by using the ``be_simple_i18n`` type:
 
-    my_yaml_i18n_routes:
-        resource: "@MyWebsiteBundle/Resources/config/routing/i18n.yml"
-        type: be_simple_i18n
-    my_xml_i18n_routes:
-        resource: "@MyWebsiteBundle/Resources/config/routing/i18n.xml"
-        type: be_simple_i18n
+```yaml
+my_yaml_i18n_routes:
+    resource: "@MyWebsiteBundle/Resources/config/routing/i18n.yml"
+    type: be_simple_i18n
+my_xml_i18n_routes:
+    resource: "@MyWebsiteBundle/Resources/config/routing/i18n.xml"
+    type: be_simple_i18n
+```
 
 ### Yaml routing file
 
-    homepage:
-        locales:  { en: "/welcome", fr: "/bienvenue", de: "/willkommen" }
-        defaults: { _controller: MyWebsiteBundle:Frontend:index }
+```yaml
+homepage:
+    locales:  { en: "/welcome", fr: "/bienvenue", de: "/willkommen" }
+    defaults: { _controller: MyWebsiteBundle:Frontend:index }
+```
 
 ### XML routing file
 
-    <?xml version="1.0" encoding="UTF-8" ?>
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes xmlns="http://besim.pl/schema/i18n_routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xsd">
 
-    <routes xmlns="http://besim.pl/schema/i18n_routing"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xsd">
-
-        <route id="homepage">
-            <locale key="en">/welcome</locale>
-            <locale key="fr">/bienvenue</locale>
-            <locale key="de">/willkommen</locale>
-            <default key="_controller">MyWebsiteBundle:Frontend:index</default>
-        </route>
-    </routes>
+    <route id="homepage">
+        <locale key="en">/welcome</locale>
+        <locale key="fr">/bienvenue</locale>
+        <locale key="de">/willkommen</locale>
+        <default key="_controller">MyWebsiteBundle:Frontend:index</default>
+    </route>
+</routes>
+```
 
 Note that the XML file uses a different namespace than when using the core
 loader: ``http://besim.pl/schema/i18n_routing``.
 
 ### PHP routing file
 
-    <?php
+```php
+<?php
 
-    use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
-    use Symfony\Component\Routing\RouteCollection;
+use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
+use Symfony\Component\Routing\RouteCollection;
 
-    $collection = new RouteCollection();
-    $route      = new I18nRoute('homepage',
-        array('en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen'),
-        array('_controller' => 'MyWebsiteBundle:Frontend:index')
-    );
-    $collection->addCollection($route->getCollection());
+$collection = new RouteCollection();
+$route      = new I18nRoute('homepage',
+    array('en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen'),
+    array('_controller' => 'MyWebsiteBundle:Frontend:index')
+);
+$collection->addCollection($route->getCollection());
 
-    return $collection;
+return $collection;
+```
 
 ### You can insert classic route in your routing
 
 #### Yaml routing file
 
-    homepage:
-        locales:  { en: "/en/", fr: "/fr/", de: "/de/" }
-        defaults: { _controller: HelloBundle:Frontend:homepage }
+```yaml
+homepage:
+    locales:  { en: "/en/", fr: "/fr/", de: "/de/" }
+    defaults: { _controller: HelloBundle:Frontend:homepage }
 
-    welcome:
-        locales:  { en: "/welcome/{name}", fr: "/bienvenue/{name}", de: "/willkommen/{name}" }
-        defaults: { _controller: MyWebsiteBundle:Frontend:welcome }
+welcome:
+    locales:  { en: "/welcome/{name}", fr: "/bienvenue/{name}", de: "/willkommen/{name}" }
+    defaults: { _controller: MyWebsiteBundle:Frontend:welcome }
+```
 
 #### XML routing file
 
-    <?xml version="1.0" encoding="UTF-8" ?>
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
 
-    <routes xmlns="http://besim.pl/schema/i18n_routing"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xsd">
+<routes xmlns="http://besim.pl/schema/i18n_routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xsd">
 
-        <route id="hello" pattern="/hello/{name}">
-            <default key="_controller">HelloBundle:Hello:index</default>
-        </route>
-
+    <route id="hello" pattern="/hello/{name}">
+        <default key="_controller">HelloBundle:Hello:index</default>
+    </route>
         <route id="homepage">
-            <locale key="en">/welcome/{name}</locale>
-            <locale key="fr">/bienvenue/{name}</locale>
-            <locale key="de">/willkommen/{name}</locale>
-            <default key="_controller">MyWebsiteBundle:Frontend:index</default>
-        </route>
-    </routes>
+        <locale key="en">/welcome/{name}</locale>
+        <locale key="fr">/bienvenue/{name}</locale>
+        <locale key="de">/willkommen/{name}</locale>
+        <default key="_controller">MyWebsiteBundle:Frontend:index</default>
+    </route>
+</routes>
+```
 
 #### PHP routing file
 
-    <?php
+```php
+<?php
 
-    use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
-    use Symfony\Component\Routing\Route;
-    use Symfony\Component\Routing\RouteCollection;
+use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
+$collection = new RouteCollection();
+$collection->add('hello', new Route('/hello/{name}', array(
+    '_controller' => 'HelloBundle:Hello:index',
+)));
+$route = new I18nRoute('homepage',
+    array('en' => '/welcome/{name}', 'fr' => '/bienvenue/{name}', 'de' => '/willkommen/{name}'),
+    array('_controller' => 'MyWebsiteBundle:Frontend:index',)
+);
+$collection->addCollection($route->getCollection());
 
-    $collection = new RouteCollection();
-    $collection->add('hello', new Route('/hello/{name}', array(
-        '_controller' => 'HelloBundle:Hello:index',
-    )));
-    $route = new I18nRoute('homepage',
-        array('en' => '/welcome/{name}', 'fr' => '/bienvenue/{name}', 'de' => '/willkommen/{name}'),
-        array('_controller' => 'MyWebsiteBundle:Frontend:index',)
-    );
-    $collection->addCollection($route->getCollection());
-
-    return $collection;
+return $collection;
+```
 
 ## Generate a route in your templates
 
@@ -158,12 +171,14 @@ loader: ``http://besim.pl/schema/i18n_routing``.
 
 #### PHP
 
-    <?php echo $view['router']->generate('homepage.en') ?>
-    <?php echo $view['router']->generate('homepage', array('locale' => 'en')) ?>
-    <?php echo $view['router']->generate('homepage.fr') ?>
-    <?php echo $view['router']->generate('homepage', array('locale' => 'fr')) ?>
-    <?php echo $view['router']->generate('homepage.de') ?>
-    <?php echo $view['router']->generate('homepage', array('locale' => 'de')) ?>
+```php
+<?php echo $view['router']->generate('homepage.en') ?>
+<?php echo $view['router']->generate('homepage', array('locale' => 'en')) ?>
+<?php echo $view['router']->generate('homepage.fr') ?>
+<?php echo $view['router']->generate('homepage', array('locale' => 'fr')) ?>
+<?php echo $view['router']->generate('homepage.de') ?>
+<?php echo $view['router']->generate('homepage', array('locale' => 'de')) ?>
+```
 
 ### Use current locale of user
 
@@ -173,7 +188,9 @@ loader: ``http://besim.pl/schema/i18n_routing``.
 
 #### PHP
 
-    <?php echo $view['router']->generate('homepage') ?>
+```php
+<?php echo $view['router']->generate('homepage') ?>
+```
 
 ## Translating the route attributes
 
@@ -184,14 +201,16 @@ routing parameters should be translated. The bundle provides 2 implementations.
 After configuring the backend you want to use (see below for each one), you
 can define a to be translated attribute in your route defaults:
 
-    product_view:
-        locales: { en: "/product/{slug}", de: "/produkt/{slug}" }
-        defaults: { _controller: "ShopBundle:Product:view", _translate: "slug" }
-    product_view2:
-        locales: { en: "/product/{category}/{slug}", de: "/produkt/{category}/{slug}" }
-        defaults:
-            _controller: "ShopBundle:Product:view"
-            _translate: ["slug", "category"]
+```yaml
+product_view:
+    locales: { en: "/product/{slug}", de: "/produkt/{slug}" }
+    defaults: { _controller: "ShopBundle:Product:view", _translate: "slug" }
+product_view2:
+    locales: { en: "/product/{category}/{slug}", de: "/produkt/{category}/{slug}" }
+    defaults:
+        _controller: "ShopBundle:Product:view"
+        _translate: ["slug", "category"]
+```
 
 The same goes with generating routes, now backwards:
 
@@ -207,26 +226,30 @@ locale then you can just pass this and do not hint to translate it with the
 
 Configure the use of the DBAL backend
 
-    // app/config/config.yml
-    be_simple_i18n_routing:
-        attribute_translator:
-            type: doctrine_dbal
-            connection: default # Doctrine DBAL connection name. Using null (default value) will use the default connection
-            cache: apc
+```yaml
+# app/config/config.yml
+be_simple_i18n_routing:
+    attribute_translator:
+        type: doctrine_dbal
+        connection: default # Doctrine DBAL connection name. Using null (default value) will use the default connection
+        cache: apc
+```
 
 The Doctrine Backend has the following table structure:
 
-    CREATE TABLE routing_translations (
-        id INT NOT NULL,
-        route VARCHAR(255) NOT NULL,
-        locale VARCHAR(255) NOT NULL,
-        attribute VARCHAR(255) NOT NULL,
-        localized_value VARCHAR(255) NOT NULL,
-        original_value VARCHAR(255) NOT NULL,
-        UNIQUE INDEX UNIQ_291BA3522C420794180C698FA7AEFFB (route, locale, attribute),
-        INDEX IDX_291BA352D951F3E4 (localized_value),
-        PRIMARY KEY(id)
-    ) ENGINE = InnoDB;
+```sql
+CREATE TABLE routing_translations (
+    id INT NOT NULL,
+    route VARCHAR(255) NOT NULL,
+    locale VARCHAR(255) NOT NULL,
+    attribute VARCHAR(255) NOT NULL,
+    localized_value VARCHAR(255) NOT NULL,
+    original_value VARCHAR(255) NOT NULL,
+    UNIQUE INDEX UNIQ_291BA3522C420794180C698FA7AEFFB (route, locale, attribute),
+    INDEX IDX_291BA352D951F3E4 (localized_value),
+    PRIMARY KEY(id)
+) ENGINE = InnoDB;
+```
 
 Lookups are made through the combination of route name, locale and attribute
 of the route to be translated.
@@ -246,21 +269,25 @@ have to call:
 This implementation uses the Symfony2 translator to translate the attributes.
 The translation domain will be created using the pattern `<route name>_<attribute name>`
 
-    // app/config/config.yml
-    be_simple_i18n_routing:
-        attribute_translator:
-            type: translator
+```yaml
+# app/config/config.yml
+be_simple_i18n_routing:
+    attribute_translator:
+        type: translator
+```
 
 ### Custom backend
 
 If you want to use a different implementation, simply create a service implementing
 `BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface`.
 
-    // app/config/config.yml
-    be_simple_i18n_routing:
-        attribute_translator:
-            type: service
-            id: my_attribute_translator
+```yaml
+# app/config/config.yml
+be_simple_i18n_routing:
+    attribute_translator:
+        type: service
+        id: my_attribute_translator
+```
 
 ## License
 
