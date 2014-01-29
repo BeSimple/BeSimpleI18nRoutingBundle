@@ -15,14 +15,13 @@
         <service id="be_simple_i18n_routing.router" class="%be_simple_i18n_routing.router.class%">
             <argument type="service" id="be_simple_i18n_routing.router.parent" />
             <argument type="service" id="be_simple_i18n_routing.translator" on-invalid="null" />
+            <argument>%locale%</argument>
         </service>
 
-        <!-- The XmlFileLoader is temporary disabled because the loader in Symfony 2.2 has changed.
         <service id="be_simple_i18n_routing.loader.xml" class="%be_simple_i18n_routing.loader.xml.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
         </service>
-        -->
 
         <service id="be_simple_i18n_routing.loader.yaml" class="%be_simple_i18n_routing.loader.yaml.class%" public="false">
             <tag name="routing.loader" />

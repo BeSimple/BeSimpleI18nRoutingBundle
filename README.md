@@ -14,29 +14,24 @@ When you create an I18N route and you go on it with your browser, the locale wil
 
 ## Installation
 
-### Add I18nRoutingBundle to your vendor/bundles dir
+    ```js
+        //composer.json
+        "require": {
+            //...
+            "besimple/i18n-routing-bundle": "dev-master"
+        }
+    ```
 
-    git submodule add git://github.com/BeSimple/BeSimpleI18nRoutingBundle.git vendor/bundles/BeSimple/I18nRoutingBundle
-
-### Add I18nRoutingBundle to your application kernel
-
-    // app/AppKernel.php
-    public function registerBundles()
-    {
-        return array(
-            // ...
-            new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),
-            // ...
-        );
-    }
-
-### Register the BeSimple namespace
-
-    // app/autoload.php
-    $loader->registerNamespaces(array(
-        'BeSimple' => __DIR__.'/../vendor/bundles',
-        // your other namespaces
-    ));
+    ```php
+        //app/AppKernel.php
+        public function registerBundles()
+        {
+            $bundles = array(
+                //...
+                new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),
+            );
+        }
+    ```
 
 ### Update your configuration
 
@@ -67,7 +62,7 @@ routing file by using the ``be_simple_i18n`` type:
 
     <routes xmlns="http://besim.pl/schema/i18n_routing"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xml">
+        xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xsd">
 
         <route id="homepage">
             <locale key="en">/welcome</locale>
@@ -114,7 +109,7 @@ loader: ``http://besim.pl/schema/i18n_routing``.
 
     <routes xmlns="http://besim.pl/schema/i18n_routing"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xml">
+        xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.0.xsd">
 
         <route id="hello" pattern="/hello/{name}">
             <default key="_controller">HelloBundle:Hello:index</default>
