@@ -83,13 +83,6 @@ class YamlFileLoader extends BaseYamlFileLoader
                 $name, $path
             ));
         }
-
-        if (!isset($config['resource']) && !isset($config['locales'])) {
-            throw new \InvalidArgumentException(sprintf(
-                'You must define a "locales" for the route "%s" in file "%s".',
-                $name, $path
-            ));
-        }
     }
 
     /**
