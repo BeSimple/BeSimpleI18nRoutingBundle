@@ -33,7 +33,12 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function getPathsToInvalidFiles()
     {
-        return array(array('nonvalid_array.yml'), array('nonvalid_extrakeys.yml'), array('nonvalid_type_without_resource.yml'), array('nonvalid_without_resource_and_locales.yml'), array('nonvalid_basic_routes.yml'));
+        return array(
+            array('nonvalid_array.yml'),
+            array('nonvalid_extrakeys.yml'),
+            array('nonvalid_type_without_resource.yml'),
+            array('nonvalid_without_resource_and_locales.yml'),
+        );
     }
 
     /**
@@ -55,6 +60,13 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $routes = $this->load('basic_i18n_route.yml')->all();
 
         $this->assertEquals(3, count($routes));
+    }
+
+    public function testBasicRoutes()
+    {
+        $routes = $this->load('basic_routes.yml')->all();
+
+        $this->assertEquals(4, count($routes));
     }
 
     public function testFullLocale()
