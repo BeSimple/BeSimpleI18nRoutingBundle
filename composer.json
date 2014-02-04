@@ -33,5 +33,10 @@
     "autoload": {
         "psr-0": { "BeSimple\\I18nRoutingBundle": "" }
     },
-    "target-dir": "BeSimple/I18nRoutingBundle"
+    "target-dir": "BeSimple/I18nRoutingBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.2-dev"
+        }
+    }
 }
