@@ -45,6 +45,13 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(7, count($routes));
     }
 
+    public function testImportPrefixLocalized()
+    {
+        $routes = $this->load('import_prefix_locale.xml')->all();
+
+        $this->assertEquals(6, count($routes));
+    }
+
     private function load($file)
     {
         $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));

@@ -2,20 +2,20 @@
 
 namespace BeSimple\I18nRoutingBundle\Tests\Routing;
 
-use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
+use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollectionBuilder;
 
 /**
  * @author Francis Besset <francis.besset@gmail.com>
  */
-class I18nRouteTest extends \PHPUnit_Framework_TestCase
+class I18nRouteCollectionBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provideI18nRouteData
      */
     public function testCollection($name, $locales, $defaults, $requirements, $options, $variables)
     {
-        $i18nRoute  = new I18nRoute($name, $locales, $defaults, $requirements, $options);
-        $collection = $i18nRoute->getCollection();
+        $i18nRoute  = new I18nRouteCollectionBuilder;
+        $collection = $i18nRoute->buildCollection($name, $locales, $defaults, $requirements, $options);
 
         foreach ($locales as $locale => $pattern) {
             $route = $collection->get($name.'.'.$locale);

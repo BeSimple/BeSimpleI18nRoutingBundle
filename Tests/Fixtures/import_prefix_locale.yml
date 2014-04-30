@@ -1,0 +1,9 @@
+_basic_i18n_route:
+    resource: basic_i18n_route.yml
+    prefix: { en: '/english', de: '/german', fr: 'french' }
+    type: be_simple_i18n
+
+_basic_routes:
+    resource: full_locale.yml
+    prefix: '/{_locale}'
+    type: be_simple_i18n

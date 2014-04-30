@@ -31,6 +31,10 @@
   </xsd:complexType>
 
   <xsd:complexType name="import">
+    <xsd:sequence>
+      <xsd:element name="locale" type="element" minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+
     <xsd:attribute name="resource" type="xsd:string" use="required" />
     <xsd:attribute name="type" type="xsd:string" />
     <xsd:attribute name="prefix" type="xsd:string" />

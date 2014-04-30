@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://besim.pl/schema/i18n_routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://besim.pl/schema/i18n_routing http://besim.pl/schema/i18n_routing/routing-1.1.xsd">
+
+    <import resource="basic_i18n_route.xml" type="be_simple_i18n">
+        <locale key="en">/english</locale>
+        <locale key="de">/german</locale>
+        <locale key="fr">/french</locale>
+    </import>
+    <import resource="full_locale.xml" prefix="/{_locale}" type="be_simple_i18n" />
+</routes>
