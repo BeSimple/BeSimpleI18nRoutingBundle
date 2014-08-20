@@ -90,6 +90,13 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(6, count($routes));
     }
 
+    public function testImportPrefixLocalized()
+    {
+        $routes = $this->load('import_prefix_locale.yml')->all();
+
+        $this->assertEquals(6, count($routes));
+    }
+
     private function load($file)
     {
         return $this

@@ -1,8 +1,9 @@
 <?php
-
 namespace BeSimple\I18nRoutingBundle\Routing\Loader;
 
-use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
+use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollection;
+use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollectionBuilder;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader;
 use Symfony\Component\Routing\Route;
@@ -21,6 +22,21 @@ class YamlFileLoader extends BaseYamlFileLoader
     private static $availableKeys = array(
         'locales', 'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options'
     );
+
+    /**
+     * @var I18nRouteCollectionBuilder
+     */
+    protected $collectionBuilder;
+
+    public function __construct(FileLocatorInterface $locator, I18nRouteCollectionBuilder $collectionBuilder = null)
+    {
+        parent::__construct($locator);
+
+        if ($collectionBuilder === null) {
+            $collectionBuilder = new I18nRouteCollectionBuilder();
+        }
+        $this->collectionBuilder = $collectionBuilder;
+    }
 
     /**
      * {@inheritdoc}
@@ -43,8 +59,9 @@ class YamlFileLoader extends BaseYamlFileLoader
         $methods = isset($config['methods']) ? $config['methods'] : array();
 
         if (isset($config['locales'])) {
-            $route = new I18nRoute($name, $config['locales'], $defaults, $requirements, $options, $host, $schemes, $methods);
-            $collection->addCollection($route->getCollection());
+            $collection->addCollection(
+                $this->collectionBuilder->buildCollection($name, $config['locales'], $defaults, $requirements, $options, $host, $schemes, $methods)
+            );
         } else {
             $route = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods);
             $collection->add($name, $route);
@@ -102,7 +119,7 @@ class YamlFileLoader extends BaseYamlFileLoader
 
         $config = Yaml::parse($path);
 
-        $collection = new RouteCollection();
+        $collection = new I18nRouteCollection();
         $collection->addResource(new FileResource($path));
 
         // empty file
