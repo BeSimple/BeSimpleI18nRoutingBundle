@@ -22,3 +22,4 @@ script: phpunit
 matrix:
   allow_failures:
     - php: hhvm
+    - env: SYMFONY_VERSION=dev-master
