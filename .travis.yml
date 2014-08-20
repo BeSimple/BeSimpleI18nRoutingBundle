@@ -17,7 +17,8 @@ before_script:
   - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
   - composer update --no-interaction --prefer-source
 
-script: phpunit
+script:
+  - phpunit --coverage-text
 
 matrix:
   allow_failures:
