@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class BeSimpleI18nRoutingBundle extends Bundle
 {
-    const VERSION = '2.2.1-DEV';
+    const VERSION = '2.2.1';
 
     public function build(ContainerBuilder $container)
     {
