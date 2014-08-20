@@ -8,6 +8,8 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class BeSimpleI18nRoutingBundle extends Bundle
 {
+    const VERSION = '2.2.1';
+
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new OverrideRoutingCompilerPass());
