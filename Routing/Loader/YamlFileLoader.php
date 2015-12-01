@@ -5,6 +5,7 @@ use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollection;
 use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollectionBuilder;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -22,6 +23,7 @@ class YamlFileLoader extends BaseYamlFileLoader
     private static $availableKeys = array(
         'locales', 'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options'
     );
+    private $yamlParser;
 
     /**
      * @var I18nRouteCollectionBuilder
@@ -117,7 +119,11 @@ class YamlFileLoader extends BaseYamlFileLoader
             throw new \InvalidArgumentException(sprintf('File "%s" not found.', $path));
         }
 
-        $config = Yaml::parse($path);
+        if (null === $this->yamlParser) {
+            $this->yamlParser = new YamlParser();
+        }
+
+        $config = $this->yamlParser->parse(file_get_contents($path));
 
         $collection = new I18nRouteCollection();
         $collection->addResource(new FileResource($path));
