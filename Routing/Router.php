@@ -8,6 +8,7 @@ use BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Router implements RouterInterface
 {
@@ -46,15 +47,15 @@ class Router implements RouterInterface
     /**
      * Generates a URL from the given parameters.
      *
-     * @param  string  $name       The name of the route
-     * @param  array   $parameters An array of parameters
-     * @param  Boolean $absolute   Whether to generate an absolute URL
+     * @param  string  $name          The name of the route
+     * @param  array   $parameters    An array of parameters
+     * @param  int     $referenceType The type of reference to be generated (one of the constants)
      *
      * @return string The generated URL
      *
      * @throws \InvalidArgumentException When the route doesn't exists
      */
-    public function generate($name, $parameters = array(), $absolute = false)
+    public function generate($name, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         if (isset($parameters['locale']) || isset($parameters['translate'])) {
 
@@ -79,16 +80,16 @@ class Router implements RouterInterface
                 unset($parameters['translate']);
             }
 
-            return $this->generateI18n($name, $locale, $parameters, $absolute);
+            return $this->generateI18n($name, $locale, $parameters, $referenceType);
         }
 
         try {
-            return $this->router->generate($name, $parameters, $absolute);
+            return $this->router->generate($name, $parameters, $referenceType);
         } catch (RouteNotFoundException $e) {
             $locale = $this->getLocale($parameters);
             if (null !== $locale) {
                 // at this point here we would never have $parameters['translate'] due to condition before
-                return $this->generateI18n($name, $locale, $parameters, $absolute);
+                return $this->generateI18n($name, $locale, $parameters, $referenceType);
             }
 
             throw $e;
@@ -148,19 +149,19 @@ class Router implements RouterInterface
     /**
      * Generates a I18N URL from the given parameter
      *
-     * @param string   $name       The name of the I18N route
-     * @param string   $locale     The locale of the I18N route
-     * @param  array   $parameters An array of parameters
-     * @param  Boolean $absolute   Whether to generate an absolute URL
+     * @param string   $name          The name of the I18N route
+     * @param string   $locale        The locale of the I18N route
+     * @param  array   $parameters    An array of parameters
+     * @param  int     $referenceType The type of reference to be generated (one of the constants)
      *
      * @return string The generated URL
      *
      * @throws RouteNotFoundException When the route doesn't exists
      */
-    protected function generateI18n($name, $locale, $parameters, $absolute)
+    protected function generateI18n($name, $locale, $parameters, $referenceType)
     {
         try {
-            return $this->router->generate($name.'.'.$locale, $parameters, $absolute);
+            return $this->router->generate($name.'.'.$locale, $parameters, $referenceType);
         } catch (RouteNotFoundException $e) {
             throw new RouteNotFoundException(sprintf('I18nRoute "%s" (%s) does not exist.', $name, $locale));
         }
