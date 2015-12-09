@@ -117,7 +117,7 @@ class YamlFileLoader extends BaseYamlFileLoader
             throw new \InvalidArgumentException(sprintf('File "%s" not found.', $path));
         }
 
-        $config = Yaml::parse($path);
+        $config = Yaml::parse(file_get_contents($path));
 
         $collection = new I18nRouteCollection();
         $collection->addResource(new FileResource($path));
