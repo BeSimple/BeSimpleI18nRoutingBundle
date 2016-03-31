@@ -42,9 +42,13 @@
         "doctrine/dbal": "~2.2"
     },
     "autoload": {
-        "psr-0": { "BeSimple\\I18nRoutingBundle": "" }
+        "psr-4": { "BeSimple\\I18nRoutingBundle\\": "src/" }
     },
-    "target-dir": "BeSimple/I18nRoutingBundle",
+    "autoload-dev": {
+        "psr-4": {
+            "BeSimple\\I18nRoutingBundle\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "2.3-dev"
