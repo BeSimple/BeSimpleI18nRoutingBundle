@@ -25,14 +25,21 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": "~2.3|~3.0"
+
+        "symfony/routing": "~2.3 || ~3.0",
+        "symfony/config": "~2.3 || ~3.0"
     },
     "require-dev": {
-        "doctrine/dbal": "~2.0",
+        "doctrine/dbal": "~2.2",
+
+        "symfony/dependency-injection": "~2.3 || ~3.0",
+        "symfony/http-kernel": "~2.3 || ~3.0",
+        "symfony/translation": "~2.3 || ~3.0",
+
         "phpunit/phpunit": "~4.7@stable"
     },
     "suggest": {
-        "doctrine/dbal": "~2.0"
+        "doctrine/dbal": "~2.2"
     },
     "autoload": {
         "psr-0": { "BeSimple\\I18nRoutingBundle": "" }
