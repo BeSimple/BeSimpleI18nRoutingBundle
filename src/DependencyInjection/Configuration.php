@@ -3,7 +3,6 @@
 namespace BeSimple\I18nRoutingBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
@@ -30,17 +29,25 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('attribute_translator')
                     ->children()
-                        ->scalarNode('type')->isRequired()->end()
+                        ->enumNode('type')
+                            ->isRequired()
+                            ->values(array('service', 'doctrine_dbal', 'translator'))
+                        ->end()
                         ->scalarNode('id')->end()
                         ->scalarNode('connection')->defaultNull()->end()
                         ->arrayNode('cache')
                             ->addDefaultsIfNotSet()
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(function($v) { return array('type' => $v); })
+                                ->then(function ($value) {
+                                    return array('type' => $value);
+                                })
                             ->end()
                             ->children()
-                                ->scalarNode('type')->defaultValue('array')->end()
+                                ->enumNode('type')
+                                    ->defaultValue('array')
+                                    ->values(array('memcache', 'apc', 'array', 'xcache'))
+                                ->end()
                                 ->scalarNode('host')->end()
                                 ->scalarNode('port')->end()
                                 ->scalarNode('instance_class')->end()
@@ -49,7 +56,9 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                     ->validate()
-                        ->ifTrue(function($v) { return 'service' === $v['type'] && !isset($v['id']); })
+                        ->ifTrue(function ($value) {
+                            return 'service' === $value['type'] && !isset($value['id']);
+                        })
                         ->thenInvalid('The id has to be specified to use a service as attribute translator')
                     ->end()
                 ->end()
