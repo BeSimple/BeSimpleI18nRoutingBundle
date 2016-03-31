@@ -56,7 +56,6 @@ class Router implements RouterInterface
     public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
         if (isset($parameters['locale']) || isset($parameters['translate'])) {
-
             $locale = $this->getLocale($parameters);
 
             if (isset($parameters['locale'])) {
@@ -71,7 +70,10 @@ class Router implements RouterInterface
                 if (null !== $this->translator) {
                     foreach ((array) $parameters['translate'] as $translateAttribute) {
                         $parameters[$translateAttribute] = $this->translator->reverseTranslate(
-                            $name, $locale, $translateAttribute, $parameters[$translateAttribute]
+                            $name,
+                            $locale,
+                            $translateAttribute,
+                            $parameters[$translateAttribute]
                         );
                     }
                 }
@@ -109,7 +111,10 @@ class Router implements RouterInterface
             if (null !== $this->translator && isset($match['_translate'])) {
                 foreach ((array) $match['_translate'] as $attribute) {
                     $match[$attribute] = $this->translator->translate(
-                        $match['_route'], $match['_locale'], $attribute, $match[$attribute]
+                        $match['_route'],
+                        $match['_locale'],
+                        $attribute,
+                        $match[$attribute]
                     );
                 }
             }

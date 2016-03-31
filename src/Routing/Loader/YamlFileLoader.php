@@ -79,25 +79,31 @@ class YamlFileLoader extends BaseYamlFileLoader
         if ($extraKeys = array_diff(array_keys($config), self::$availableKeys)) {
             throw new \InvalidArgumentException(sprintf(
                 'The routing file "%s" contains unsupported keys for "%s": "%s". Expected one of: "%s".',
-                $path, $name, implode('", "', $extraKeys), implode('", "', self::$availableKeys)
+                $path,
+                $name,
+                implode('", "', $extraKeys),
+                implode('", "', self::$availableKeys)
             ));
         }
         if (isset($config['resource']) && isset($config['path'])) {
             throw new \InvalidArgumentException(sprintf(
                 'The routing file "%s" must not specify both the "resource" key and the "path" key for "%s". Choose between an import and a route definition.',
-                $path, $name
+                $path,
+                $name
             ));
         }
         if (!isset($config['resource']) && isset($config['type'])) {
             throw new \InvalidArgumentException(sprintf(
                 'The "type" key for the route definition "%s" in "%s" is unsupported. It is only available for imports in combination with the "resource" key.',
-                $name, $path
+                $name,
+                $path
             ));
         }
         if (!isset($config['resource']) && !isset($config['path']) && !isset($config['locales'])) {
             throw new \InvalidArgumentException(sprintf(
                 'You must define a "path" for the route "%s" in file "%s".',
-                $name, $path
+                $name,
+                $path
             ));
         }
     }
