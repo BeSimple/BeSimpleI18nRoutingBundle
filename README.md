@@ -89,15 +89,18 @@ loader: ``http://besim.pl/schema/i18n_routing``.
 ```php
 <?php
 
-use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
+use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollectionBuilder;
 use Symfony\Component\Routing\RouteCollection;
 
+$builder = new I18nRouteCollectionBuilder();
+
 $collection = new RouteCollection();
-$route      = new I18nRoute('homepage',
-    array('en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen'),
-    array('_controller' => 'MyWebsiteBundle:Frontend:index')
+$collection->addCollection(
+    $builder->buildCollection('homepage',
+        array('en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen'),
+        array('_controller' => 'MyWebsiteBundle:Frontend:index')
+    )
 );
-$collection->addCollection($route->getCollection());
 
 return $collection;
 ```
