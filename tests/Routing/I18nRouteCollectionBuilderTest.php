@@ -24,7 +24,12 @@ class I18nRouteCollectionBuilderTest extends \PHPUnit_Framework_TestCase
             $defaults['_locale']       = $locale;
             $options['compiler_class'] = 'Symfony\\Component\\Routing\\RouteCompiler';
 
-            $this->assertEquals($pattern, $route->getPattern(), '(pattern)');
+            if (method_exists($route, 'getPath')) {
+                $this->assertEquals($pattern, $route->getPath(), '(path)');
+            } else {
+                $this->assertEquals($pattern, $route->getPattern(), '(pattern)');
+            }
+
             $this->assertEquals($defaults, $route->getDefaults(), '(defaults)');
             $this->assertEquals($requirements, $route->getRequirements(), '(requirements)');
             $this->assertEquals($options, $route->getOptions(), '(options)');

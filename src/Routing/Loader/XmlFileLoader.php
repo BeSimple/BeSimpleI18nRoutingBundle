@@ -117,7 +117,6 @@ class XmlFileLoader extends BaseXmlFileLoader
                 $this->collectionBuilder->buildCollection($id, $localesWithPaths, $defaults, $requirements, $options, $node->getAttribute('host'), $schemes, $methods)
             );
         } else {
-
             if (!$node->hasAttribute('pattern') && !$node->hasAttribute('path')) {
                 throw new \InvalidArgumentException(sprintf('The <route> element in file "%s" must have an "path" attribute.', $path));
             }

@@ -75,7 +75,7 @@ class DoctrineDBALTranslator implements AttributeTranslatorInterface
      * Reverse Translate a value into its current locale.
      *
      * This feature can optionally be used when generating route urls by passing
-     * the "translate" parameter to RouterInterface::generate() 
+     * the "translate" parameter to RouterInterface::generate()
      * specifying which attributes should be translated.
      *
      * @param string $route
