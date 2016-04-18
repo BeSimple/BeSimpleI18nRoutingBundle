@@ -145,18 +145,22 @@ welcome:
 ```php
 <?php
 
-use BeSimple\I18nRoutingBundle\Routing\I18nRoute;
+use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollectionBuilder;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+
+$builder = new I18nRouteCollectionBuilder();
+
 $collection = new RouteCollection();
 $collection->add('hello', new Route('/hello/{name}', array(
     '_controller' => 'HelloBundle:Hello:index',
 )));
-$route = new I18nRoute('homepage',
-    array('en' => '/welcome/{name}', 'fr' => '/bienvenue/{name}', 'de' => '/willkommen/{name}'),
-    array('_controller' => 'MyWebsiteBundle:Frontend:index',)
+$collection->addCollection(
+    $builder->buildCollection('homepage',
+        array('en' => '/welcome/{name}', 'fr' => '/bienvenue/{name}', 'de' => '/willkommen/{name}'),
+        array('_controller' => 'MyWebsiteBundle:Frontend:index',)
+    )
 );
-$collection->addCollection($route->getCollection());
 
 return $collection;
 ```
