@@ -45,10 +45,16 @@ routing file by using the ``be_simple_i18n`` type:
 my_yaml_i18n_routes:
     resource: "@MyWebsiteBundle/Resources/config/routing/i18n.yml"
     type: be_simple_i18n
+    prefix:
+        en: /website
+        fr: /site
+        de: /webseite
 my_xml_i18n_routes:
     resource: "@MyWebsiteBundle/Resources/config/routing/i18n.xml"
     type: be_simple_i18n
 ```
+
+You can optionally specify a prefix or translated prefixes as shown above.
 
 ### Yaml routing file
 
