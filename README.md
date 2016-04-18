@@ -14,12 +14,8 @@ When you create an I18N route and you go on it with your browser, the locale wil
 
 ## Installation
 
-```js
-//composer.json
-"require": {
-    //...
-    "besimple/i18n-routing-bundle": "dev-master"
-}
+```bash
+composer.phar require besimple/i18n-routing-bundle
 ```
 
 ```php
