@@ -8,19 +8,24 @@
   <xsd:element name="routes" type="routes" />
 
   <xsd:complexType name="routes">
-    <xsd:choice maxOccurs="unbounded" minOccurs="0">
+    <xsd:choice minOccurs="0" maxOccurs="unbounded">
       <xsd:element name="import" type="import" />
       <xsd:element name="route" type="route" />
     </xsd:choice>
   </xsd:complexType>
 
-  <xsd:complexType name="route">
-    <xsd:sequence>
+  <xsd:group name="configs">
+    <xsd:choice>
       <xsd:element name="locale" type="element" minOccurs="0" maxOccurs="unbounded" />
-      <xsd:element name="default" type="element" minOccurs="0" maxOccurs="unbounded" />
-      <xsd:element name="requirement" type="element" minOccurs="0" maxOccurs="unbounded" />
-      <xsd:element name="option" type="element" minOccurs="0" maxOccurs="unbounded" />
-    </xsd:sequence>
+      <xsd:element name="default" nillable="true" type="element" />
+      <xsd:element name="requirement" type="element" />
+      <xsd:element name="option" type="element" />
+      <xsd:element name="condition" type="xsd:string" />
+    </xsd:choice>
+  </xsd:group>
+
+  <xsd:complexType name="route">
+    <xsd:group ref="configs" minOccurs="0" maxOccurs="unbounded" />
 
     <xsd:attribute name="id" type="xsd:string" use="required" />
     <xsd:attribute name="path" type="xsd:string" />
@@ -31,9 +36,7 @@
   </xsd:complexType>
 
   <xsd:complexType name="import">
-    <xsd:sequence>
-      <xsd:element name="locale" type="element" minOccurs="0" maxOccurs="unbounded" />
-    </xsd:sequence>
+    <xsd:group ref="configs" minOccurs="0" maxOccurs="unbounded" />
 
     <xsd:attribute name="resource" type="xsd:string" use="required" />
     <xsd:attribute name="type" type="xsd:string" />
@@ -43,7 +46,11 @@
     <xsd:attribute name="methods" type="xsd:string" />
   </xsd:complexType>
 
-  <xsd:complexType name="element" mixed="true">
-    <xsd:attribute name="key" type="xsd:string" />
+  <xsd:complexType name="element">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="key" type="xsd:string" use="required" />
+      </xsd:extension>
+    </xsd:simpleContent>
   </xsd:complexType>
 </xsd:schema>

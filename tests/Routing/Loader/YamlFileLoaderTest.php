@@ -3,7 +3,9 @@
 namespace BeSimple\I18nRoutingBundle\Tests\Routing\Loader;
 
 use BeSimple\I18nRoutingBundle\Routing\Loader\YamlFileLoader;
+use BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\RouteNameInflector;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Routing\Route;
 
 /**
  * @author Francis Besset <francis.besset@gmail.com>
@@ -15,6 +17,7 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = $this->getYamlFileLoader();
 
         $this->assertTrue($loader->supports('foo.yml', 'be_simple_i18n'));
+        $this->assertTrue($loader->supports('foo.yaml', 'be_simple_i18n'));
         $this->assertTrue($loader->supports('foo.bar.yml', 'be_simple_i18n'));
 
         $this->assertFalse($loader->supports('foo.yml'));
@@ -57,9 +60,37 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testBasicI18nRoute()
     {
-        $routes = $this->load('basic_i18n_route.yml')->all();
+        $inflector = $this->getMock('BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\RouteNameInflector');
+        $inflector
+            ->expects($this->exactly(3))
+            ->method('inflect')
+            ->willReturnMap(array(
+                array('homepage_locale', 'en', 'english'),
+                array('homepage_locale', 'de', 'german'),
+                array('homepage_locale', 'fr', 'french')
+            ));
+
+        $routes = $this->load('basic_i18n_route.yml', $inflector)->all();
 
         $this->assertEquals(3, count($routes));
+
+        $this->assertEquals(
+            array(
+                'english' => new Route('/en/', array(
+                    '_locale' => 'en',
+                    '_controller' => 'TestBundle:Frontend:homepageLocale'
+                )),
+                'german' => new Route('/de/', array(
+                    '_locale' => 'de',
+                    '_controller' => 'TestBundle:Frontend:homepageLocale'
+                )),
+                'french' => new Route('/fr/', array(
+                    '_locale' => 'fr',
+                    '_controller' => 'TestBundle:Frontend:homepageLocale'
+                )),
+            ),
+            $routes
+        );
     }
 
     public function testBasicRoutes()
@@ -97,16 +128,16 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(6, count($routes));
     }
 
-    private function load($file)
+    private function load($file, RouteNameInflector $routeNameInflector = null)
     {
         return $this
-            ->getYamlFileLoader()
+            ->getYamlFileLoader($routeNameInflector)
             ->load($file, 'be_simple_i18n')
         ;
     }
 
-    private function getYamlFileLoader()
+    private function getYamlFileLoader(RouteNameInflector $routeNameInflector = null)
     {
-        return new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));
+        return new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')), $routeNameInflector);
     }
 }

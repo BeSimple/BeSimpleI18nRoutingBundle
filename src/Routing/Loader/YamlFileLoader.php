@@ -2,54 +2,123 @@
 namespace BeSimple\I18nRoutingBundle\Routing\Loader;
 
 use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollection;
-use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollectionBuilder;
+use BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\PostfixInflector;
+use BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\RouteNameInflector;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Resource\FileResource;
-use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader;
 use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml as YamlParser;
+use Symfony\Component\Config\Loader\FileLoader;
 
 /**
- * YamlFileLoader
- *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Francis Besset <francis.besset@gmail.com>
- * @author Andrej Hudec <pulzarraider@gmail.com>
+ * YamlFileLoader loads Yaml routing files.
  */
-class YamlFileLoader extends BaseYamlFileLoader
+class YamlFileLoader extends FileLoader
 {
     private static $availableKeys = array(
-        'locales', 'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options'
+        'locales', 'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'condition',
     );
-
     /**
-     * @var I18nRouteCollectionBuilder
+     * @var YamlParser|null
      */
-    protected $collectionBuilder;
+    private $yamlParser;
+    /**
+     * @var RouteNameInflector
+     */
+    private $routeNameInflector;
 
-    public function __construct(FileLocatorInterface $locator, I18nRouteCollectionBuilder $collectionBuilder = null)
+    public function __construct(FileLocatorInterface $locator, RouteNameInflector $routeNameInflector = null)
     {
         parent::__construct($locator);
 
-        if ($collectionBuilder === null) {
-            $collectionBuilder = new I18nRouteCollectionBuilder();
-        }
-        $this->collectionBuilder = $collectionBuilder;
+        $this->routeNameInflector = $routeNameInflector ?: new PostfixInflector();
     }
 
     /**
-     * {@inheritdoc}
+     * Loads a Yaml file.
+     *
+     * @param string      $file A Yaml file path
+     * @param string|null $type The resource type
+     *
+     * @return I18nRouteCollection A I18nRouteCollection instance
+     *
+     * @throws \InvalidArgumentException When a route can't be parsed because YAML is invalid
+     */
+    public function load($file, $type = null)
+    {
+        $path = $this->locator->locate($file);
+
+        if (!stream_is_local($path)) {
+            throw new \InvalidArgumentException(sprintf('This is not a local file "%s".', $path));
+        }
+
+        if (!file_exists($path)) {
+            throw new \InvalidArgumentException(sprintf('File "%s" not found.', $path));
+        }
+
+        if (null === $this->yamlParser) {
+            $this->yamlParser = new YamlParser();
+        }
+
+        try {
+            $parsedConfig = $this->yamlParser->parse(file_get_contents($path));
+        } catch (ParseException $e) {
+            throw new \InvalidArgumentException(sprintf('The file "%s" does not contain valid YAML.', $path), 0, $e);
+        }
+
+        $collection = new I18nRouteCollection($this->routeNameInflector);
+        $collection->addResource(new FileResource($path));
+
+        // empty file
+        if (null === $parsedConfig) {
+            return $collection;
+        }
+
+        // not an array
+        if (!is_array($parsedConfig)) {
+            throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $path));
+        }
+
+        foreach ($parsedConfig as $name => $config) {
+            if (isset($config['pattern'])) {
+                if (isset($config['path'])) {
+                    throw new \InvalidArgumentException(sprintf('The file "%s" cannot define both a "path" and a "pattern" attribute. Use only "path".', $path));
+                }
+
+                $config['path'] = $config['pattern'];
+                unset($config['pattern']);
+            }
+
+            $this->validate($config, $name, $path);
+
+            if (isset($config['resource'])) {
+                $this->parseImport($collection, $config, $path, $file);
+            } else {
+                $this->parseRoute($collection, $name, $config, $path);
+            }
+        }
+
+        return $collection;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function supports($resource, $type = null)
     {
-        return is_string($resource) && ('be_simple_i18n' === $type) && 'yml' === pathinfo($resource, PATHINFO_EXTENSION);
+        return 'be_simple_i18n' === $type && is_string($resource) && in_array(pathinfo($resource, PATHINFO_EXTENSION), array('yml', 'yaml'), true);
     }
 
     /**
-     * {@inheritDoc}
+     * Parses a route and adds it to the I18nRouteCollection.
+     *
+     * @param I18nRouteCollection $collection A RouteCollection instance
+     * @param string $name Route name
+     * @param array $config Route definition
+     * @param string $path Full path of the YAML file being processed
      */
-    protected function parseRoute(RouteCollection $collection, $name, array $config, $path)
+    protected function parseRoute(I18nRouteCollection $collection, $name, array $config, $path)
     {
         $defaults = isset($config['defaults']) ? $config['defaults'] : array();
         $requirements = isset($config['requirements']) ? $config['requirements'] : array();
@@ -57,19 +126,66 @@ class YamlFileLoader extends BaseYamlFileLoader
         $host = isset($config['host']) ? $config['host'] : '';
         $schemes = isset($config['schemes']) ? $config['schemes'] : array();
         $methods = isset($config['methods']) ? $config['methods'] : array();
+        $condition = isset($config['condition']) ? $config['condition'] : null;
 
-        if (isset($config['locales'])) {
-            $collection->addCollection(
-                $this->collectionBuilder->buildCollection($name, $config['locales'], $defaults, $requirements, $options, $host, $schemes, $methods)
-            );
-        } else {
-            $route = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods);
+        if (!isset($config['locales'])) {
+            $route = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
             $collection->add($name, $route);
+        } else {
+            $collection->addI18n(
+                $name,
+                $config['locales'],
+                new Route('', $defaults, $requirements, $options, $host, $schemes, $methods, $condition)
+            );
         }
     }
 
     /**
-     * {@inheritDoc}
+     * Parses an import and adds the routes in the resource to the RouteCollection.
+     *
+     * @param I18nRouteCollection $collection A RouteCollection instance
+     * @param array $config Route definition
+     * @param string $path Full path of the YAML file being processed
+     * @param string $file Loaded file name
+     */
+    protected function parseImport(I18nRouteCollection $collection, array $config, $path, $file)
+    {
+        $type = isset($config['type']) ? $config['type'] : null;
+        $prefix = isset($config['prefix']) ? $config['prefix'] : '';
+        $defaults = isset($config['defaults']) ? $config['defaults'] : array();
+        $requirements = isset($config['requirements']) ? $config['requirements'] : array();
+        $options = isset($config['options']) ? $config['options'] : array();
+        $host = isset($config['host']) ? $config['host'] : null;
+        $condition = isset($config['condition']) ? $config['condition'] : null;
+        $schemes = isset($config['schemes']) ? $config['schemes'] : null;
+        $methods = isset($config['methods']) ? $config['methods'] : null;
+
+        $this->setCurrentDir(dirname($path));
+
+        $subCollection = $this->import($config['resource'], $type, false, $file);
+        /* @var $subCollection \Symfony\Component\Routing\RouteCollection */
+        $subCollection->addPrefix($prefix);
+        if (null !== $host) {
+            $subCollection->setHost($host);
+        }
+        if (null !== $condition) {
+            $subCollection->setCondition($condition);
+        }
+        if (null !== $schemes) {
+            $subCollection->setSchemes($schemes);
+        }
+        if (null !== $methods) {
+            $subCollection->setMethods($methods);
+        }
+        $subCollection->addDefaults($defaults);
+        $subCollection->addRequirements($requirements);
+        $subCollection->addOptions($options);
+
+        $collection->addCollection($subCollection);
+    }
+
+    /**
+     * @inheritDoc
      */
     protected function validate($config, $name, $path)
     {
@@ -106,57 +222,5 @@ class YamlFileLoader extends BaseYamlFileLoader
                 $path
             ));
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function load($file, $type = null)
-    {
-        $path = $this->locator->locate($file);
-
-        if (!stream_is_local($path)) {
-            throw new \InvalidArgumentException(sprintf('This is not a local file "%s".', $path));
-        }
-
-        if (!file_exists($path)) {
-            throw new \InvalidArgumentException(sprintf('File "%s" not found.', $path));
-        }
-
-        $config = Yaml::parse(file_get_contents($path));
-
-        $collection = new I18nRouteCollection();
-        $collection->addResource(new FileResource($path));
-
-        // empty file
-        if (null === $config) {
-            $config = array();
-        }
-
-        // not an array
-        if (!is_array($config)) {
-            throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $file));
-        }
-
-        foreach ($config as $name => $config) {
-            if (isset($config['pattern'])) {
-                if (isset($config['path'])) {
-                    throw new \InvalidArgumentException(sprintf('The file "%s" cannot define both a "path" and a "pattern" attribute. Use only "path".', $path));
-                }
-
-                $config['path'] = $config['pattern'];
-                unset($config['pattern']);
-            }
-
-            $this->validate($config, $name, $path);
-
-            if (isset($config['resource'])) {
-                $this->parseImport($collection, $config, $path, $file);
-            } else {
-                $this->parseRoute($collection, $name, $config, $path);
-            }
-        }
-
-        return $collection;
     }
 }
