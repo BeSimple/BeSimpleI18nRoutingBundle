@@ -3,8 +3,17 @@
 namespace BeSimple\I18nRoutingBundle\Routing;
 
 use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
 
+@trigger_error(
+    'The '.__NAMESPACE__.'\I18nRouteCollectionBuilder class is deprecated and will be removed in 3.0. '.
+    'Use the BeSimple\I18nRoutingBundle\Routing\I18nRouteCollection::addI18n instead.',
+    E_USER_DEPRECATED
+);
+
+/**
+ * @deprecated since version 2.4, to be removed in 3.0.
+ *             Use {@link \BeSimple\I18nRoutingBundle\Routing\I18nRouteCollection::addI18n} instead.
+ */
 class I18nRouteCollectionBuilder
 {
     /**
@@ -22,17 +31,13 @@ class I18nRouteCollectionBuilder
      * @param  string          $host             The host pattern to match
      * @param  string|array    $schemes          A required URI scheme or an array of restricted schemes
      * @param  string|array    $methods          A required HTTP method or an array of restricted methods
-     * @return RouteCollection
+     * @return \Symfony\Component\Routing\RouteCollection
      */
     public function buildCollection($name, array $localesWithPaths, array $defaults = array(), array $requirements = array(), array $options = array(), $host = '', $schemes = array(), $methods = array())
     {
-        $collection = new RouteCollection();
-        foreach ($localesWithPaths as $locale => $path) {
-            $defaults['_locale'] = $locale;
-
-            $collection->add($name.'.'.$locale, new Route($path, $defaults, $requirements, $options, $host, $schemes, $methods));
-        }
-
+        $collection = new I18nRouteCollection();
+        $collection->addI18n($name, $localesWithPaths, new Route('', $defaults, $requirements, $options, $host, $schemes, $methods));
+        
         return $collection;
     }
 }

@@ -2,6 +2,9 @@
 namespace BeSimple\I18nRoutingBundle\Routing;
 
 use BeSimple\I18nRoutingBundle\Routing\Exception\MissingRouteLocaleException;
+use BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\PostfixInflector;
+use BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\RouteNameInflector;
+use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -11,6 +14,31 @@ class I18nRouteCollection extends RouteCollection
 {
     const LOCALE_REGEX = '#\{_locale\}#';
     const LOCALE_PARAM = '_locale';
+    /**
+     * @var RouteNameInflector
+     */
+    private $routeNameInflector;
+
+    public function __construct(RouteNameInflector $routeNameInflector = null)
+    {
+        $this->routeNameInflector = $routeNameInflector ?: new PostfixInflector();
+    }
+
+    public function addI18n($name, array $localesWithPaths, Route $baseRoute)
+    {
+        $serializedRoute = serialize($baseRoute);
+        foreach ($localesWithPaths as $locale => $path) {
+            /** @var \Symfony\Component\Routing\Route $localeRoute */
+            $localeRoute = unserialize($serializedRoute);
+            $localeRoute->setDefault(self::LOCALE_PARAM, $locale);
+            $localeRoute->setPath($path);
+
+            $this->add(
+                $this->routeNameInflector->inflect($name, $locale),
+                $localeRoute
+            );
+        }
+    }
 
     /**
      * {@inheritdoc}
@@ -57,7 +85,7 @@ class I18nRouteCollection extends RouteCollection
     protected function localizeRoutes($locales)
     {
         $removeRoutes = array();
-        $collection = new self();
+        $collection = new RouteCollection();
         foreach ($this->all() as $name => $route) {
             if ($route->getDefault(self::LOCALE_PARAM) !== null) {
                 continue;
@@ -68,7 +96,11 @@ class I18nRouteCollection extends RouteCollection
                 /** @var \Symfony\Component\Routing\Route $localeRoute */
                 $localeRoute = unserialize(serialize($route));
                 $localeRoute->setDefault(self::LOCALE_PARAM, $locale);
-                $collection->add($name.'.'.$locale, $localeRoute);
+
+                $collection->add(
+                    $this->routeNameInflector->inflect($name, $locale),
+                    $localeRoute
+                );
             }
         }
 

@@ -51,4 +51,65 @@ class I18nRouteCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/nl/test', $nlRoute->getPath(), '(nl.path)');
         $this->assertEquals('nl', $nlRoute->getDefault('_locale'), '(nl._locale)');
     }
+
+    public function testAddI18nRoute()
+    {
+        $collection = new I18nRouteCollection();
+        $collection->addI18n('test', array('en' => '/en/', 'nl' => '/nl/'), new Route(''));
+
+        $this->assertEquals(
+            array(
+                'test.en' => new Route('/en/', array('_locale' => 'en')),
+                'test.nl' => new Route('/nl/', array('_locale' => 'nl')),
+            ),
+            $collection->all()
+        );
+    }
+
+    public function testAddI18nUsesNameInflector()
+    {
+        $inflector = $this->getMock('BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\RouteNameInflector');
+        $inflector
+            ->expects($this->exactly(2))
+            ->method('inflect')
+            ->willReturnMap(array(
+                array('test', 'en', 'english'),
+                array('test', 'nl', 'dutch')
+            ));
+
+        $collection = new I18nRouteCollection($inflector);
+        $collection->addI18n('test', array('en' => '/en/', 'nl' => '/nl/'), new Route(''));
+
+        $this->assertEquals(
+            array(
+                'english' => new Route('/en/', array('_locale' => 'en')),
+                'dutch' => new Route('/nl/', array('_locale' => 'nl')),
+            ),
+            $collection->all()
+        );
+    }
+
+    public function testAddPrefixWillUseNameInflector()
+    {
+        $inflector = $this->getMock('BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\RouteNameInflector');
+        $inflector
+            ->expects($this->exactly(2))
+            ->method('inflect')
+            ->willReturnMap(array(
+                array('test', 'en', 'english'),
+                array('test', 'nl', 'dutch')
+            ));
+
+        $collection = new I18nRouteCollection($inflector);
+        $collection->add('test', new Route('/test'));
+        $collection->addPrefix(array('en' => '/en/', 'nl' => '/nl/'));
+
+        $this->assertEquals(
+            array(
+                'english' => new Route('/en/test', array('_locale' => 'en')),
+                'dutch' => new Route('/nl/test', array('_locale' => 'nl')),
+            ),
+            $collection->all()
+        );
+    }
 }
