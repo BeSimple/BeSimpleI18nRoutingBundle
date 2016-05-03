@@ -1,12 +1,12 @@
 <?php
 namespace BeSimple\I18nRoutingBundle\Routing\Loader;
 
-use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollection;
-use BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\PostfixInflector;
-use BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\RouteNameInflector;
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\I18nRouteGenerator;
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\RouteGenerator;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml as YamlParser;
 use Symfony\Component\Config\Loader\FileLoader;
@@ -24,15 +24,15 @@ class YamlFileLoader extends FileLoader
      */
     private $yamlParser;
     /**
-     * @var RouteNameInflector
+     * @var RouteGenerator
      */
-    private $routeNameInflector;
+    private $routeGenerator;
 
-    public function __construct(FileLocatorInterface $locator, RouteNameInflector $routeNameInflector = null)
+    public function __construct(FileLocatorInterface $locator, RouteGenerator $routeGenerator = null)
     {
         parent::__construct($locator);
 
-        $this->routeNameInflector = $routeNameInflector ?: new PostfixInflector();
+        $this->routeGenerator = $routeGenerator ?: new I18nRouteGenerator();
     }
 
     /**
@@ -41,7 +41,7 @@ class YamlFileLoader extends FileLoader
      * @param string      $file A Yaml file path
      * @param string|null $type The resource type
      *
-     * @return I18nRouteCollection A I18nRouteCollection instance
+     * @return RouteCollection A RouteCollection instance
      *
      * @throws \InvalidArgumentException When a route can't be parsed because YAML is invalid
      */
@@ -67,7 +67,7 @@ class YamlFileLoader extends FileLoader
             throw new \InvalidArgumentException(sprintf('The file "%s" does not contain valid YAML.', $path), 0, $e);
         }
 
-        $collection = new I18nRouteCollection($this->routeNameInflector);
+        $collection = new RouteCollection();
         $collection->addResource(new FileResource($path));
 
         // empty file
@@ -111,14 +111,14 @@ class YamlFileLoader extends FileLoader
     }
 
     /**
-     * Parses a route and adds it to the I18nRouteCollection.
+     * Parses a route and adds it to the RouteCollection.
      *
-     * @param I18nRouteCollection $collection A RouteCollection instance
+     * @param RouteCollection $collection A RouteCollection instance
      * @param string $name Route name
      * @param array $config Route definition
      * @param string $path Full path of the YAML file being processed
      */
-    protected function parseRoute(I18nRouteCollection $collection, $name, array $config, $path)
+    protected function parseRoute(RouteCollection $collection, $name, array $config, $path)
     {
         $defaults = isset($config['defaults']) ? $config['defaults'] : array();
         $requirements = isset($config['requirements']) ? $config['requirements'] : array();
@@ -128,27 +128,29 @@ class YamlFileLoader extends FileLoader
         $methods = isset($config['methods']) ? $config['methods'] : array();
         $condition = isset($config['condition']) ? $config['condition'] : null;
 
-        if (!isset($config['locales'])) {
+        if (isset($config['locales'])) {
+            $collection->addCollection(
+                $this->routeGenerator->generateRoutes(
+                    $name,
+                    $config['locales'],
+                    new Route('', $defaults, $requirements, $options, $host, $schemes, $methods, $condition)
+                )
+            );
+        } else {
             $route = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
             $collection->add($name, $route);
-        } else {
-            $collection->addI18n(
-                $name,
-                $config['locales'],
-                new Route('', $defaults, $requirements, $options, $host, $schemes, $methods, $condition)
-            );
         }
     }
 
     /**
      * Parses an import and adds the routes in the resource to the RouteCollection.
      *
-     * @param I18nRouteCollection $collection A RouteCollection instance
+     * @param RouteCollection $collection A RouteCollection instance
      * @param array $config Route definition
      * @param string $path Full path of the YAML file being processed
      * @param string $file Loaded file name
      */
-    protected function parseImport(I18nRouteCollection $collection, array $config, $path, $file)
+    protected function parseImport(RouteCollection $collection, array $config, $path, $file)
     {
         $type = isset($config['type']) ? $config['type'] : null;
         $prefix = isset($config['prefix']) ? $config['prefix'] : '';
@@ -164,7 +166,7 @@ class YamlFileLoader extends FileLoader
 
         $subCollection = $this->import($config['resource'], $type, false, $file);
         /* @var $subCollection \Symfony\Component\Routing\RouteCollection */
-        $subCollection->addPrefix($prefix);
+        $subCollection = $this->routeGenerator->generateCollection($prefix, $subCollection);
         if (null !== $host) {
             $subCollection->setHost($host);
         }

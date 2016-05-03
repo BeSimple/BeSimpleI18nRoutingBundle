@@ -1,7 +1,8 @@
 <?php
-namespace BeSimple\I18nRoutingBundle\Tests\Routing\RouteNameInflector;
+namespace BeSimple\I18nRoutingBundle\Tests\Routing\RouteGenerator\NameInflector;
 
-use BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\PostfixInflector;
+
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\PostfixInflector;
 
 class PostfixInflectorTest extends \PHPUnit_Framework_TestCase
 {

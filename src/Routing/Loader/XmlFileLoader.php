@@ -1,14 +1,14 @@
 <?php
 namespace BeSimple\I18nRoutingBundle\Routing\Loader;
 
-use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollection;
-use BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\PostfixInflector;
-use BeSimple\I18nRoutingBundle\Routing\RouteNameInflector\RouteNameInflector;
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\I18nRouteGenerator;
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\RouteGenerator;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Config\Util\XmlUtils;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * XmlFileLoader
@@ -22,15 +22,15 @@ class XmlFileLoader extends FileLoader
     const NAMESPACE_URI = 'http://besim.pl/schema/i18n_routing';
     const SCHEME_PATH = '/schema/routing/routing-1.0.xsd';
     /**
-     * @var RouteNameInflector
+     * @var RouteGenerator
      */
-    private $routeNameInflector;
+    private $routeGenerator;
 
-    public function __construct(FileLocatorInterface $locator, RouteNameInflector $routeNameInflector = null)
+    public function __construct(FileLocatorInterface $locator, RouteGenerator $routeGenerator = null)
     {
         parent::__construct($locator);
 
-        $this->routeNameInflector = $routeNameInflector ?: new PostfixInflector();
+        $this->routeGenerator = $routeGenerator ?: new I18nRouteGenerator();
     }
 
     /**
@@ -39,7 +39,7 @@ class XmlFileLoader extends FileLoader
      * @param string      $file An XML file path
      * @param string|null $type The resource type
      *
-     * @return I18nRouteCollection A RouteCollection instance
+     * @return RouteCollection A RouteCollection instance
      *
      * @throws \InvalidArgumentException When the file cannot be loaded or when the XML cannot be
      *                                   parsed because it does not validate against the scheme.
@@ -50,7 +50,7 @@ class XmlFileLoader extends FileLoader
 
         $xml = $this->loadFile($path);
 
-        $collection = new I18nRouteCollection($this->routeNameInflector);
+        $collection = new RouteCollection();
         $collection->addResource(new FileResource($path));
 
         // process routes and imports
@@ -68,14 +68,14 @@ class XmlFileLoader extends FileLoader
     /**
      * Parses a node from a loaded XML file.
      *
-     * @param I18nRouteCollection $collection Collection to associate with the node
+     * @param RouteCollection $collection Collection to associate with the node
      * @param \DOMElement $node Element to parse
      * @param string $path Full path of the XML file being processed
      * @param string $file Loaded file name
      *
      * @throws \InvalidArgumentException When the XML is invalid
      */
-    protected function parseNode(I18nRouteCollection $collection, \DOMElement $node, $path, $file)
+    protected function parseNode(RouteCollection $collection, \DOMElement $node, $path, $file)
     {
         if (self::NAMESPACE_URI !== $node->namespaceURI) {
             return;
@@ -102,15 +102,15 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Parses a route and adds it to the I18nRouteCollection.
+     * Parses a route and adds it to the RouteCollection.
      *
-     * @param I18nRouteCollection $collection RouteCollection instance
+     * @param RouteCollection $collection RouteCollection instance
      * @param \DOMElement $node Element to parse that represents a Route
      * @param string $path Full path of the XML file being processed
      *
      * @throws \InvalidArgumentException When the XML is invalid
      */
-    protected function parseRoute(I18nRouteCollection $collection, \DOMElement $node, $path)
+    protected function parseRoute(RouteCollection $collection, \DOMElement $node, $path)
     {
         if ('' === ($id = $node->getAttribute('id'))) {
             throw new \InvalidArgumentException(sprintf('The <route> element in file "%s" must have an "id" attribute.', $path));
@@ -131,10 +131,12 @@ class XmlFileLoader extends FileLoader
         list($defaults, $requirements, $options, $condition, $localesWithPaths) = $this->parseConfigs($node, $path);
 
         if ($localesWithPaths) {
-            $collection->addI18n(
-                $id,
-                $localesWithPaths,
-                new Route('', $defaults, $requirements, $options, $node->getAttribute('host'), $schemes, $methods, $condition)
+            $collection->addCollection(
+                $this->routeGenerator->generateRoutes(
+                    $id,
+                    $localesWithPaths,
+                    new Route('', $defaults, $requirements, $options, $node->getAttribute('host'), $schemes, $methods, $condition)
+                )
             );
         } else {
             if (!$node->hasAttribute('pattern') && !$node->hasAttribute('path')) {
@@ -149,14 +151,14 @@ class XmlFileLoader extends FileLoader
     /**
      * Parses an import and adds the routes in the resource to the RouteCollection.
      *
-     * @param I18nRouteCollection $collection RouteCollection instance
+     * @param RouteCollection $collection RouteCollection instance
      * @param \DOMElement $node Element to parse that represents a Route
      * @param string $path Full path of the XML file being processed
      * @param string $file Loaded file name
      *
      * @throws \InvalidArgumentException When the XML is invalid
      */
-    protected function parseImport(I18nRouteCollection $collection, \DOMElement $node, $path, $file)
+    protected function parseImport(RouteCollection $collection, \DOMElement $node, $path, $file)
     {
         if ('' === $resource = $node->getAttribute('resource')) {
             throw new \InvalidArgumentException(sprintf('The <import> element in file "%s" must have a "resource" attribute.', $path));
@@ -174,7 +176,10 @@ class XmlFileLoader extends FileLoader
 
         $subCollection = $this->import($resource, ('' !== $type ? $type : null), false, $file);
         /* @var $subCollection \Symfony\Component\Routing\RouteCollection */
-        $subCollection->addPrefix(empty($localesWithPaths) ? $prefix : $localesWithPaths);
+        $subCollection = $this->routeGenerator->generateCollection(
+            empty($localesWithPaths) ? $prefix : $localesWithPaths,
+            $subCollection
+        );
         if (null !== $host) {
             $subCollection->setHost($host);
         }

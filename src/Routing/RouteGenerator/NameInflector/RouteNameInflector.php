@@ -1,5 +1,5 @@
 <?php
-namespace BeSimple\I18nRoutingBundle\Routing\RouteNameInflector;
+namespace BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector;
 
 /**
  * Deduce the route name to use for a localized route.

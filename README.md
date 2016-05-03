@@ -89,15 +89,20 @@ loader: ``http://besim.pl/schema/i18n_routing``.
 ```php
 <?php
 
-use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollection;
+use Symfony\Component\Routing\RouteCollection;
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\I18nRouteGenerator;
 
-$collection = new I18nRouteCollection();
-$collection->addI18n(
-    'homepage',
-    array('en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen'),
-    new Route('', array(
-        '_controller' => 'MyWebsiteBundle:Frontend:index'
-    ))
+$generator = new I18nRouteGenerator();
+
+$collection = new RouteCollection();
+$collection->addCollection(
+    $generator->generateRoutes(
+        'homepage',
+        array('en' => '/welcome', 'fr' => '/bienvenue', 'de' => '/willkommen'),
+        new Route('', array(
+            '_controller' => 'MyWebsiteBundle:Frontend:index'
+        ))
+    )
 );
 
 return $collection;
@@ -143,21 +148,24 @@ welcome:
 ```php
 <?php
 
-use BeSimple\I18nRoutingBundle\Routing\I18nRouteCollection;
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\I18nRouteGenerator;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
 
-$builder = new I18nRouteCollection();
+$generator = new I18nRouteGenerator();
 
 $collection = new RouteCollection();
 $collection->add('hello', new Route('/hello/{name}', array(
     '_controller' => 'HelloBundle:Hello:index',
 )));
-$collection->addI18n(
-    'homepage',
-    array('en' => '/welcome/{name}', 'fr' => '/bienvenue/{name}', 'de' => '/willkommen/{name}'),
-    new Route('', array(
-        '_controller' => 'MyWebsiteBundle:Frontend:index',
-    ))
+$collection->addCollection(
+    $generator->generateRoutes(
+        'homepage',
+        array('en' => '/welcome/{name}', 'fr' => '/bienvenue/{name}', 'de' => '/willkommen/{name}'),
+        new Route('', array(
+            '_controller' => 'MyWebsiteBundle:Frontend:index',
+        ))
+    )
 );
 
 return $collection;
