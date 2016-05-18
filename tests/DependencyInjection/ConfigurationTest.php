@@ -18,7 +18,9 @@ class ConfigurationTest extends AbstractConfigurationTestCase
     {
         $this->assertProcessedConfigurationEquals(
             array(),
-            array()
+            array(
+                'route_name_inflector' => 'be_simple_i18n_routing.route_name_inflector.postfix',
+            )
         );
     }
 
@@ -90,6 +92,82 @@ class ConfigurationTest extends AbstractConfigurationTestCase
                 )
             ),
             'attribute_translator'
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function processed_configuration_for_locales_defaults()
+    {
+        $this->assertProcessedConfigurationEquals(
+            array(
+                array(
+                    'locales' => array()
+                )
+            ),
+            array(
+                'locales' => array(
+                    'default_locale' => null,
+                    'supported' => array(),
+                    'filter' => false,
+                    'strict' => false
+                )
+            ),
+            'locales'
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function processed_configuration_for_locales_full()
+    {
+        $this->assertProcessedConfigurationEquals(
+            array(
+                array(
+                    'locales' => array(
+                        'default_locale' => 'en',
+                        'supported' => array('en', 'nl', 'de'),
+                        'filter' => true,
+                        'strict' => true
+                    )
+                )
+            ),
+            array(
+                'locales' => array(
+                    'default_locale' => 'en',
+                    'supported' => array('en', 'nl', 'de'),
+                    'filter' => true,
+                    'strict' => true
+                )
+            ),
+            'locales'
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function processed_configuration_for_locales_locale_string()
+    {
+        $this->assertProcessedConfigurationEquals(
+            array(
+                array(
+                    'locales' => array(
+                        'supported' => 'en',
+                    )
+                )
+            ),
+            array(
+                'locales' => array(
+                    'default_locale' => null,
+                    'supported' => array('en'),
+                    'filter' => false,
+                    'strict' => false
+                )
+            ),
+            'locales'
         );
     }
 }

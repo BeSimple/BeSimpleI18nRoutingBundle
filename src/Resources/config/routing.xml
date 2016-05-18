@@ -5,6 +5,9 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+        <parameter key="be_simple_i18n_routing.default_locale">%locale%</parameter>
+        <parameter key="be_simple_i18n_routing.locales" type="collection" />
+
         <parameter key="be_simple_i18n_routing.router.class">BeSimple\I18nRoutingBundle\Routing\Router</parameter>
         <parameter key="be_simple_i18n_routing.loader.xml.class">BeSimple\I18nRoutingBundle\Routing\Loader\XmlFileLoader</parameter>
         <parameter key="be_simple_i18n_routing.loader.yaml.class">BeSimple\I18nRoutingBundle\Routing\Loader\YamlFileLoader</parameter>
@@ -15,21 +18,63 @@
         <service id="be_simple_i18n_routing.router" class="%be_simple_i18n_routing.router.class%">
             <argument type="service" id="be_simple_i18n_routing.router.parent" />
             <argument type="service" id="be_simple_i18n_routing.translator" on-invalid="null" />
-            <argument>%locale%</argument>
+            <argument>%be_simple_i18n_routing.default_locale%</argument>
+            <argument type="service" id="be_simple_i18n_routing.route_name_inflector" />
         </service>
 
+        <!-- Route loaders -->
         <service id="be_simple_i18n_routing.loader.xml" class="%be_simple_i18n_routing.loader.xml.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
+            <argument type="service" id="be_simple_i18n_routing.route_generator" />
         </service>
 
         <service id="be_simple_i18n_routing.loader.yaml" class="%be_simple_i18n_routing.loader.yaml.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
+            <argument type="service" id="be_simple_i18n_routing.route_generator" />
         </service>
 
+        <!-- Route parameters translators -->
         <service id="be_simple_i18n_routing.translator.translation" class="%be_simple_i18n_routing.translator.translation.class%" public="false">
             <argument type="service" id="translator" />
+        </service>
+
+        <!-- Route generators -->
+        <service id="be_simple_i18n_routing.route_generator" alias="be_simple_i18n_routing.route_generator.i18n" />
+
+        <service id="be_simple_i18n_routing.route_generator.i18n"
+                 class="BeSimple\I18nRoutingBundle\Routing\RouteGenerator\I18nRouteGenerator"
+                 public="false">
+            <argument type="service" id="be_simple_i18n_routing.route_name_inflector"/>
+        </service>
+
+        <service id="be_simple_i18n_routing.route_generator.filter"
+                 class="BeSimple\I18nRoutingBundle\Routing\RouteGenerator\FilteredLocaleGenerator"
+                 public="false">
+            <argument type="service" id="be_simple_i18n_routing.route_generator.i18n"/>
+            <argument>%be_simple_i18n_routing.locales%</argument>
+        </service>
+
+        <service id="be_simple_i18n_routing.route_generator.strict"
+                 class="BeSimple\I18nRoutingBundle\Routing\RouteGenerator\StrictLocaleRouteGenerator"
+                 public="false">
+            <argument type="service" id="be_simple_i18n_routing.route_generator.i18n"/>
+            <argument>%be_simple_i18n_routing.locales%</argument>
+        </service>
+
+        <!-- Route name inflectors -->
+        <service id="be_simple_i18n_routing.route_name_inflector" alias="be_simple_i18n_routing.route_name_inflector.postfix" />
+
+        <service id="be_simple_i18n_routing.route_name_inflector.postfix"
+                 class="BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\PostfixInflector"
+                 public="false">
+        </service>
+
+        <service id="be_simple_i18n_routing.route_name_inflector.default_postfix"
+                 class="BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\DefaultPostfixInflector"
+                 public="false">
+            <argument>%be_simple_i18n_routing.default_locale%</argument>
         </service>
     </services>
 </container>

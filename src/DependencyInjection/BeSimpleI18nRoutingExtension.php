@@ -25,7 +25,12 @@ class BeSimpleI18nRoutingExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $this->configureLocales($config, $container, $loader);
         $this->configureAttributeTranslator($config, $container, $loader);
+
+        if (isset($config['route_name_inflector'])) {
+            $container->setAlias('be_simple_i18n_routing.route_name_inflector', $config['route_name_inflector']);
+        }
 
         $this->addClassesToCompile(array(
             'BeSimple\\I18nRoutingBundle\\Routing\\Router',
@@ -112,5 +117,45 @@ class BeSimpleI18nRoutingExtension extends Extension
 
         // generate a unique namespace for the given application
         $container->setParameter('be_simple_i18n_routing.doctrine_dbal.cache.namespace', 'be_simple_i18n_'.md5($container->getParameter('kernel.root_dir')));
+    }
+
+    /**
+     * Configures the supported locales
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param LoaderInterface $loader
+     */
+    private function configureLocales(array $config, ContainerBuilder $container, LoaderInterface $loader)
+    {
+        if (!isset($config['locales'])) {
+            return;
+        }
+        $config = $config['locales'];
+
+        $container->setParameter('be_simple_i18n_routing.default_locale', $config['default_locale']);
+        $container->setParameter('be_simple_i18n_routing.locales', $config['supported']);
+
+        // Configure the route generator
+        $routeGenerator = 'be_simple_i18n_routing.route_generator.i18n';
+        if ($config['strict'] !== false) {
+            $container->getDefinition('be_simple_i18n_routing.route_generator.strict')
+                ->replaceArgument(0, new Reference($routeGenerator));
+
+            if ($config['strict'] === null) {
+                $container->getDefinition('be_simple_i18n_routing.route_generator.strict')
+                    ->addMethodCall('allowFallback', array(true));
+            }
+
+            $routeGenerator = 'be_simple_i18n_routing.route_generator.strict';
+        }
+        if ($config['filter']) {
+            $container->getDefinition('be_simple_i18n_routing.route_generator.filter')
+                ->replaceArgument(0, new Reference($routeGenerator));
+
+            $routeGenerator = 'be_simple_i18n_routing.route_generator.filter';
+        }
+
+        $container->setAlias('be_simple_i18n_routing.route_generator', $routeGenerator);
     }
 }
