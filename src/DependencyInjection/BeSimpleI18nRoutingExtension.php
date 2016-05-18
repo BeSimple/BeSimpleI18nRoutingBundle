@@ -6,6 +6,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class BeSimpleI18nRoutingExtension extends Extension
@@ -51,7 +52,20 @@ class BeSimpleI18nRoutingExtension extends Extension
                 return;
 
             case 'doctrine_dbal':
+                $container->setParameter('be_simple_i18n_routing.doctrine_dbal.connection_name', $config['connection']);
+
                 $loader->load('dbal.xml');
+
+                // BC support for symfony factory
+                $def = $container->getDefinition('be_simple_i18n_routing.doctrine_dbal.connection');
+
+                if (method_exists($def, 'setFactory')) {
+                    $def->setFactory(array(new Reference('doctrine'), 'getConnection'));
+                } else {
+                    $def->setFactoryService('doctrine')
+                        ->setFactoryMethod('getConnection');
+                }
+
                 $this->configureDbalCacheDefinition($config['cache'], $container);
                 $container->setAlias('be_simple_i18n_routing.translator', 'be_simple_i18n_routing.translator.doctrine_dbal');
 
@@ -67,7 +81,7 @@ class BeSimpleI18nRoutingExtension extends Extension
                 $container->setAlias('be_simple_i18n_routing.translator', 'be_simple_i18n_routing.translator.translation');
                 return;
         }
-        
+
         throw new \InvalidArgumentException(sprintf('Unsupported attribute translator type "%s"', $config['type']));
     }
 
