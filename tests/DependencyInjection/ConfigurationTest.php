@@ -19,6 +19,7 @@ class ConfigurationTest extends AbstractConfigurationTestCase
         $this->assertProcessedConfigurationEquals(
             array(),
             array(
+                'annotations' => false,
                 'route_name_inflector' => 'be_simple_i18n_routing.route_name_inflector.postfix',
             )
         );

@@ -28,6 +28,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->booleanNode('annotations')->defaultFalse()->end()
                 ->scalarNode('route_name_inflector')->defaultValue('be_simple_i18n_routing.route_name_inflector.postfix')->end()
             ->end()
         ;

@@ -10,6 +10,7 @@ To get the diff between two versions, go to https://github.com/BeSimple/BeSimple
   * bugs #80 Set be_simple_i18n_routing.doctrine_dbal.connection_name parameter (boekkooi)
   * bugs #74 Exclude languaged (boekkooi)
   * bugs #77, #66 Added Symfony 3 support (boekkooi)
+  * feature #43 Added annotation loader support for Symfony 3.5 and greater (boekkooi)
   * feature #80 Introduced RouteNameInflector & RouteGenerator (boekkooi)
   * feature #80 Added strict route support (boekkooi)
   * feature #80 Implemented DI tests (boekkooi)

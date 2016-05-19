@@ -92,6 +92,20 @@ class BeSimpleI18nRoutingExtensionTest extends AbstractExtensionTestCase
     /**
      * @test
      */
+    public function loading_with_annotations()
+    {
+        $this->load(array(
+            'annotations' => true,
+        ));
+
+        $this->assertContainerBuilderHasService('be_simple_i18n_routing.loader.annotation_dir', 'Symfony\Component\Routing\Loader\AnnotationDirectoryLoader');
+        $this->assertContainerBuilderHasService('be_simple_i18n_routing.loader.annotation_file', 'Symfony\Component\Routing\Loader\AnnotationFileLoader');
+        $this->assertContainerBuilderHasService('be_simple_i18n_routing.loader.annotation_class', 'BeSimple\I18nRoutingBundle\Routing\Loader\AnnotatedRouteControllerLoader');
+    }
+
+    /**
+     * @test
+     */
     public function load_attribute_translator_service()
     {
         $this->load(array(
