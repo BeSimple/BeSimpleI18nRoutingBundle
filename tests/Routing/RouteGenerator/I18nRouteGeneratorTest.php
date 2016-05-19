@@ -23,7 +23,7 @@ class I18nRouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateRoutesUsesNameInflector()
     {
-        $inflector = $this->getMock('BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflector');
+        $inflector = $this->getMock('BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflectorInterface');
         $inflector
             ->expects($this->exactly(2))
             ->method('inflect')

@@ -3,7 +3,7 @@
 namespace BeSimple\I18nRoutingBundle\Routing;
 
 use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\PostfixInflector;
-use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflector;
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflectorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface;
@@ -30,7 +30,7 @@ class Router implements RouterInterface
      */
     protected $defaultLocale;
     /**
-     * @var RouteNameInflector
+     * @var RouteNameInflectorInterface
      */
     private $routeNameInflector;
 
@@ -41,7 +41,7 @@ class Router implements RouterInterface
      * @param Translator\AttributeTranslatorInterface|null $translator
      * @param string                                       $defaultLocale
      */
-    public function __construct(RouterInterface $router, AttributeTranslatorInterface $translator = null, $defaultLocale = null, RouteNameInflector $routeNameInflector = null)
+    public function __construct(RouterInterface $router, AttributeTranslatorInterface $translator = null, $defaultLocale = null, RouteNameInflectorInterface $routeNameInflector = null)
     {
         $this->router = $router;
         $this->translator = $translator;

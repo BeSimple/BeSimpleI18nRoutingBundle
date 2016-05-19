@@ -198,7 +198,7 @@ To do this you can specify a route name inflector service in your configuration 
 be_simple_i18n_routing:
   route_name_inflector: 'my_route_name_inflector_service'
 ```
-*The service must implement the `BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflector` interface.*
+*The service must implement the `BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflectorInterface` interface.*
 
 There are currently 2 inflectors available by default [`be_simple_i18n_routing.route_name_inflector.postfix`](src/Routing/RouteGenerator/NameInflector/PostfixInflector.php) and [`be_simple_i18n_routing.route_name_inflector.default_postfix`](src/Routing/RouteGenerator/NameInflector/DefaultPostfixInflector.php).
 

@@ -3,7 +3,7 @@ namespace BeSimple\I18nRoutingBundle\Routing\RouteGenerator;
 
 use BeSimple\I18nRoutingBundle\Routing\Exception\MissingRouteLocaleException;
 use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\PostfixInflector;
-use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflector;
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflectorInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -12,11 +12,11 @@ class I18nRouteGenerator implements RouteGenerator
     const LOCALE_REGEX = '#\{_locale\}#';
     const LOCALE_PARAM = '_locale';
     /**
-     * @var RouteNameInflector
+     * @var RouteNameInflectorInterface
      */
     private $routeNameInflector;
 
-    public function __construct(RouteNameInflector $routeNameInflector = null)
+    public function __construct(RouteNameInflectorInterface $routeNameInflector = null)
     {
         $this->routeNameInflector = $routeNameInflector ?: new PostfixInflector();
     }

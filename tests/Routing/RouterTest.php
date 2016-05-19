@@ -98,7 +98,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             );
         ;
 
-        $routeNameInflector = $this->getMock('BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflector');
+        $routeNameInflector = $this->getMock('BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflectorInterface');
         $routeNameInflector
             ->expects($this->once())
             ->method('inflect')

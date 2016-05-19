@@ -4,7 +4,7 @@ namespace BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector;
 /**
  * Deduce the route name to use for a localized route.
  */
-interface RouteNameInflector
+interface RouteNameInflectorInterface
 {
     /**
      * Return the route name and return it.

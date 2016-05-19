@@ -4,7 +4,7 @@ namespace BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector;
 /**
  * A route name inflector that appends the locale to the routes name except when the locale is the default locale.
  */
-class DefaultPostfixInflector implements RouteNameInflector
+class DefaultPostfixInflector implements RouteNameInflectorInterface
 {
     /**
      * @var string
