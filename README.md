@@ -171,6 +171,47 @@ $collection->addCollection(
 return $collection;
 ```
 
+### Advanced locale support
+
+By default this bundle allows any locale to be used and there is no check if a locale is missing for a specific route. 
+This is great but sometimes you may wish to be strict, let take a look at the following configuration:
+```YAML
+be_simple_i18n_routing:
+  locales:
+    supported: ['en', 'nl']
+    filter: true
+    strict: true
+```
+
+The `locales.supported` specifies which locales are supported.
+
+The `locales.filter` option is responsible for filtering out any unknown locales so only routes for 'en' and 'nl' are available.
+
+The `locales.strict` option when set to `true` is responsible for throwing a exception when a i18n route is found where the locale is unknown or where a locale is missing.
+This option can also be set to `null` to disable locale is missing for a route exception and `false` to disable exceptions.
+
+### Route naming
+
+By default all routes that are imported are named '<route_name>.<locale>' but sometimes you may want to change this behaviour.
+To do this you can specify a route name inflector service in your configuration as followed.
+```YAML
+be_simple_i18n_routing:
+  route_name_inflector: 'my_route_name_inflector_service'
+```
+*The service must implement the `BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflector` interface.*
+
+There are currently 2 inflectors available by default [`be_simple_i18n_routing.route_name_inflector.postfix`](src/Routing/RouteGenerator/NameInflector/PostfixInflector.php) and [`be_simple_i18n_routing.route_name_inflector.default_postfix`](src/Routing/RouteGenerator/NameInflector/DefaultPostfixInflector.php).
+
+#### Default postfix inflector
+The default postfix inflector changed the behaviour of to only add a locale postfix when the locale is not the default locale.
+A example configuration is as followed.
+```YAML
+be_simple_i18n_routing:
+  route_name_inflector: 'my_route_name_inflector_service'
+  locales:
+    default_locale: '%kernel.default_locale%'
+```
+
 ## Generate a route in your templates
 
 ### Specify a locale
@@ -303,6 +344,7 @@ be_simple_i18n_routing:
         type: service
         id: my_attribute_translator
 ```
+
 
 ## License
 
