@@ -8,12 +8,12 @@ use Symfony\Component\Routing\RouteCollection;
  * A route generator to only allow a specified set of locales.
  * Any locales that are not within the supported list will not be generated.
  */
-class FilteredLocaleGenerator implements RouteGenerator
+class FilteredLocaleGenerator implements RouteGeneratorInterface
 {
     private $routeGenerator;
     private $locales;
 
-    public function __construct(RouteGenerator $internalRouteGenerator, array $allowedLocales)
+    public function __construct(RouteGeneratorInterface $internalRouteGenerator, array $allowedLocales)
     {
         if (empty($allowedLocales)) {
             throw new \InvalidArgumentException('The allowedLocales must contain at least one locale.');

@@ -9,14 +9,14 @@ use Symfony\Component\Routing\RouteCollection;
 /**
  * A class to enforce a supported set of locales.
  */
-class StrictLocaleRouteGenerator implements RouteGenerator
+class StrictLocaleRouteGenerator implements RouteGeneratorInterface
 {
     private $routeGenerator;
     private $locales;
 
     private $allowFallback = false;
 
-    public function __construct(RouteGenerator $internalRouteGenerator, array $supportedLocales)
+    public function __construct(RouteGeneratorInterface $internalRouteGenerator, array $supportedLocales)
     {
         if (empty($supportedLocales)) {
             throw new \InvalidArgumentException('The supportedLocales must contain at least one locale.');

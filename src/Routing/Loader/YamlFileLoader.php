@@ -2,7 +2,7 @@
 namespace BeSimple\I18nRoutingBundle\Routing\Loader;
 
 use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\I18nRouteGenerator;
-use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\RouteGenerator;
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\RouteGeneratorInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\Route;
@@ -24,11 +24,11 @@ class YamlFileLoader extends FileLoader
      */
     private $yamlParser;
     /**
-     * @var RouteGenerator
+     * @var RouteGeneratorInterface
      */
     private $routeGenerator;
 
-    public function __construct(FileLocatorInterface $locator, RouteGenerator $routeGenerator = null)
+    public function __construct(FileLocatorInterface $locator, RouteGeneratorInterface $routeGenerator = null)
     {
         parent::__construct($locator);
 

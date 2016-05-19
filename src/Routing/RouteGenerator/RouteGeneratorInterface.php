@@ -4,7 +4,7 @@ namespace BeSimple\I18nRoutingBundle\Routing\RouteGenerator;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-interface RouteGenerator
+interface RouteGeneratorInterface
 {
     /**
      * Generate localized versions of the given route.

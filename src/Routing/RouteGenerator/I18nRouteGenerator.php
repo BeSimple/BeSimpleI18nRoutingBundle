@@ -7,7 +7,7 @@ use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInf
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class I18nRouteGenerator implements RouteGenerator
+class I18nRouteGenerator implements RouteGeneratorInterface
 {
     const LOCALE_REGEX = '#\{_locale\}#';
     const LOCALE_PARAM = '_locale';

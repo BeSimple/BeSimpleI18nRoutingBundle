@@ -8,7 +8,7 @@ use Symfony\Component\Routing\RouteCollection;
 class FilteredLocaleGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\BeSimple\I18nRoutingBundle\Routing\RouteGenerator\RouteGenerator
+     * @var \PHPUnit_Framework_MockObject_MockObject|\BeSimple\I18nRoutingBundle\Routing\RouteGenerator\RouteGeneratorInterface
      */
     private $internalGenerator;
     /**
@@ -18,7 +18,7 @@ class FilteredLocaleGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->internalGenerator = $this->getMock('BeSimple\I18nRoutingBundle\Routing\RouteGenerator\RouteGenerator');
+        $this->internalGenerator = $this->getMock('BeSimple\I18nRoutingBundle\Routing\RouteGenerator\RouteGeneratorInterface');
 
         $this->generator = new FilteredLocaleGenerator($this->internalGenerator, array('en', 'nl', 'fr'));
     }
