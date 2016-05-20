@@ -36,7 +36,10 @@
         "symfony/http-kernel": "~2.3 || ~3.0",
         "symfony/translation": "~2.3 || ~3.0",
 
-        "phpunit/phpunit": "~4.7@stable"
+        "phpunit/phpunit": "~4.7@stable",
+
+        "matthiasnoback/symfony-dependency-injection-test": "^0.7",
+        "matthiasnoback/symfony-config-test": "^1.4"
     },
     "suggest": {
         "doctrine/dbal": "~2.2"
@@ -51,7 +54,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.3-dev"
+            "dev-master": "2.4-dev"
         }
     }
 }

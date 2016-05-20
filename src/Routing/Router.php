@@ -2,6 +2,8 @@
 
 namespace BeSimple\I18nRoutingBundle\Routing;
 
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\PostfixInflector;
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\RouteNameInflectorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface;
@@ -27,6 +29,10 @@ class Router implements RouterInterface
      * @var string
      */
     protected $defaultLocale;
+    /**
+     * @var RouteNameInflectorInterface
+     */
+    private $routeNameInflector;
 
     /**
      * Constructor
@@ -35,11 +41,12 @@ class Router implements RouterInterface
      * @param Translator\AttributeTranslatorInterface|null $translator
      * @param string                                       $defaultLocale
      */
-    public function __construct(RouterInterface $router, AttributeTranslatorInterface $translator = null, $defaultLocale = null)
+    public function __construct(RouterInterface $router, AttributeTranslatorInterface $translator = null, $defaultLocale = null, RouteNameInflectorInterface $routeNameInflector = null)
     {
         $this->router = $router;
         $this->translator = $translator;
         $this->defaultLocale = $defaultLocale;
+        $this->routeNameInflector = $routeNameInflector ?: new PostfixInflector();
     }
 
     /**
@@ -164,7 +171,11 @@ class Router implements RouterInterface
     protected function generateI18n($name, $locale, $parameters, $referenceType = self::ABSOLUTE_PATH)
     {
         try {
-            return $this->router->generate($name.'.'.$locale, $parameters, $referenceType);
+            return $this->router->generate(
+                $this->routeNameInflector->inflect($name, $locale),
+                $parameters,
+                $referenceType
+            );
         } catch (RouteNotFoundException $e) {
             throw new RouteNotFoundException(sprintf('I18nRoute "%s" (%s) does not exist.', $name, $locale));
         }

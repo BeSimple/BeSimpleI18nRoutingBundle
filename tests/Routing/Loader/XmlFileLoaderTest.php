@@ -4,6 +4,7 @@ namespace BeSimple\I18nRoutingBundle\Tests\Routing\Loader;
 
 use BeSimple\I18nRoutingBundle\Routing\Loader\XmlFileLoader;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Routing\Route;
 
 /**
  * @author Francis Besset <francis.besset@gmail.com>
@@ -15,6 +16,24 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $routes = $this->load('basic_i18n_route.xml')->all();
 
         $this->assertEquals(3, count($routes));
+
+        $this->assertEquals(
+            array(
+                'homepage_locale.en' => new Route('/en/', array(
+                    '_locale' => 'en',
+                    '_controller' => 'TestBundle:Frontend:homepageLocale'
+                )),
+                'homepage_locale.de' => new Route('/de/', array(
+                    '_locale' => 'de',
+                    '_controller' => 'TestBundle:Frontend:homepageLocale'
+                )),
+                'homepage_locale.fr' => new Route('/fr/', array(
+                    '_locale' => 'fr',
+                    '_controller' => 'TestBundle:Frontend:homepageLocale'
+                )),
+            ),
+            $routes
+        );
     }
 
     public function testBasicRoutes()

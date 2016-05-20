@@ -22,7 +22,7 @@
             <argument type="service" id="be_simple_i18n_routing.doctrine_dbal.cache" />
         </service>
 
-        <service id="be_simple_i18n_routing.doctrine_dbal.connection" factory-service="doctrine" factory-method="getConnection" class="Doctrine\DBAL\Connection" public="false">
+        <service id="be_simple_i18n_routing.doctrine_dbal.connection" class="Doctrine\DBAL\Connection" public="false">
             <argument>%be_simple_i18n_routing.doctrine_dbal.connection_name%</argument>
         </service>
 
