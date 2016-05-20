@@ -6,7 +6,10 @@ for different languages. Additionally it allows to translate given routing param
 between languages in Router#match and UrlGenerator#generate using either a Symfony Translator
 or a Doctrine DBAL (+Cache) based backend.
 
-[![Build Status](https://secure.travis-ci.org/BeSimple/BeSimpleI18nRoutingBundle.png?branch=master)](http://travis-ci.org/BeSimple/BeSimpleI18nRoutingBundle)
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](src/Resources/meta/LICENSE)
+[![Build Status][ico-travis]][link-travis]
+[![Total Downloads][ico-downloads]][link-packagist]
 
 ## Information
 
@@ -348,6 +351,12 @@ be_simple_i18n_routing:
 
 ## License
 
-This bundle is under the MIT license. See the complete license in the bundle:
+This bundle is under the MIT License (MIT). Please see [License File](src/Resources/meta/LICENSE) for more information.
 
-    Resources/meta/LICENSE
+[ico-version]: https://img.shields.io/packagist/v/BeSimple/i18n-routing-bundle.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/BeSimple/BeSimpleI18nRoutingBundle/master.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/BeSimple/i18n-routing-bundle.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/BeSimple/i18n-routing-bundle
+[link-travis]: https://travis-ci.org/BeSimple/BeSimpleI18nRoutingBundle
