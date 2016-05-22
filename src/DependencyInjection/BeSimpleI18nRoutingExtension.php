@@ -5,6 +5,8 @@ namespace BeSimple\I18nRoutingBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -25,15 +27,13 @@ class BeSimpleI18nRoutingExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $this->configureLocales($config, $container, $loader);
+        $this->configureLocales($config, $container);
         $this->configureAttributeTranslator($config, $container, $loader);
-
-        if (isset($config['route_name_inflector'])) {
-            $container->setAlias('be_simple_i18n_routing.route_name_inflector', $config['route_name_inflector']);
-        }
+        $this->configureRouteNameInflector($config, $container);
 
         $this->addClassesToCompile(array(
             'BeSimple\\I18nRoutingBundle\\Routing\\Router',
+            'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector'
         ));
     }
 
@@ -124,9 +124,8 @@ class BeSimpleI18nRoutingExtension extends Extension
      *
      * @param array $config
      * @param ContainerBuilder $container
-     * @param LoaderInterface $loader
      */
-    private function configureLocales(array $config, ContainerBuilder $container, LoaderInterface $loader)
+    private function configureLocales(array $config, ContainerBuilder $container)
     {
         if (!isset($config['locales'])) {
             return;
@@ -157,5 +156,30 @@ class BeSimpleI18nRoutingExtension extends Extension
         }
 
         $container->setAlias('be_simple_i18n_routing.route_generator', $routeGenerator);
+    }
+
+    /**
+     * Configures the route name inflector
+     *
+     * @param ContainerBuilder $container
+     * @param $config
+     */
+    private function configureRouteNameInflector(array $config, ContainerBuilder $container)
+    {
+        if (isset($config['route_name_inflector'])) {
+            $container->setAlias('be_simple_i18n_routing.route_name_inflector', $config['route_name_inflector']);
+        }
+
+        // Try and register the route name inflector to compilation/caching
+        try {
+            $def = $container->findDefinition('be_simple_i18n_routing.route_name_inflector');
+            if ($def->getClass() !== null) {
+                $this->addClassesToCompile(array($def->getClass()));
+            }
+        } catch (ServiceNotFoundException $e) {
+            // This happens when the alias is set to a external service
+        } catch (InvalidArgumentException $e) {
+            // This happens when the alias is set to a external service in Symfony 2.3
+        }
     }
 }
