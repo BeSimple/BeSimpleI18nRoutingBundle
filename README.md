@@ -111,6 +111,27 @@ $collection->addCollection(
 return $collection;
 ```
 
+### Controller annotations
+ 
+Annotation loading is only supported for Symfony 2.5 and greater and needs to be enabled as followed.
+```YAML
+# app/config/config.yml
+be_simple_i18n_routing:
+    annotations: true
+```
+
+```PHP
+use BeSimple\I18nRoutingBundle\Routing\Annotation\I18nRoute;
+
+class NoPrefixController
+{
+    /**
+     * @I18nRoute({ "en": "/welcome", "fr": "/bienvenue", "de": "/willkommen" }, name="homepage")
+     */
+    public function indexAction() { }
+}
+```
+
 ### You can insert classic route in your routing
 
 #### Yaml routing file

@@ -30,6 +30,7 @@ class BeSimpleI18nRoutingExtension extends Extension
         $this->configureLocales($config, $container);
         $this->configureAttributeTranslator($config, $container, $loader);
         $this->configureRouteNameInflector($config, $container);
+        $this->configureAnnotations($config, $container, $loader);
 
         $this->addClassesToCompile(array(
             'BeSimple\\I18nRoutingBundle\\Routing\\Router',
@@ -181,5 +182,21 @@ class BeSimpleI18nRoutingExtension extends Extension
         } catch (InvalidArgumentException $e) {
             // This happens when the alias is set to a external service in Symfony 2.3
         }
+    }
+
+    /**
+     * Configures the route annotations loader etc.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param LoaderInterface $loader
+     */
+    private function configureAnnotations(array $config, ContainerBuilder $container, LoaderInterface $loader)
+    {
+        if (!isset($config['annotations']) || !$config['annotations']) {
+            return;
+        }
+
+        $loader->load('annotation.xml');
     }
 }
