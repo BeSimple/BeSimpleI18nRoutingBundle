@@ -51,14 +51,20 @@ class BeSimpleI18nRoutingExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('be_simple_i18n_routing.loader.xml.class', 'BeSimple\I18nRoutingBundle\Routing\Loader\XmlFileLoader');
         $this->assertContainerBuilderHasParameter('be_simple_i18n_routing.translator.translation.class', 'BeSimple\I18nRoutingBundle\Routing\Translator\TranslationTranslator');
 
+        $classesToCompile = $this->container->getExtension('be_simple_i18n_routing')->getClassesToCompile();
         $this->assertEquals(
-            $this->container->getExtension('be_simple_i18n_routing')->getClassesToCompile(),
+            $classesToCompile,
             array(
                 'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector\\PostfixInflector',
                 'BeSimple\\I18nRoutingBundle\\Routing\\Router',
-                'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector',
+                'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector\\RouteNameInflectorInterface',
             )
         );
+        foreach ($classesToCompile as $class) {
+            $this->assertTrue(
+                class_exists($class) || interface_exists($class) || (function_exists('trait_exists') && trait_exists($class)),
+                sprintf('Expected class %s to exists', $class));
+        }
 
         $this->compile();
     }
@@ -78,7 +84,7 @@ class BeSimpleI18nRoutingExtensionTest extends AbstractExtensionTestCase
             $this->container->getExtension('be_simple_i18n_routing')->getClassesToCompile(),
             array(
                 'BeSimple\\I18nRoutingBundle\\Routing\\Router',
-                'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector'
+                'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector\\RouteNameInflectorInterface'
             )
         );
     }

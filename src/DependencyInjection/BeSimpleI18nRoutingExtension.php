@@ -33,7 +33,7 @@ class BeSimpleI18nRoutingExtension extends Extension
 
         $this->addClassesToCompile(array(
             'BeSimple\\I18nRoutingBundle\\Routing\\Router',
-            'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector'
+            'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector\\RouteNameInflectorInterface'
         ));
     }
 
