@@ -51,6 +51,15 @@ class BeSimpleI18nRoutingExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('be_simple_i18n_routing.loader.xml.class', 'BeSimple\I18nRoutingBundle\Routing\Loader\XmlFileLoader');
         $this->assertContainerBuilderHasParameter('be_simple_i18n_routing.translator.translation.class', 'BeSimple\I18nRoutingBundle\Routing\Translator\TranslationTranslator');
 
+        $this->assertEquals(
+            $this->container->getExtension('be_simple_i18n_routing')->getClassesToCompile(),
+            array(
+                'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector\\PostfixInflector',
+                'BeSimple\\I18nRoutingBundle\\Routing\\Router',
+                'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector',
+            )
+        );
+
         $this->compile();
     }
 
@@ -64,6 +73,14 @@ class BeSimpleI18nRoutingExtensionTest extends AbstractExtensionTestCase
         ));
 
         $this->assertContainerBuilderHasAlias('be_simple_i18n_routing.route_name_inflector', 'my.custom_name_inflector');
+
+        $this->assertEquals(
+            $this->container->getExtension('be_simple_i18n_routing')->getClassesToCompile(),
+            array(
+                'BeSimple\\I18nRoutingBundle\\Routing\\Router',
+                'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector'
+            )
+        );
     }
 
     /**
