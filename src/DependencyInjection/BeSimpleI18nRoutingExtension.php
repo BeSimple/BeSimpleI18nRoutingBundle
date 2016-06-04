@@ -48,9 +48,13 @@ class BeSimpleI18nRoutingExtension extends Extension
     private function configureAttributeTranslator(array $config, ContainerBuilder $container, LoaderInterface $loader)
     {
         if (!isset($config['attribute_translator'])) {
+            throw new \InvalidArgumentException('Expected attribute "attribute_translator" to be set');
+        }
+
+        $config = $config['attribute_translator'];
+        if ($config['type'] === null) {
             return;
         }
-        $config = $config['attribute_translator'];
 
         switch ($config['type']) {
             case 'service':
@@ -129,7 +133,7 @@ class BeSimpleI18nRoutingExtension extends Extension
     private function configureLocales(array $config, ContainerBuilder $container)
     {
         if (!isset($config['locales'])) {
-            return;
+            throw new \InvalidArgumentException('Expected attribute "locales" to be set');
         }
         $config = $config['locales'];
 

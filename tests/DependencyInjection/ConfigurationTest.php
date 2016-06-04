@@ -21,6 +21,20 @@ class ConfigurationTest extends AbstractConfigurationTestCase
             array(
                 'annotations' => false,
                 'route_name_inflector' => 'be_simple_i18n_routing.route_name_inflector.postfix',
+                'locales' => array(
+                    'default_locale' => null,
+                    'supported' => array(),
+                    'filter' => false,
+                    'strict' => false
+                ),
+                'attribute_translator' => array(
+                    'enabled' => false,
+                    'type' => 'translator',
+                    'connection' => null,
+                    'cache' => array(
+                        'type' => 'array',
+                    )
+                )
             )
         );
     }
@@ -41,6 +55,7 @@ class ConfigurationTest extends AbstractConfigurationTestCase
             ),
             array(
                 'attribute_translator' => array(
+                    'enabled' => true,
                     'type' => 'service',
                     'id' => 'test_service_id',
                     'connection' => null,
@@ -85,6 +100,7 @@ class ConfigurationTest extends AbstractConfigurationTestCase
             ),
             array(
                 'attribute_translator' => array(
+                    'enabled' => true,
                     'type' => 'doctrine_dbal',
                     'connection' => null,
                     'cache' => array(

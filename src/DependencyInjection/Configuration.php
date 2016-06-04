@@ -44,6 +44,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('locales')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('default_locale')->defaultNull()->end()
                         ->arrayNode('supported')
@@ -86,9 +87,10 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('attribute_translator')
+                    ->canBeEnabled()
                     ->children()
                         ->enumNode('type')
-                            ->isRequired()
+                            ->defaultValue('translator')
                             ->values(array('service', 'doctrine_dbal', 'translator'))
                         ->end()
                         ->scalarNode('id')->end()

@@ -30,8 +30,6 @@ class BeSimpleI18nRoutingExtensionTest extends AbstractExtensionTestCase
      */
     public function loading_with_default_values()
     {
-        $this->container->setParameter('locale', null);
-
         $this->load();
 
         $this->assertContainerBuilderHasService('be_simple_i18n_routing.router');
@@ -44,7 +42,7 @@ class BeSimpleI18nRoutingExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasService('be_simple_i18n_routing.route_name_inflector.postfix');
         $this->assertContainerBuilderHasService('be_simple_i18n_routing.route_generator');
 
-        $this->assertContainerBuilderHasParameter('be_simple_i18n_routing.default_locale', '%locale%');
+        $this->assertContainerBuilderHasParameter('be_simple_i18n_routing.default_locale', null);
         $this->assertContainerBuilderHasParameter('be_simple_i18n_routing.locales', array());
 
         $this->assertContainerBuilderHasParameter('be_simple_i18n_routing.router.class', 'BeSimple\I18nRoutingBundle\Routing\Router');

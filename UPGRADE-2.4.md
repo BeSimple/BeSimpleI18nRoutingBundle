@@ -1,5 +1,17 @@
 # UPGRADE FROM 2.3 to 2.4
 
+## Configuration
+
+* The `locale` container parameter was used for the default locale this need to be specified from now on.
+
+  After:  
+  ```YAML  
+  # app/config/config.yml
+  be_simple_i18n_routing:
+      locales:
+          default_locale: "%locale%"
+  ```
+
 ## Routing
 
 * The `I18nRouteCollectionBuilder` class has been removed in favor of `I18nRouteGenerator`. 
