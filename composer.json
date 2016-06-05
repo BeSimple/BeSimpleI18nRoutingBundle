@@ -1,7 +1,7 @@
 {
     "name": "besimple/i18n-routing-bundle",
     "type": "symfony-bundle",
-    "description": "Full routing internationalized on your Symfony2 project ",
+    "description": "Full routing internationalized on your Symfony2 project",
     "keywords": ["routing", "internationalisation", "Symfony2", "BeSimpleI18nRoutingBundle"],
     "homepage": "https://github.com/BeSimple/BeSimpleI18nRoutingBundle",
     "license": "MIT",
