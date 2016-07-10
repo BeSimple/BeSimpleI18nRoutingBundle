@@ -1,4 +1,5 @@
 <?php
+
 namespace BeSimple\I18nRoutingBundle\Routing\Loader;
 
 use BeSimple\I18nRoutingBundle\Routing\Exception\MissingLocaleException;
@@ -82,40 +83,29 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
             } else {
                 foreach ($localesWithPaths as $locale => $localePath) {
                     if (!isset($globals['locales'][$locale])) {
-                        throw new MissingLocaleException(sprintf(
-                            'Expected global configuration to contain %s for %s::%s',
-                            $locale,
-                            $class->getName(),
-                            $method->getName()
-                        ));
+                        throw new MissingLocaleException(sprintf('Locale "%s" for controller %s::%s is expected to be part of the global configuration at class level.', $locale, $class->getName(), $method->getName()));
                     }
-
                     $localesWithPaths[$locale] = $globals['locales'][$locale].$localePath;
                 }
             }
         } elseif (!is_array($localesWithPaths)) {
-            throw new MissingRouteLocaleException(sprintf(
-                'Unsupported locales found for %s::%s',
-                $class->getName(),
-                $method->getName()
-            ));
+            throw new MissingRouteLocaleException(sprintf('Missing locales for controller %s::%s', $class->getName(), $method->getName()));
         }
 
         $route = $this->createRoute($path, $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
 
         $this->configureRoute($route, $class, $method, $annot);
 
-        if ($localesWithPaths !== null) {
-            $collection->addCollection(
-                $this->routeGenerator->generateRoutes(
-                    $name,
-                    $localesWithPaths,
-                    $route
-                )
-            );
-        } else {
+        if (null === $localesWithPaths) {
+            // Standard route
             $collection->add($name, $route);
+
+            return;
         }
+
+        $collection->addCollection(
+                $this->routeGenerator->generateRoutes($name, $localesWithPaths, $route)
+        );
     }
 
     /**

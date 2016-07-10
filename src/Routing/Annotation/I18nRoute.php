@@ -1,4 +1,5 @@
 <?php
+
 namespace BeSimple\I18nRoutingBundle\Routing\Annotation;
 
 /**
