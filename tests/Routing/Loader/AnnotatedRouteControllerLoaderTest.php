@@ -1,4 +1,5 @@
 <?php
+
 namespace BeSimple\I18nRoutingBundle\Tests\Routing\Loader;
 
 use BeSimple\I18nRoutingBundle\Routing\Loader\AnnotatedRouteControllerLoader;
@@ -95,5 +96,16 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
         AnnotationRegistry::registerLoader('class_exists');
 
         $loader->load('BeSimple\I18nRoutingBundle\Tests\Fixtures\Controller\MissingPrefixedLocalesController');
+    }
+
+    /**
+     * @expectedException \BeSimple\I18nRoutingBundle\Routing\Exception\MissingRouteLocaleException
+     */
+    public function testRoutesMissingLocales()
+    {
+        $loader = new AnnotatedRouteControllerLoader(new AnnotationReader());
+        AnnotationRegistry::registerLoader('class_exists');
+
+        $loader->load('BeSimple\I18nRoutingBundle\Tests\Fixtures\Controller\MissingLocalesController');
     }
 }
