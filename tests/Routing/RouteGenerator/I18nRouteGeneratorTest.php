@@ -14,8 +14,8 @@ class I18nRouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(
-                'test.en' => new Route('/en/', array('_locale' => 'en')),
-                'test.nl' => new Route('/nl/', array('_locale' => 'nl')),
+                'test.be-simple-i18n.en' => new Route('/en/', array('_locale' => 'en')),
+                'test.be-simple-i18n.nl' => new Route('/nl/', array('_locale' => 'nl')),
             ),
             $collection->all()
         );
@@ -79,8 +79,8 @@ class I18nRouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(
-                'test.en' => new Route('/en/test', array('_locale' => 'en')),
-                'test.nl' => new Route('/nl/test', array('_locale' => 'nl')),
+                'test.be-simple-i18n.en' => new Route('/en/test', array('_locale' => 'en')),
+                'test.be-simple-i18n.nl' => new Route('/nl/test', array('_locale' => 'nl')),
                 'test_localized' => new Route('/en/testing', array('_locale' => 'en')),
             ),
             $localizedCollection->all()

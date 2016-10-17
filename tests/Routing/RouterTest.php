@@ -15,13 +15,13 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('match')
             ->with($this->equalTo('/foo'))
-            ->will($this->returnValue(array('_route' => 'test.en', '_locale' => 'en')))
+            ->will($this->returnValue(array('_route' => 'test.be-simple-i18n.en', '_locale' => 'en')))
         ;
         $parentRouter
             ->expects($this->at(1))
             ->method('match')
             ->with($this->equalTo('/bar'))
-            ->will($this->returnValue(array('_route' => 'test.de', '_locale' => 'de')))
+            ->will($this->returnValue(array('_route' => 'test.be-simple-i18n.de', '_locale' => 'de')))
         ;
 
         $router = new Router($parentRouter);
@@ -41,7 +41,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $parentRouter->expects($this->any())
             ->method('match')
             ->with($this->equalTo('/foo/beberlei'))
-            ->will($this->returnValue(array('_route' => 'test.en', '_locale' => 'en', '_translate' => 'name', 'name' => 'beberlei')))
+            ->will($this->returnValue(array('_route' => 'test.be-simple-i18n.en', '_locale' => 'en', '_translate' => 'name', 'name' => 'beberlei')))
         ;
         $translator = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface');
         $translator
@@ -63,7 +63,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $parentRouter = $this->mockParentRouter();
         $parentRouter->expects($this->once())
             ->method('generate')
-            ->with($this->equalTo('test_route.en'), $this->equalTo(array('foo' => 'bar')), $this->equalTo(false))
+            ->with($this->equalTo('test_route.be-simple-i18n.en'), $this->equalTo(array('foo' => 'bar')), $this->equalTo(false))
         ;
         $router = new Router($parentRouter);
 
@@ -129,7 +129,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $parentRouter = $this->mockParentRouter();
         $parentRouter->expects($this->once())
             ->method('generate')
-            ->with($this->equalTo('test_route.en'), $this->equalTo(array('foo' => 'baz')), $this->equalTo(false))
+            ->with($this->equalTo('test_route.be-simple-i18n.en'), $this->equalTo(array('foo' => 'baz')), $this->equalTo(false))
         ;
         $translator = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface');
         $translator
@@ -143,13 +143,32 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $router->generate('test_route', array('foo' => 'bar', 'translate' => 'foo', 'locale' => 'en'), false);
     }
 
+    /**
+     * @expectedException \Symfony\Component\Routing\Exception\RouteNotFoundException
+     */
+    public function testTheConfiguredLocaleIsTheSameAsThePrefixLocaleWhenMatched()
+    {
+        $parentRouter = $this->getMock('Symfony\Component\Routing\RouterInterface');
+
+        $parentRouter->expects($this->once())
+            ->method('match')
+            ->with($this->equalTo('/en/testen'))
+            ->will($this->returnValue(array('_route' => 'test.be-simple-i18n.nl', '_locale' => 'en')));
+
+        $router = new Router($parentRouter);
+
+        $this->assertInstanceOf(Router::class, $router);
+
+        $match = $router->match('/en/testen');
+    }
+
     public function testGenerateI18nTranslatedContextLocale()
     {
         $parentRouter = $this->mockParentRouter();
 
         $parentRouter->expects($this->once())
             ->method('generate')
-            ->with($this->equalTo('test_route.fr'), $this->equalTo(array('foo' => 'baz')), $this->equalTo(false))
+            ->with($this->equalTo('test_route.be-simple-i18n.fr'), $this->equalTo(array('foo' => 'baz')), $this->equalTo(false))
         ;
         $translator = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface');
         $translator
@@ -229,7 +248,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->method('generate')
             ->withConsecutive(
                 array('test_route', array('foo' => 'bar'), false),
-                array('test_route.en', array('foo' => 'bar'), false)
+                array('test_route.be-simple-i18n.en', array('foo' => 'bar'), false)
             )
             ->willThrowException(new RouteNotFoundException());
         ;

@@ -11,6 +11,6 @@ class PostfixInflector implements RouteNameInflectorInterface
      */
     public function inflect($name, $locale)
     {
-        return $name.'.'.$locale;
+        return $name.'.be-simple-i18n.'.$locale;
     }
 }

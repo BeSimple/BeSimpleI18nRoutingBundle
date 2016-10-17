@@ -111,18 +111,22 @@ class Router implements RouterInterface
         $match = $this->router->match($pathinfo);
 
         // if a _locale parameter isset remove the .locale suffix that is appended to each route in I18nRoute
-        if (!empty($match['_locale']) && preg_match('#^(.+)\.'.preg_quote($match['_locale'], '#').'+$#', $match['_route'], $route)) {
-            $match['_route'] = $route[1];
+        if ( ! empty($match['_locale'])) {
+            if (preg_match('#^(.+)\.be-simple-i18n\.' . preg_quote($match['_locale'], '#') . '+$#', $match['_route'], $route)) {
+                $match['_route'] = $route[1];
 
-            // now also check if we want to translate parameters:
-            if (null !== $this->translator && isset($match['_translate'])) {
-                foreach ((array) $match['_translate'] as $attribute) {
-                    $match[$attribute] = $this->translator->translate(
-                        $match['_route'],
-                        $match['_locale'],
-                        $attribute,
-                        $match[$attribute]
-                    );
+                // now also check if we want to translate parameters:
+                if (null !== $this->translator && isset($match['_translate'])) {
+                    foreach ((array) $match['_translate'] as $attribute) {
+                        $match[$attribute] = $this->translator->translate(
+                            $match['_route'], $match['_locale'], $attribute, $match[$attribute]
+                        );
+                    }
+                }
+            } else {
+                // check if this is a route, configured as i18n route, if so, throw the exception
+                if (preg_match("/^.*\.be-simple-i18n\.[a-z]{2}$/", $match['_route'])) {
+                    throw new RouteNotFoundException('A route was matched, but the locale provided does not match the locale of the matched route.');
                 }
             }
         }

@@ -11,11 +11,11 @@ class PostfixInflectorTest extends \PHPUnit_Framework_TestCase
         $inflector = new PostfixInflector();
 
         $this->assertSame(
-            'route.name.en',
+            'route.name.be-simple-i18n.en',
             $inflector->inflect('route.name', 'en')
         );
         $this->assertSame(
-            'route.name.nl',
+            'route.name.be-simple-i18n.nl',
             $inflector->inflect('route.name', 'nl')
         );
     }

@@ -43,10 +43,10 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnlyInstancesOf('Symfony\Component\Routing\Route', $rc);
         $this->assertCount(4, $rc);
 
-        $this->assertEquals('/', $rc->get('besimple_i18nrouting_tests_fixtures_noprefix_index.en')->getPath());
-        $this->assertEquals('/nl/', $rc->get('besimple_i18nrouting_tests_fixtures_noprefix_index.nl')->getPath());
-        $this->assertEquals('/new', $rc->get('new_action.en')->getPath());
-        $this->assertEquals('/nieuw', $rc->get('new_action.nl')->getPath());
+        $this->assertEquals('/', $rc->get('besimple_i18nrouting_tests_fixtures_noprefix_index.be-simple-i18n.en')->getPath());
+        $this->assertEquals('/nl/', $rc->get('besimple_i18nrouting_tests_fixtures_noprefix_index.be-simple-i18n.nl')->getPath());
+        $this->assertEquals('/new', $rc->get('new_action.be-simple-i18n.en')->getPath());
+        $this->assertEquals('/nieuw', $rc->get('new_action.be-simple-i18n.nl')->getPath());
     }
 
     public function testRoutesWithPrefixedLocales()
@@ -60,15 +60,15 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnlyInstancesOf('Symfony\Component\Routing\Route', $rc);
         $this->assertCount(7, $rc);
 
-        $this->assertEquals('/en/', $rc->get('idx.en')->getPath());
-        $this->assertEquals('/nl/', $rc->get('idx.nl')->getPath());
-        $this->assertEquals('/fr/', $rc->get('idx.fr')->getPath());
+        $this->assertEquals('/en/', $rc->get('idx.be-simple-i18n.en')->getPath());
+        $this->assertEquals('/nl/', $rc->get('idx.be-simple-i18n.nl')->getPath());
+        $this->assertEquals('/fr/', $rc->get('idx.be-simple-i18n.fr')->getPath());
 
-        $this->assertEquals('/en/edit', $rc->get('edit.en')->getPath());
+        $this->assertEquals('/en/edit', $rc->get('edit.be-simple-i18n.en')->getPath());
 
-        $this->assertEquals('/en/new', $rc->get('new.en')->getPath());
-        $this->assertEquals('/nl/nieuw', $rc->get('new.nl')->getPath());
-        $this->assertEquals('/fr/nouveau', $rc->get('new.fr')->getPath());
+        $this->assertEquals('/en/new', $rc->get('new.be-simple-i18n.en')->getPath());
+        $this->assertEquals('/nl/nieuw', $rc->get('new.be-simple-i18n.nl')->getPath());
+        $this->assertEquals('/fr/nouveau', $rc->get('new.be-simple-i18n.fr')->getPath());
     }
 
     public function testRoutesWithStringPrefix()
@@ -82,8 +82,8 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnlyInstancesOf('Symfony\Component\Routing\Route', $rc);
         $this->assertCount(3, $rc);
 
-        $this->assertEquals('/color/', $rc->get('idx.en')->getPath());
-        $this->assertEquals('/color/test', $rc->get('idx.test')->getPath());
+        $this->assertEquals('/color/', $rc->get('idx.be-simple-i18n.en')->getPath());
+        $this->assertEquals('/color/test', $rc->get('idx.be-simple-i18n.test')->getPath());
         $this->assertEquals('/color/plain', $rc->get('new')->getPath());
     }
 
