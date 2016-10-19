@@ -52,8 +52,7 @@ class PostfixInflector implements RouteNameInflectorInterface
      */
     public function isValidMatch($name, $locale, RouteCollection $routeCollection = null)
     {
-        $truncateHere = strpos(self::INFIX, $name);
-        $matchedRoute = substr($name, 0, $truncateHere);
+        $matchedRoute = $this->unInflect($name, $locale);
 
          // locale does not match postfixed locale
          if ($locale !== ($otherLocale = substr($name, - strlen($locale)))) {
