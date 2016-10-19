@@ -2,9 +2,9 @@
 
 namespace BeSimple\I18nRoutingBundle\Tests\Routing;
 
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\PostfixInflector;
 use BeSimple\I18nRoutingBundle\Routing\Router;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Routing\RequestContext;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,13 +15,13 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('match')
             ->with($this->equalTo('/foo'))
-            ->will($this->returnValue(array('_route' => 'test.be-simple-i18n.en', '_locale' => 'en')))
+            ->will($this->returnValue(array('_route' => 'test' . PostfixInflector::INFIX . 'en', '_locale' => 'en')))
         ;
         $parentRouter
-            ->expects($this->at(1))
+            ->expects($this->at(2))
             ->method('match')
             ->with($this->equalTo('/bar'))
-            ->will($this->returnValue(array('_route' => 'test.be-simple-i18n.de', '_locale' => 'de')))
+            ->will($this->returnValue(array('_route' => 'test' . PostfixInflector::INFIX . 'de', '_locale' => 'de')))
         ;
 
         $router = new Router($parentRouter);
@@ -41,7 +41,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $parentRouter->expects($this->any())
             ->method('match')
             ->with($this->equalTo('/foo/beberlei'))
-            ->will($this->returnValue(array('_route' => 'test.be-simple-i18n.en', '_locale' => 'en', '_translate' => 'name', 'name' => 'beberlei')))
+            ->will($this->returnValue(array('_route' => 'test' . PostfixInflector::INFIX . 'en', '_locale' => 'en', '_translate' => 'name', 'name' => 'beberlei')))
         ;
         $translator = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface');
         $translator
@@ -63,7 +63,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $parentRouter = $this->mockParentRouter();
         $parentRouter->expects($this->once())
             ->method('generate')
-            ->with($this->equalTo('test_route.be-simple-i18n.en'), $this->equalTo(array('foo' => 'bar')), $this->equalTo(false))
+            ->with($this->equalTo('test_route' . PostfixInflector::INFIX . 'en'), $this->equalTo(array('foo' => 'bar')), $this->equalTo(false))
         ;
         $router = new Router($parentRouter);
 
@@ -129,7 +129,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $parentRouter = $this->mockParentRouter();
         $parentRouter->expects($this->once())
             ->method('generate')
-            ->with($this->equalTo('test_route.be-simple-i18n.en'), $this->equalTo(array('foo' => 'baz')), $this->equalTo(false))
+            ->with($this->equalTo('test_route' . PostfixInflector::INFIX . 'en'), $this->equalTo(array('foo' => 'baz')), $this->equalTo(false))
         ;
         $translator = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface');
         $translator
@@ -153,7 +153,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $parentRouter->expects($this->once())
             ->method('match')
             ->with($this->equalTo('/en/testen'))
-            ->will($this->returnValue(array('_route' => 'test.be-simple-i18n.nl', '_locale' => 'en')));
+            ->will($this->returnValue(array('_route' => 'test' . PostfixInflector::INFIX . 'nl', '_locale' => 'en')));
 
         $router = new Router($parentRouter);
 
@@ -168,7 +168,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $parentRouter->expects($this->once())
             ->method('generate')
-            ->with($this->equalTo('test_route.be-simple-i18n.fr'), $this->equalTo(array('foo' => 'baz')), $this->equalTo(false))
+            ->with($this->equalTo('test_route' . PostfixInflector::INFIX . 'fr'), $this->equalTo(array('foo' => 'baz')), $this->equalTo(false))
         ;
         $translator = $this->getMock('BeSimple\I18nRoutingBundle\Routing\Translator\AttributeTranslatorInterface');
         $translator
@@ -248,7 +248,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->method('generate')
             ->withConsecutive(
                 array('test_route', array('foo' => 'bar'), false),
-                array('test_route.be-simple-i18n.en', array('foo' => 'bar'), false)
+                array('test_route' . PostfixInflector::INFIX . 'en', array('foo' => 'bar'), false)
             )
             ->willThrowException(new RouteNotFoundException());
         ;
