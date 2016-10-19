@@ -109,24 +109,53 @@ class Router implements RouterInterface
     public function match($pathinfo)
     {
         $match = $this->router->match($pathinfo);
+        $route = $match['_route'];
 
-        // if a _locale parameter isset remove the .locale suffix that is appended to each route in I18nRoute
-        if ( ! empty($match['_locale'])) {
-            if (preg_match('#^(.+)\.be-simple-i18n\.' . preg_quote($match['_locale'], '#') . '+$#', $match['_route'], $route)) {
-                $match['_route'] = $route[1];
+        // @todo: let the inflector take responsibility for this
+        // if the matched route is a BeSimple route remove the .be-simple-i18n.locale suffix that is appended to each route in I18nRoute
+        if (false !== ($truncateHere = strpos($route, '.be-simple-i18n.'))) {
+            // throw an exception if the locale does not match the postfixed locale
+            $locale = $match['_locale'];
 
-                // now also check if we want to translate parameters:
-                if (null !== $this->translator && isset($match['_translate'])) {
-                    foreach ((array) $match['_translate'] as $attribute) {
-                        $match[$attribute] = $this->translator->translate(
-                            $match['_route'], $match['_locale'], $attribute, $match[$attribute]
-                        );
-                    }
-                }
-            } else {
-                // check if this is a route, configured as i18n route, if so, throw the exception
-                if (preg_match("/^.*\.be-simple-i18n\.[a-z]{2}$/", $match['_route'])) {
+            $matchedRoute = substr($route, 0, $truncateHere);
+
+            // locale does not match postfixed locale
+            if ($locale !== ($otherLocale = substr($route, - strlen($locale)))) {
+                // check if no another registered route does match, and then throw an exception
+                $otherRoute = $this->routeNameInflector->inflect($matchedRoute, $locale);
+
+                if (is_null($this->getRouteCollection())) {
                     throw new RouteNotFoundException('A route was matched, but the locale provided does not match the locale of the matched route.');
+                }
+
+                $allRoutes = $this->getRouteCollection()->getIterator();
+
+                // there is no valid route for the other locale
+                if (!key_exists($otherRoute, $allRoutes)) {
+                    throw new RouteNotFoundException('A route was matched, but the locale provided does not match the locale of the matched route.');
+                }
+
+                // there is a valid route for the other locale, but does the pathinfo match?
+                $originalPathInfo = $allRoutes[$route]->getPath();
+                $otherPathInfo = $allRoutes[$otherRoute]->getPath();
+
+                if ($originalPathInfo !== $otherPathInfo) {
+                    // mismatch
+                    throw new RouteNotFoundException('A route was matched, but the locale provided does not match the locale of the matched route.');
+                }
+            }
+
+            $match['_route'] = $matchedRoute;
+
+            // now also check if we want to translate parameters:
+            if (null !== $this->translator && isset($match['_translate'])) {
+                foreach ((array) $match['_translate'] as $attribute) {
+                    $match[$attribute] = $this->translator->translate(
+                        $match['_route'],
+                        $match['_locale'],
+                        $attribute,
+                        $match[$attribute]
+                    );
                 }
             }
         }
