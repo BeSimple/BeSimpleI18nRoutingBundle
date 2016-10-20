@@ -33,7 +33,7 @@ interface RouteNameInflectorInterface
      * @param $locale
      * @return mixed
      */
-    public function isBeSimpleRoute($name, $locale = '');
+    public function isInflected($name, $locale = '');
 
     /**
      * Checks if the constraints defined in the route definition are actually met.

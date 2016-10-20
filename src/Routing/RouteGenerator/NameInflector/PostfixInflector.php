@@ -22,7 +22,7 @@ class PostfixInflector implements RouteNameInflectorInterface
      *
      * @param $name
      * @param $locale
-     * @return mixed
+     * @return string
      */
     public function unInflect($name, $locale)
     {
@@ -31,13 +31,13 @@ class PostfixInflector implements RouteNameInflectorInterface
     }
 
     /**
-     * Is used in the matching process to determine if isValidMatch() should be checked on a matched route.
+     * Checks if $name has been inflected by this inflector.
      *
      * @param $name
      * @param $locale
-     * @return mixed
+     * @return bool
      */
-    public function isBeSimpleRoute($name, $locale = '')
+    public function isInflected($name, $locale = '')
     {
         return false !== strpos($name, self::INFIX);
     }
@@ -48,7 +48,7 @@ class PostfixInflector implements RouteNameInflectorInterface
      * @param                 $name
      * @param                 $locale
      * @param RouteCollection $routeCollection
-     * @return mixed
+     * @return bool
      */
     public function isValidMatch($name, $locale, RouteCollection $routeCollection = null)
     {

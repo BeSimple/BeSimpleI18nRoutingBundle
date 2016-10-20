@@ -26,11 +26,11 @@ class PostfixInflectorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test', $inflector->unInflect('test' . $inflector::INFIX . 'nl', $locale = 'nl'));
     }
 
-    public function testisBeSimpleRoute()
+    public function testisInflected()
     {
         $inflector = new PostfixInflector();
-        $this->assertFalse($inflector->isBeSimpleRoute('test', 'nl'), "'test' is not at BeSimple route");
-        $this->assertTrue($inflector->isBeSimpleRoute('test' . PostfixInflector::INFIX . 'nl', 'nl'), 'Should have been a BeSimple route.');
+        $this->assertFalse($inflector->isInflected('test', 'nl'), "'test' is not at BeSimple route");
+        $this->assertTrue($inflector->isInflected('test' . PostfixInflector::INFIX . 'nl', 'nl'), 'Should have been a BeSimple route.');
     }
 
     public function testIsValidMatch()
