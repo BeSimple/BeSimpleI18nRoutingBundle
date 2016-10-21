@@ -110,7 +110,7 @@ class Router implements RouterInterface
     {
         $match = $this->router->match($pathinfo);
         $route = $match['_route'];
-        $locale = $match['_locale'];
+        $locale = $match['_locale'] ?? '';
 
         if ($this->routeNameInflector->isInflected($route, $locale)) {
 
