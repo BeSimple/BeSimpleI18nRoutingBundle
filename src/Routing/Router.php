@@ -114,7 +114,8 @@ class Router implements RouterInterface
 
         if ($this->routeNameInflector->isInflected($route, $locale)) {
 
-            if ( ! $this->routeNameInflector->isValidMatch($route, $locale, $this->getRouteCollection())) {
+            // we can't check without a locale
+            if (! empty($locale) && ! $this->routeNameInflector->isValidMatch($route, $locale, $this->getRouteCollection())) {
                 throw new RouteNotFoundException('A BeSimple route was matched, but it is not valid.');
             }
 
