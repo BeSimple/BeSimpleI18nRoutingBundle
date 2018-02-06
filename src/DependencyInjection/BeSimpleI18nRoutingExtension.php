@@ -32,10 +32,12 @@ class BeSimpleI18nRoutingExtension extends Extension
         $this->configureRouteNameInflector($config, $container);
         $this->configureAnnotations($config, $container, $loader);
 
-        $this->addClassesToCompile(array(
-            'BeSimple\\I18nRoutingBundle\\Routing\\Router',
-            'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector\\RouteNameInflectorInterface'
-        ));
+        if (PHP_VERSION_ID < 70000) {
+            $this->addClassesToCompile(array(
+                'BeSimple\\I18nRoutingBundle\\Routing\\Router',
+                'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector\\RouteNameInflectorInterface'
+            ));
+        }
     }
 
     /**
@@ -175,16 +177,18 @@ class BeSimpleI18nRoutingExtension extends Extension
             $container->setAlias('be_simple_i18n_routing.route_name_inflector', $config['route_name_inflector']);
         }
 
-        // Try and register the route name inflector to compilation/caching
-        try {
-            $def = $container->findDefinition('be_simple_i18n_routing.route_name_inflector');
-            if ($def->getClass() !== null) {
-                $this->addClassesToCompile(array($def->getClass()));
+        if (PHP_VERSION_ID < 70000) {
+            // Try and register the route name inflector to compilation/caching
+            try {
+                $def = $container->findDefinition('be_simple_i18n_routing.route_name_inflector');
+                if ($def->getClass() !== null) {
+                    $this->addClassesToCompile(array($def->getClass()));
+                }
+            } catch (ServiceNotFoundException $e) {
+                // This happens when the alias is set to a external service
+            } catch (InvalidArgumentException $e) {
+                // This happens when the alias is set to a external service in Symfony 2.3
             }
-        } catch (ServiceNotFoundException $e) {
-            // This happens when the alias is set to a external service
-        } catch (InvalidArgumentException $e) {
-            // This happens when the alias is set to a external service in Symfony 2.3
         }
     }
 

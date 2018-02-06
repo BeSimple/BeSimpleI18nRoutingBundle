@@ -52,7 +52,7 @@ class BeSimpleI18nRoutingExtensionTest extends AbstractExtensionTestCase
         $classesToCompile = $this->container->getExtension('be_simple_i18n_routing')->getClassesToCompile();
         $this->assertEquals(
             $classesToCompile,
-            array(
+            PHP_VERSION_ID >= 70000 ? array() : array(
                 'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector\\PostfixInflector',
                 'BeSimple\\I18nRoutingBundle\\Routing\\Router',
                 'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector\\RouteNameInflectorInterface',
@@ -80,7 +80,7 @@ class BeSimpleI18nRoutingExtensionTest extends AbstractExtensionTestCase
 
         $this->assertEquals(
             $this->container->getExtension('be_simple_i18n_routing')->getClassesToCompile(),
-            array(
+            PHP_VERSION_ID >= 70000 ? array() : array(
                 'BeSimple\\I18nRoutingBundle\\Routing\\Router',
                 'BeSimple\\I18nRoutingBundle\\Routing\\RouteGenerator\\NameInflector\\RouteNameInflectorInterface'
             )
