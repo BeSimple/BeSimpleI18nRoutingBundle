@@ -2,6 +2,7 @@
 namespace BeSimple\I18nRoutingBundle\Tests\Routing\RouteGenerator\NameInflector;
 
 use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\DefaultPostfixInflector;
+use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\NameInflector\PostfixInflector;
 
 class DefaultPostfixInflectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +15,7 @@ class DefaultPostfixInflectorTest extends \PHPUnit_Framework_TestCase
             $inflector->inflect('route.name', 'en')
         );
         $this->assertSame(
-            'route.name.nl',
+            'route.name' . PostfixInflector::INFIX .'nl',
             $inflector->inflect('route.name', 'nl')
         );
     }

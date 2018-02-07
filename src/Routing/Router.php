@@ -109,10 +109,21 @@ class Router implements RouterInterface
     public function match($pathinfo)
     {
         $match = $this->router->match($pathinfo);
+        $route = $match['_route'];
+        $locale = $match['_locale'] ?? '';
 
-        // if a _locale parameter isset remove the .locale suffix that is appended to each route in I18nRoute
-        if (!empty($match['_locale']) && preg_match('#^(.+)\.'.preg_quote($match['_locale'], '#').'+$#', $match['_route'], $route)) {
-            $match['_route'] = $route[1];
+        if (empty($locale)) {
+            // no point in trying to match when we have no locale
+            return $match;
+        }
+
+        if ($this->routeNameInflector->isInflected($route, $locale)) {
+
+            if ( ! $this->routeNameInflector->isValidMatch($route, $locale, $this->getRouteCollection())) {
+                throw new RouteNotFoundException('A BeSimple route was matched, but it is not valid.');
+            }
+
+            $match['_route'] = $this->routeNameInflector->unInflect($route, $locale);
 
             // now also check if we want to translate parameters:
             if (null !== $this->translator && isset($match['_translate'])) {

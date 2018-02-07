@@ -19,15 +19,15 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(
-                'homepage_locale.en' => new Route('/en/', array(
+                'homepage_locale.be-simple-i18n.en' => new Route('/en/', array(
                     '_locale' => 'en',
                     '_controller' => 'TestBundle:Frontend:homepageLocale'
                 )),
-                'homepage_locale.de' => new Route('/de/', array(
+                'homepage_locale.be-simple-i18n.de' => new Route('/de/', array(
                     '_locale' => 'de',
                     '_controller' => 'TestBundle:Frontend:homepageLocale'
                 )),
-                'homepage_locale.fr' => new Route('/fr/', array(
+                'homepage_locale.be-simple-i18n.fr' => new Route('/fr/', array(
                     '_locale' => 'fr',
                     '_controller' => 'TestBundle:Frontend:homepageLocale'
                 )),
