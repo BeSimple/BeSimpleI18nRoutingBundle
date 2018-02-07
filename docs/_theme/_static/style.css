@@ -1,0 +1,75 @@
+.clearfix:before, .clearfix:after {
+    content: " ";
+    display: table
+}
+
+.clearfix:after {
+    clear: both
+}
+
+div.configuration-block {
+    margin: 1em 0;
+    position: relative
+}
+
+div.configuration-block ul.simple {
+    margin: 0
+}
+
+div.configuration-block .simple li {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #f2f2f2;
+    float: left;
+    list-style: none;
+    margin: 0 7px 0 0;
+    padding: 0
+}
+
+div.configuration-block li em {
+    font-size: 90%;
+    font-style: normal
+}
+
+div.configuration-block .simple li a {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: #000000;
+    display: block;
+    padding: 5px 12px 3px;
+    text-decoration: none
+}
+
+div.configuration-block .simple li.selected,
+div.configuration-block .simple li a:hover {
+    background-color: #c0bec3;
+    color: #000000;
+}
+div.configuration-block .selected a {
+    color: #000000;
+    text-decoration: none
+}
+
+div.configuration-block div.highlight pre {
+    margin: 0
+}
+
+div.configuration-block div {
+    left: 0;
+    position: absolute
+}
+
+div.configuration-block div div {
+    position: static
+}
+
+div.configuration-block .literal-block {
+    margin: 0 0 10px
+}
+
+@supports (overflow:-webkit-marquee) and (justify-content:inherit) {
+    div.configuration-block div.highlight pre {
+        margin: 0 1em 0 0;
+        padding: 1em 5em 1em 1em
+    }
+}
