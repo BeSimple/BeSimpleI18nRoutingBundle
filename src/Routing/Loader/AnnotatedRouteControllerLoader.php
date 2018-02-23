@@ -2,6 +2,7 @@
 
 namespace BeSimple\I18nRoutingBundle\Routing\Loader;
 
+use BeSimple\I18nRoutingBundle\Routing\Annotation\I18nRoute;
 use BeSimple\I18nRoutingBundle\Routing\Exception\MissingLocaleException;
 use BeSimple\I18nRoutingBundle\Routing\Exception\MissingRouteLocaleException;
 use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\I18nRouteGenerator;
