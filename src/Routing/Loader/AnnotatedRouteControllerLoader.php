@@ -26,7 +26,7 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         parent::__construct($reader);
 
         $this->routeGenerator = $routeGenerator ?: new I18nRouteGenerator();
-        $this->setRouteAnnotationClass('BeSimple\\I18nRoutingBundle\\Routing\\Annotation\\I18nRoute');
+        $this->setRouteAnnotationClass('Symfony\\Component\\Routing\\Annotation\\Route');
     }
 
     protected function addRoute(RouteCollection $collection, $annot, $globals, \ReflectionClass $class, \ReflectionMethod $method)
