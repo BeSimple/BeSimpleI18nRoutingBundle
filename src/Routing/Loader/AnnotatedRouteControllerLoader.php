@@ -2,6 +2,7 @@
 
 namespace BeSimple\I18nRoutingBundle\Routing\Loader;
 
+use BeSimple\I18nRoutingBundle\Routing\Annotation\I18nRoute;
 use BeSimple\I18nRoutingBundle\Routing\Exception\MissingLocaleException;
 use BeSimple\I18nRoutingBundle\Routing\Exception\MissingRouteLocaleException;
 use BeSimple\I18nRoutingBundle\Routing\RouteGenerator\I18nRouteGenerator;
@@ -26,12 +27,17 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         parent::__construct($reader);
 
         $this->routeGenerator = $routeGenerator ?: new I18nRouteGenerator();
-        $this->setRouteAnnotationClass('BeSimple\\I18nRoutingBundle\\Routing\\Annotation\\I18nRoute');
+        $this->setRouteAnnotationClass('Symfony\\Component\\Routing\\Annotation\\Route');
     }
 
     protected function addRoute(RouteCollection $collection, $annot, $globals, \ReflectionClass $class, \ReflectionMethod $method)
     {
-        /** @var \BeSimple\I18nRoutingBundle\Routing\Annotation\I18nRoute $annot */
+        if (!$annot instanceof I18nRoute) {
+            parent::addRoute($collection, $annot, $globals, $class, $method);
+
+            return;
+        }
+
         $name = $annot->getName();
         if (null === $name) {
             $name = $this->getDefaultRouteName($class, $method);
@@ -115,51 +121,15 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
     {
         $globals = array(
             'locales' => '',
-            'requirements' => array(),
-            'options' => array(),
-            'defaults' => array(),
-            'schemes' => array(),
-            'methods' => array(),
-            'host' => '',
-            'condition' => '',
         );
 
-        /** @var \BeSimple\I18nRoutingBundle\Routing\Annotation\I18nRoute $annot */
         if ($annot = $this->reader->getClassAnnotation($class, $this->routeAnnotationClass)) {
-            if (null !== $annot->getLocales()) {
+            if ($annot instanceof I18nRoute && null !== $annot->getLocales()) {
                 $globals['locales'] = $annot->getLocales();
-            }
-
-            if (null !== $annot->getRequirements()) {
-                $globals['requirements'] = $annot->getRequirements();
-            }
-
-            if (null !== $annot->getOptions()) {
-                $globals['options'] = $annot->getOptions();
-            }
-
-            if (null !== $annot->getDefaults()) {
-                $globals['defaults'] = $annot->getDefaults();
-            }
-
-            if (null !== $annot->getSchemes()) {
-                $globals['schemes'] = $annot->getSchemes();
-            }
-
-            if (null !== $annot->getMethods()) {
-                $globals['methods'] = $annot->getMethods();
-            }
-
-            if (null !== $annot->getHost()) {
-                $globals['host'] = $annot->getHost();
-            }
-
-            if (null !== $annot->getCondition()) {
-                $globals['condition'] = $annot->getCondition();
             }
         }
 
-        return $globals;
+        return array_merge(parent::getGlobals($class), $globals);
     }
 
     /**

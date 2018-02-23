@@ -2,23 +2,20 @@
 
 namespace BeSimple\I18nRoutingBundle\Routing\Annotation;
 
+use Symfony\Component\Routing\Annotation\Route as BaseRoute;
+
 /**
  * Annotation class for @I18nRoute().
  *
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-class I18nRoute
+class I18nRoute extends BaseRoute
 {
-    private $locales;
-    private $name;
-    private $requirements = array();
-    private $options = array();
-    private $defaults = array();
-    private $host;
-    private $methods = array();
-    private $schemes = array();
-    private $condition;
+    protected $locales;
+    protected $requirements = array();
+    protected $methods = array();
+    protected $schemes = array();
 
     /**
      * Constructor.
@@ -34,13 +31,7 @@ class I18nRoute
             unset($data['value']);
         }
 
-        foreach ($data as $key => $value) {
-            $method = 'set'.str_replace('_', '', $key);
-            if (!method_exists($this, $method)) {
-                throw new \BadMethodCallException(sprintf('Unknown property "%s" on annotation "%s".', $key, get_class($this)));
-            }
-            $this->$method($value);
-        }
+        parent::__construct($data);
     }
 
     public function setLocales($locales)
@@ -51,26 +42,6 @@ class I18nRoute
     public function getLocales()
     {
         return $this->locales;
-    }
-
-    public function setHost($pattern)
-    {
-        $this->host = $pattern;
-    }
-
-    public function getHost()
-    {
-        return $this->host;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    public function getName()
-    {
-        return $this->name;
     }
 
     public function setRequirements($requirements)
@@ -95,26 +66,6 @@ class I18nRoute
         return $this->requirements;
     }
 
-    public function setOptions($options)
-    {
-        $this->options = $options;
-    }
-
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    public function setDefaults($defaults)
-    {
-        $this->defaults = $defaults;
-    }
-
-    public function getDefaults()
-    {
-        return $this->defaults;
-    }
-
     public function setSchemes($schemes)
     {
         $this->schemes = is_array($schemes) ? $schemes : array($schemes);
@@ -133,15 +84,5 @@ class I18nRoute
     public function getMethods()
     {
         return $this->methods;
-    }
-
-    public function setCondition($condition)
-    {
-        $this->condition = $condition;
-    }
-
-    public function getCondition()
-    {
-        return $this->condition;
     }
 }
