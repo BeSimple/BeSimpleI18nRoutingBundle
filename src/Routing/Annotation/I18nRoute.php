@@ -44,16 +44,6 @@ class I18nRoute extends BaseRoute
         return $this->locales;
     }
 
-    public function setPath($path)
-    {
-        throw new \Exception('Bad method call.');
-    }
-
-    public function getPath()
-    {
-        throw new \Exception('Bad method call.');
-    }
-
     public function setRequirements($requirements)
     {
         if (isset($requirements['_method'])) {
